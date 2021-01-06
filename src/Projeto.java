@@ -3,27 +3,23 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Projeto {
-    static Scanner ler = new Scanner(System.in);
-    public static void main(String[] args) throws FileNotFoundException {
-        //leituraVetor(args[0]);
-        int populacaoInicial[] = leituraVetor("hamsters.txt");
-        double matrizLeslie[][] = leituraMatriz(populacaoInicial, "hamsters.txt");
 
-        for(int i =0; i< matrizLeslie.length; i++){
-            if(i!=0)
-                System.out.println("");
-            for(int j =0 ; j< matrizLeslie.length; j++)
-                System.out.print(matrizLeslie[i][j] + " ");
-        }
+    static Scanner ler = new Scanner(System.in);
+
+    public static void main(String[] args) throws FileNotFoundException {
+        int populacaoInicial[] = leituraVetor("hamsters.txt"/*args[0]*/);
+        double matrizLeslie[][] = leituraMatriz(populacaoInicial, "hamsters.txt"/*args[0]*/);
+
+        System.out.println("Qual é o número de gerações que pretende calcular?");
+        int t=ler.nextInt(); // CALCULO DO NUMERO DE GERAÇOES
+
         double populaçãoTotal;
         double [] Nt = new double [matrizLeslie.length];
-        int t;
-        t=ler.nextInt();
         populaçãoTotal=dimensãoPopulação(matrizLeslie,populacaoInicial,Nt,t);
         imprimir(Nt,populaçãoTotal);
     }
 
-    public static int[] leituraVetor(String nomeFicheiro) throws FileNotFoundException {
+    public static int[] leituraVetor(String nomeFicheiro) throws FileNotFoundException { //LEITURA EXCLUSIVA DO VETOR
         File ficheiro = new File(nomeFicheiro);
         Scanner leituraFicheiro = new Scanner(ficheiro);
        //while (leituraFicheiro.hasNext()) {
@@ -35,7 +31,7 @@ public class Projeto {
         return insercaoVetor(dadosInseridos);
     }
 
-    public static int[] insercaoVetor(String[] dadosInseridos) {
+    public static int[] insercaoVetor(String[] dadosInseridos) { //INSERÇÃO DA POPULAÇAO ATUAL NO VETOR
         int[] populacaoInicial = new int[dadosInseridos.length];
             for (int i = 0; i < dadosInseridos.length; i++) {
                 String valorIdades = "";
@@ -47,10 +43,12 @@ public class Projeto {
         return populacaoInicial;
     }
 
-    public static double[][] leituraMatriz (int[]dadosInseridos2, String nomeFicheiro) throws FileNotFoundException {
+    public static double[][] leituraMatriz (int[]dadosInseridos2, String nomeFicheiro) throws FileNotFoundException { //LEITURA E INSERÇÃO DE DADOS NA MATRIZ DE LESLIE
         double[][] matrizLeslie = new double[dadosInseridos2.length][dadosInseridos2.length];
+
         File ficheiro = new File(nomeFicheiro);
         Scanner leituraFicheiro2 = new Scanner(ficheiro);
+
         while (leituraFicheiro2.hasNext()) {
             String input = leituraFicheiro2.nextLine();
             String[] dadosInseridos = input.split(", ");
@@ -76,7 +74,8 @@ public class Projeto {
         }
         return matrizLeslie;
     }
-    public static double dimensãoPopulação ( double [][] matrizLeslie, int[] populacaoInicial, double [] Nt, int t) throws FileNotFoundException{
+
+    public static double dimensãoPopulação ( double [][] matrizLeslie, int[] populacaoInicial, double [] Nt, int t) throws FileNotFoundException{ //CALCULO DIMENSAO POPULACAO
         double novaLeslie[][] = leituraMatriz(populacaoInicial, "hamsters.txt");
         double [] aux = new double [matrizLeslie.length];
         int n= matrizLeslie.length;
@@ -109,11 +108,12 @@ public class Projeto {
         }
         return total;
     }
+
     public static void imprimir(double [] Nt, double total){
         int  l;
-        System.out.println(total);
+        System.out.printf("%.2f\n",total);
         for(l=0;l<4;l++){
-            System.out.println(Nt[l]);
+            System.out.printf("%.2f\n", Nt[l]);
         }
     }
 }
