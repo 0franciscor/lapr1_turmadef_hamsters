@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Projeto {
-
+    static Scanner ler = new Scanner(System.in);
     public static void main(String[] args) throws FileNotFoundException {
         //leituraVetor(args[0]);
         int populacaoInicial[] = leituraVetor("hamsters.txt");
@@ -15,6 +15,12 @@ public class Projeto {
             for(int j =0 ; j< matrizLeslie.length; j++)
                 System.out.print(matrizLeslie[i][j] + " ");
         }
+        double populaçãoTotal;
+        double [] Nt = new double [matrizLeslie.length];
+        int t;
+        t=ler.nextInt();
+        populaçãoTotal=dimensãoPopulação(matrizLeslie,populacaoInicial,Nt,t);
+        imprimir(Nt,populaçãoTotal);
     }
 
     public static int[] leituraVetor(String nomeFicheiro) throws FileNotFoundException {
@@ -69,5 +75,45 @@ public class Projeto {
             }
         }
         return matrizLeslie;
+    }
+    public static double dimensãoPopulação ( double [][] matrizLeslie, int[] populacaoInicial, double [] Nt, int t) throws FileNotFoundException{
+        double novaLeslie[][] = leituraMatriz(populacaoInicial, "hamsters.txt");
+        double [] aux = new double [matrizLeslie.length];
+        int n= matrizLeslie.length;
+        int i,l,c,g;
+        double total=0,soma;
+        for (g=2;g<=t;g++){
+            for (l=0;l<n;l++){
+                for (i=0;i<n;i++){
+                    soma=0;
+                    for (c=0;c<n;c++){
+                        soma=soma+novaLeslie[l][c]*matrizLeslie[c][i];
+                    }
+                    aux[i]=soma;
+                }
+                for (c=0;c<n;c++){
+                    novaLeslie[l][c]=aux[c];
+                }
+            }
+        }
+        for (i=0;i<n;i++){
+            double somas=0;
+            for (l=0;l<n;l++){
+                somas=somas+novaLeslie[i][l]*populacaoInicial[l];
+            }
+            Nt[i]=somas;
+        }
+        total=0;
+        for (i=0;i<n;i++){
+            total=total+Nt[i];
+        }
+        return total;
+    }
+    public static void imprimir(double [] Nt, double total){
+        int  l;
+        System.out.println(total);
+        for(l=0;l<4;l++){
+            System.out.println(Nt[l]);
+        }
     }
 }
