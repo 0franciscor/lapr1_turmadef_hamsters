@@ -4,40 +4,59 @@ public class CalculoNt {
     static Scanner ler = new Scanner(System.in);
     public static void main(String[] args) {
         double [][] matrizLeslie=new double[4][4];
-        matrizLeslie[0][1]=0;
-        matrizLeslie[0][2]=0.8;
-        matrizLeslie[0][3]=0.6;
-        matrizLeslie[1][0]=0.95;
-        matrizLeslie[2][1]=0.9;
-        matrizLeslie[3][2]=0.75;
+        matrizLeslie[0][1]=3;
+        matrizLeslie[0][2]=3.17;
+        matrizLeslie[0][3]=0.39;
+        matrizLeslie[1][0]=0.11;
+        matrizLeslie[2][1]=0.29;
+        matrizLeslie[3][2]=0.33;
         double [] população = new double [4];
-        população[0]=0;
-        população[1]=100;
-        população[2]=100;
+        população[0]=1000;
+        população[1]=300;
+        população[2]=330;
         população[3]=100;
         double [] Nt = new double [4];
-        int t;
+        int t,n=4;
         double populaçãoTotal;
         t=ler.nextInt();
-        populaçãoTotal=dimensãoPopulação(matrizLeslie,população,Nt,t);
+        populaçãoTotal=dimensãoPopulação(matrizLeslie,população,Nt,t,n);
         imprimir(Nt,populaçãoTotal);
     }
-    public static double dimensãoPopulação ( double [][] matrizLeslie, double [] população, double [] Nt, int t){
-        int i,l,g;
-        double total=0;
-        for (g=1;g<=t;g++){
-            for (i=0;i<4;i++){
-                double soma=0;
-                for (l=0;l<4;l++){
-                    soma=soma+matrizLeslie[i][l]*população[l];
+    public static double dimensãoPopulação ( double [][] matrizLeslie, double [] população, double [] Nt, int t,int n){
+        double [][] novaLeslie=new double[4][4];
+        novaLeslie[0][1]=3;
+        novaLeslie[0][2]=3.17;
+        novaLeslie[0][3]=0.39;
+        novaLeslie[1][0]=0.11;
+        novaLeslie[2][1]=0.29;
+        novaLeslie[3][2]=0.33;
+        double [] aux = new double [4];
+        int i,l,c,g;
+        double total=0,soma;
+        for (g=2;g<=t;g++){
+            for (l=0;l<n;l++){
+                for (i=0;i<n;i++){
+                    soma=0;
+                    for (c=0;c<n;c++){
+                        soma=soma+novaLeslie[l][c]*matrizLeslie[c][i];
+                    }
+                    aux[i]=soma;
                 }
-                Nt[i]=soma;
+                for (c=0;c<n;c++){
+                    novaLeslie[l][c]=aux[c];
+                }
             }
-            total=0;
-            for (i=0;i<4;i++){
-                população[i]=Nt[i];
-                total=total+população[i];
+        }
+        for (i=0;i<n;i++){
+            double somas=0;
+            for (l=0;l<n;l++){
+                somas=somas+novaLeslie[i][l]*população[l];
             }
+            Nt[i]=somas;
+        }
+        total=0;
+        for (i=0;i<n;i++){
+            total=total+Nt[i];
         }
         return total;
     }
