@@ -15,9 +15,25 @@ public class ValorVetorPróprio {
         Matrix a = new Basic2DMatrix(matrizLeslie);
         EigenDecompositor eigenD=new EigenDecompositor(a);
         Matrix [] mattD= eigenD.decompose();
-        for(int i=0; i<2;i++) {
-            System.out.println(mattD[i]);
+        double valor [][]= mattD[1].toDenseMatrix().toArray();
+        double maior=0;
+        //double maiorValorPróprio= matB[0][0];
+        //System.out.printf("%.3f\n",maiorValorPróprio);
+        for (int l=0;l<matrizLeslie.length;l++){
+            for (int c=0; c<matrizLeslie.length;c++){
+                if (valor[l][c]>=0){
+                    if (valor[l][c]>maior){
+                        maior=valor[l][c];
+                    }
+                } else {
+                    if ((-valor[l][c])>maior){
+                        maior=(valor[l][c]);
+                    }
+
+                }
+            }
         }
+        System.out.printf("%.3f\n",maior);
 
     }
     public static int[] leituraVetor(String nomeFicheiro) throws FileNotFoundException { //LEITURA EXCLUSIVA DO VETOR
