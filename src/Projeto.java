@@ -7,10 +7,10 @@ public class Projeto {
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws FileNotFoundException {
-        double populacaoInicial[] = tratamentoDados((leituraDados("hamsters.txt", 0))/*args[0]*/);     //VETOR INICIAL
+        double populacaoInicial[] = tratamentoDados((leituraDados("hamsters.txt"/*args[0]*/, 0)));     //VETOR INICIAL
         double matrizLeslie[][] = new double [populacaoInicial.length][populacaoInicial.length];                           //DECLARAÇÃO MATRIZ LESLIE
         for(int i = 1; i<=2; i++){
-            insercaoMatriz(matrizLeslie, leituraDados("hamsters.txt", i), i/*args[0]*/);
+            insercaoMatriz(matrizLeslie, leituraDados("hamsters.txt"/*args[0]*/, i), i);
         }
 
         System.out.println("Qual é o número de gerações que pretende calcular?");
@@ -26,6 +26,7 @@ public class Projeto {
             double variacao;
             variacao = TaxaVariacao(populaçãoTotal, populacaoTotalMais1);
             imprimir(variacao);
+            System.out.println("Qual é o número de gerações que pretende calcular?");
             t=ler.nextDouble();
         }
     }
