@@ -12,20 +12,20 @@ public class Projeto {
 
         System.out.println("Qual é o número de gerações que pretende calcular?");
         int t=ler.nextInt(); // CALCULO DO NUMERO DE GERAÇOES
-
         double populaçãoTotal;
         double [] Nt = new double [matrizLeslie.length];
-        populaçãoTotal=dimensãoPopulação(matrizLeslie,populacaoInicial,Nt,t);
-        imprimir(Nt,populaçãoTotal);
-
-        int u;
-        u = t+1;
-        double populacaoTotalMais1;
-        populacaoTotalMais1 = dimensãoPopulação(matrizLeslie,populacaoInicial,Nt,u);
-        double variacao;
-        variacao = TaxaVariacao(populaçãoTotal, populacaoTotalMais1);
-        imprimir(variacao);
-
+        while (t>0){
+            populaçãoTotal=dimensãoPopulação(matrizLeslie,populacaoInicial,Nt,t);
+            imprimir(Nt,populaçãoTotal);
+            int u;
+            u = t+1;
+            double populacaoTotalMais1;
+            populacaoTotalMais1 = dimensãoPopulação(matrizLeslie,populacaoInicial,Nt,u);
+            double variacao;
+            variacao = TaxaVariacao(populaçãoTotal, populacaoTotalMais1);
+            imprimir(variacao);
+            t=ler.nextInt();
+        }
     }
 
     public static int[] leituraVetor(String nomeFicheiro) throws FileNotFoundException { //LEITURA EXCLUSIVA DO VETOR
