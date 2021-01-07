@@ -17,6 +17,15 @@ public class Projeto {
         double [] Nt = new double [matrizLeslie.length];
         populaçãoTotal=dimensãoPopulação(matrizLeslie,populacaoInicial,Nt,t);
         imprimir(Nt,populaçãoTotal);
+
+        int u;
+        u = t+1;
+        double populacaoTotalMais1;
+        populacaoTotalMais1 = dimensãoPopulação(matrizLeslie,populacaoInicial,Nt,u);
+        double variacao;
+        variacao = TaxaVariacao(populaçãoTotal, populacaoTotalMais1);
+        imprimir(variacao);
+
     }
 
     public static int[] leituraVetor(String nomeFicheiro) throws FileNotFoundException { //LEITURA EXCLUSIVA DO VETOR
@@ -116,4 +125,14 @@ public class Projeto {
             System.out.printf("%.2f\n", Nt[l]);
         }
     }
+    public static double TaxaVariacao(double populacaoT, double populacaoTMAIS1) {
+        double variacao;
+        variacao = populacaoTMAIS1 / populacaoT;
+
+        return variacao;
+    }
+    public static void imprimir(double variacao) {
+        System.out.printf("%.2f%%\n", variacao);
+    }
+
 }
