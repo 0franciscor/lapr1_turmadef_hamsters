@@ -27,7 +27,7 @@ public class ValorVetorPróprio {
                     }
                 } else {
                     if ((-valor[l][c])>maior){
-                        maior=(valor[l][c]);
+                        maior=(-valor[l][c]);
                     }
 
                 }

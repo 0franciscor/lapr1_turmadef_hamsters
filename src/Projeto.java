@@ -25,8 +25,7 @@ public class Projeto {
             populacaoTotalMais1 = dimensãoPopulação(matrizLeslie,populacaoInicial,Nt,u);
             double variacao;
             variacao = TaxaVariacao(populaçãoTotal, populacaoTotalMais1);
-            imprimir(variacao);
-            System.out.println("Qual é o número de gerações que pretende calcular?");
+            imprimir(variacao);// vai ser para guardar num vetor e não imprimir logo
             t=ler.nextDouble();
         }
     }
