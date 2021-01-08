@@ -7,7 +7,7 @@ public class Projeto {
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws FileNotFoundException {
-        String nomeFicheiro = "hamster.txt";
+        String nomeFicheiro = args[0];
         File ficheiroVerificacao = new File(nomeFicheiro);
         boolean existe = ficheiroVerificacao.exists();
 
@@ -40,8 +40,7 @@ public class Projeto {
 
         int n=matrizLeslie.length;
 
-        System.out.println("Quais as geracoes que pretende que sejam estudadas?");
-        System.out.println("Para terminar a introducao das geracoes a analisar digite -1");
+        System.out.println("Quais as geracoes que pretende que sejam estudadas?\nPara terminar a introducao das geracoes a analisar digite -1");
 
         int t=ler.nextInt(), geracao=-1;
         int [] geracoesEstimadas = new int [1000];
@@ -155,8 +154,7 @@ public class Projeto {
     }
 
     public static void TaxaVariacao(double [] populacoesEstimadas, int geracao, double[] taxasDeVariacao) {
-        double variacao;
-        variacao=populacoesEstimadas[geracao+1]/populacoesEstimadas[geracao];
+        double variacao=populacoesEstimadas[geracao+1]/populacoesEstimadas[geracao];
         taxasDeVariacao[geracao]=variacao;
     }
 
@@ -185,7 +183,7 @@ public class Projeto {
 
     public static void imprimirAnaliseGeracoes (int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas,double[] taxasDeVariacao,double [][] distribuicaoNormalizada, double[][] Nt, int n){
         for (int l=0; l<=geracao;l++){
-            System.out.print("A populacao total na geracao " + geracoesEstimadas[l] +" e ");
+            System.out.print("\nA populacao total na geracao " + geracoesEstimadas[l] +" e ");
             System.out.printf("%.15f\n", populacoesEstimadas[l]);
             System.out.print("Sendo a taxa de variacao nesta geracao de ");
             System.out.printf("%.4f\n", taxasDeVariacao[l]);
@@ -198,7 +196,7 @@ public class Projeto {
             for (int j=0; j<n;j++){
                 System.out.printf("%.3f ", distribuicaoNormalizada[l][j]);
             }
-            System.out.println("\n\n");
+            System.out.println("\n");
         }
     }
 }
