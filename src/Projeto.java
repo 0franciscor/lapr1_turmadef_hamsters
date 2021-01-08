@@ -7,16 +7,13 @@ public class Projeto {
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws FileNotFoundException {
-        boolean existe;
-        String nomeFicheiro;
+        boolean existe = false;
+        String nomeFicheiro = null;
         if(args.length != 0) {
             nomeFicheiro = args[0];
             File ficheiroVerificacao = new File(nomeFicheiro);
             existe = ficheiroVerificacao.exists();
         }
-        else
-            nomeFicheiro = null;
-            existe = false;
 
         double populacaoInicial[] = null; //VETOR INICIAL
         double matrizLeslie[][] = null;   //DECLARAÇÃO MATRIZ LESLIE
@@ -27,7 +24,7 @@ public class Projeto {
             for(int i = 1; i<=2; i++){
                 insercaoMatriz(matrizLeslie, leituraDados(nomeFicheiro, i), i);
             }
-        } else if (!existe ) {
+        } else {
             System.out.println("Quantos intervalos de idade possui a populacao que pretende estudar?");
             int numIntervalos = ler.nextInt();
 
