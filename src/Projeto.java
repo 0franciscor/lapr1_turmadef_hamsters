@@ -7,7 +7,7 @@ public class Projeto {
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws FileNotFoundException {
-        String nomeFicheiro = args[0];
+        String nomeFicheiro = "hamster.txt";
         File ficheiroVerificacao = new File(nomeFicheiro);
         boolean existe = ficheiroVerificacao.exists();
 
@@ -21,19 +21,23 @@ public class Projeto {
                 insercaoMatriz(matrizLeslie, leituraDados(nomeFicheiro, i), i);
             }
         } else {
+            System.out.println("Quantos intervalos de idade possui a populacao que pretende estudar?");
             int numIntervalos = ler.nextInt();
+
             populacaoInicial = new double [numIntervalos];
-            insercaoDados(populacaoInicial, "População");
+            insercaoDados(populacaoInicial, "Populacao");
+
             matrizLeslie = new double [populacaoInicial.length][populacaoInicial.length];
             double aux [] = new double [matrizLeslie.length];
+
             for(int i = 1; i<=2; i++){
                 if(i==1)
-                    insercaoManualMatriz(matrizLeslie, insercaoDados(aux, "Taxa de sobrevivência"), i);
+                    insercaoManualMatriz(matrizLeslie, insercaoDados(aux, "Taxa de sobrevivencia"), i);
                 if(i==2)
                     insercaoManualMatriz(matrizLeslie, insercaoDados(aux, "Taxa de fecundidade"), i);
             }
         }
-        
+
         int n=matrizLeslie.length;
 
         System.out.println("Quais as geracoes que pretende que sejam estudadas?");
@@ -56,12 +60,17 @@ public class Projeto {
             t=ler.nextInt();
         }
 
-        imprimirAnalisegeracoes(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,Nt,n);
+        imprimirAnaliseGeracoes(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,Nt,n);
     }
 
     public static double[] insercaoDados(double[] array, String elemento){
-        for(int i = 0; i< array.length; i++){
-            System.out.println("Insira o valor nº " + i + " da " + elemento);
+        int limite;
+        if(elemento.equalsIgnoreCase("Taxa de sobrevivencia"))
+            limite= (array.length-1);
+        else
+            limite = array.length;
+        for(int i=0; i< limite; i++){
+            System.out.println("Insira o valor n" + (i+1) + " da " + elemento);
             array[i] = ler.nextDouble();
         }
         return array;
@@ -87,10 +96,16 @@ public class Projeto {
         }
         return valoresTratados;
     }
+
+    public static double[][] insercaoMatriz (double[][] matrizLeslie, String input, int tipologia) throws FileNotFoundException { //LEITURA E INSERÇÃO DE DADOS NA MATRIZ DE LESLIE 0-SOBREVIVENCIA 1- FECUNDIDADE
+        double[] valoresTratados = tratamentoDados(input);
+        return insercaoManualMatriz(matrizLeslie, valoresTratados, tipologia);
+    }
+
     public static double[][] insercaoManualMatriz (double[][] matrizLeslie, double[] valoresTratados, int tipologia) throws FileNotFoundException {
         if (tipologia == 1) {
             int colunaCorrente = 0;
-            for (int i = 1; i <= valoresTratados.length; i++) {
+            for (int i = 1; i <= (valoresTratados.length-1); i++) {
                 matrizLeslie[i][colunaCorrente] = valoresTratados[i - 1];
                 colunaCorrente++;
             }
@@ -100,11 +115,6 @@ public class Projeto {
                 matrizLeslie[0][i] = valoresTratados[i];
         }
         return matrizLeslie;
-    }
-
-    public static double[][] insercaoMatriz (double[][] matrizLeslie, String input, int tipologia) throws FileNotFoundException { //LEITURA E INSERÇÃO DE DADOS NA MATRIZ DE LESLIE 0-SOBREVIVENCIA 1- FECUNDIDADE
-        double[] valoresTratados = tratamentoDados(input);
-        return insercaoManualMatriz(matrizLeslie, valoresTratados, tipologia);
     }
 
     public static void dimensaoPopulacao (double [][] matrizLeslie, double[] populacaoInicial, int t, double[][] Nt,double[] populacoesEstimadas, int geracao) throws FileNotFoundException{ //CALCULO DIMENSAO POPULACAO
@@ -146,9 +156,9 @@ public class Projeto {
 
     public static void multiplicarmatrizes (double [][] matriz1, double[][] matriz2){
         double [] aux = new double [matriz2.length];
-        int i,l,c;
-        for (l=0;l<matriz1.length;l++){
-            for (i=0;i<matriz1.length;i++){
+        int c;
+        for (int l=0;l<matriz1.length;l++){
+            for (int i=0;i<matriz1.length;i++){
                 double soma=0;
                 for (c=0;c<matriz1.length;c++){
                     soma+=matriz2[l][c]*matriz1[c][i];
@@ -160,13 +170,14 @@ public class Projeto {
             }
         }
     }
+
     public static void distribuicaoNormalizada (int geracao,double[][] Nt, double [] populacoesEstimadas, double[][] distribuicaoNormalizada, int n){
         for (int i=0;i<n;i++){
             distribuicaoNormalizada[geracao][i]=Nt[geracao][i]/populacoesEstimadas[geracao];
         }
     }
 
-    public static void imprimirAnalisegeracoes (int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas,double[] taxasDeVariacao,double [][] distribuicaoNormalizada, double[][] Nt, int n){
+    public static void imprimirAnaliseGeracoes (int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas,double[] taxasDeVariacao,double [][] distribuicaoNormalizada, double[][] Nt, int n){
         for (int l=0; l<=geracao;l++){
             System.out.print("A populacao total na geracao " + geracoesEstimadas[l] +" e ");
             System.out.printf("%.15f\n", populacoesEstimadas[l]);
@@ -181,8 +192,7 @@ public class Projeto {
             for (int j=0; j<n;j++){
                 System.out.printf("%.3f ", distribuicaoNormalizada[l][j]);
             }
-            System.out.println("");
-            System.out.println("");
+            System.out.println("\n\n");
         }
     }
 }
