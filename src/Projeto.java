@@ -7,11 +7,33 @@ public class Projeto {
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws FileNotFoundException {
-        double [] populacaoInicial = tratamentoDados((leituraDados(args[0], 0)));     //VETOR INICIAL
-        double [][] matrizLeslie = new double [populacaoInicial.length][populacaoInicial.length];                           //DECLARAÇÃO MATRIZ LESLIE
-        for(int i = 1; i<=2; i++){
-            insercaoMatriz(matrizLeslie, leituraDados(args[0], i), i);
+        String nomeFicheiro = args[0];
+        File ficheiroVerificacao = new File(nomeFicheiro);
+        boolean existe = ficheiroVerificacao.exists();
+
+        double populacaoInicial[]; //VETOR INICIAL
+        double matrizLeslie[][];   //DECLARAÇÃO MATRIZ LESLIE
+
+        if(existe) {
+            populacaoInicial = tratamentoDados((leituraDados(nomeFicheiro, 0)));
+            matrizLeslie = new double [populacaoInicial.length][populacaoInicial.length];
+            for(int i = 1; i<=2; i++){
+                insercaoMatriz(matrizLeslie, leituraDados(nomeFicheiro, i), i);
+            }
+        } else {
+            int numIntervalos = ler.nextInt();
+            populacaoInicial = new double [numIntervalos];
+            insercaoDados(populacaoInicial, "População");
+            matrizLeslie = new double [populacaoInicial.length][populacaoInicial.length];
+            double aux [] = new double [matrizLeslie.length];
+            for(int i = 1; i<=2; i++){
+                if(i==1)
+                    insercaoManualMatriz(matrizLeslie, insercaoDados(aux, "Taxa de sobrevivência"), i);
+                if(i==2)
+                    insercaoManualMatriz(matrizLeslie, insercaoDados(aux, "Taxa de fecundidade"), i);
+            }
         }
+        
         int n=matrizLeslie.length;
 
         System.out.println("Quais as geracoes que pretende que sejam estudadas?");
@@ -37,6 +59,14 @@ public class Projeto {
         imprimirAnalisegeracoes(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,Nt,n);
     }
 
+    public static double[] insercaoDados(double[] array, String elemento){
+        for(int i = 0; i< array.length; i++){
+            System.out.println("Insira o valor nº " + i + " da " + elemento);
+            array[i] = ler.nextDouble();
+        }
+        return array;
+    }
+
     public static String leituraDados(String nomeFicheiro, int numLinha) throws FileNotFoundException { //LEITURA EXCLUSIVA DO VETOR
         File ficheiro = new File(nomeFicheiro);
         Scanner leituraFicheiro = new Scanner(ficheiro);
@@ -57,9 +87,7 @@ public class Projeto {
         }
         return valoresTratados;
     }
-
-    public static double[][] insercaoMatriz (double[][] matrizLeslie, String input, int tipologia) throws FileNotFoundException { //LEITURA E INSERÇÃO DE DADOS NA MATRIZ DE LESLIE 0-SOBREVIVENCIA 1- FECUNDIDADE
-        double[] valoresTratados = tratamentoDados(input);
+    public static double[][] insercaoManualMatriz (double[][] matrizLeslie, double[] valoresTratados, int tipologia) throws FileNotFoundException {
         if (tipologia == 1) {
             int colunaCorrente = 0;
             for (int i = 1; i <= valoresTratados.length; i++) {
@@ -72,6 +100,11 @@ public class Projeto {
                 matrizLeslie[0][i] = valoresTratados[i];
         }
         return matrizLeslie;
+    }
+
+    public static double[][] insercaoMatriz (double[][] matrizLeslie, String input, int tipologia) throws FileNotFoundException { //LEITURA E INSERÇÃO DE DADOS NA MATRIZ DE LESLIE 0-SOBREVIVENCIA 1- FECUNDIDADE
+        double[] valoresTratados = tratamentoDados(input);
+        return insercaoManualMatriz(matrizLeslie, valoresTratados, tipologia);
     }
 
     public static void dimensaoPopulacao (double [][] matrizLeslie, double[] populacaoInicial, int t, double[][] Nt,double[] populacoesEstimadas, int geracao) throws FileNotFoundException{ //CALCULO DIMENSAO POPULACAO
