@@ -13,20 +13,24 @@ public class Projeto {
             insercaoMatriz(matrizLeslie, leituraDados("hamsters.txt"/*args[0]*/, i), i);
         }
 
-        System.out.println("Qual é o número de gerações que pretende calcular?");
-        double t=ler.nextDouble(); // CALCULO DO NUMERO DE GERAÇOES
+        System.out.println("Quais as gerações que pretende analisar?");
+        double [] populaçõesEstimadas = new double[1000];
+        double [] taxasDeVariação = new double[1000];
+        int t=ler.nextInt(); // CALCULO DO NUMERO DE GERAÇOES
         double populaçãoTotal;
         double [] Nt = new double [matrizLeslie.length];
+        int geração=-1;
         while (t>0){
-            populaçãoTotal=dimensãoPopulação(matrizLeslie,populacaoInicial,Nt,t);
-            imprimir(Nt,populaçãoTotal);
-            double u = t+1;
-            double populacaoTotalMais1;
-            populacaoTotalMais1 = dimensãoPopulação(matrizLeslie,populacaoInicial,Nt,u);
-            double variacao;
-            variacao = TaxaVariacao(populaçãoTotal, populacaoTotalMais1);
-            imprimir(variacao);// vai ser para guardar num vetor e não imprimir logo
-            t=ler.nextDouble();
+            int u = t+1;
+            geração=geração+1;
+            dimensãoPopulação(matrizLeslie,populacaoInicial,Nt,t,populaçõesEstimadas,geração);
+            dimensãoPopulação(matrizLeslie,populacaoInicial,Nt,u,populaçõesEstimadas,(geração+1));
+            TaxaVariacao(populaçõesEstimadas,geração,taxasDeVariação);
+            t=ler.nextInt();
+        }
+        for (int l=0; l<=geração;l++){
+            System.out.printf("%.2f\n", populaçõesEstimadas[l]);
+            System.out.printf("%.2f\n", taxasDeVariação[l]);
         }
     }
 
@@ -70,60 +74,50 @@ public class Projeto {
         return matrizLeslie;
     }
 
-    public static double dimensãoPopulação (double [][] matrizLeslie, double[] populacaoInicial, double [] Nt, double t) throws FileNotFoundException{ //CALCULO DIMENSAO POPULACAO
-        double novaLeslie[][] = new double[matrizLeslie.length][matrizLeslie.length];
+    public static void dimensãoPopulação (double [][] matrizLeslie, double[] populacaoInicial, double [] Nt, int t, double[] populaçõesEstimadas, int geração) throws FileNotFoundException{ //CALCULO DIMENSAO POPULACAO
+        double Lesliemultiplicada[][] = new double[matrizLeslie.length][matrizLeslie.length];
         for(int i =0 ; i<matrizLeslie.length; i++){
             for(int j =0 ; j< matrizLeslie.length; j++){
-                novaLeslie[i][j]=matrizLeslie[i][j];
+                Lesliemultiplicada[i][j]=matrizLeslie[i][j];
             }
         }
-        double [] aux = new double [matrizLeslie.length];
-        int n= matrizLeslie.length;
+        multiplicarmatrizes(matrizLeslie,Lesliemultiplicada,t);
+        double total=0;
+        int i,l;
+        for (i=0;i<matrizLeslie.length;i++){
+            double somas=0;
+            for (l=0;l< matrizLeslie.length;l++){
+                somas=somas+Lesliemultiplicada[i][l]*populacaoInicial[l];
+            }
+            total=total+somas;
+        }
+        populaçõesEstimadas[geração]=total;
+    }
+
+    public static void TaxaVariacao(double [] populaçõesEstimadas, int geração, double[] taxasDeVariação) {
+        double variacao;
+        variacao=populaçõesEstimadas[geração+1]/populaçõesEstimadas[geração];
+        taxasDeVariação[geração]=variacao;
+    }
+
+    public static void multiplicarmatrizes (double [][] matriz1, double[][] matriz2, double t){
+        double [] aux = new double [matriz1.length];
         int i,l,c,g;
-        double total=0,soma;
+        double soma;
         for (g=2;g<=t;g++){
-            for (l=0;l<n;l++){
-                for (i=0;i<n;i++){
+            for (l=0;l<matriz1.length;l++){
+                for (i=0;i<matriz1.length;i++){
                     soma=0;
-                    for (c=0;c<n;c++){
-                        soma=soma+novaLeslie[l][c]*matrizLeslie[c][i];
+                    for (c=0;c<matriz1.length;c++){
+                        soma=soma+matriz2[l][c]*matriz1[c][i];
                     }
                     aux[i]=soma;
                 }
-                for (c=0;c<n;c++){
-                    novaLeslie[l][c]=aux[c];
+                for (c=0;c<matriz1.length;c++){
+                    matriz2[l][c]=aux[c];
                 }
             }
         }
-        for (i=0;i<n;i++){
-            double somas=0;
-            for (l=0;l<n;l++){
-                somas=somas+novaLeslie[i][l]*populacaoInicial[l];
-            }
-            Nt[i]=somas;
-        }
-        total=0;
-        for (i=0;i<n;i++){
-            total=total+Nt[i];
-        }
-        return total;
-    }
-
-    public static void imprimir(double [] Nt, double total){
-        int  l;
-        System.out.printf("%.2f\n",total);
-        for(l=0;l<4;l++){
-            System.out.printf("%.2f\n", Nt[l]);
-        }
-    }
-    public static double TaxaVariacao(double populacaoT, double populacaoTMAIS1) {
-        double variacao;
-        variacao = populacaoTMAIS1 / populacaoT;
-
-        return variacao;
-    }
-    public static void imprimir(double variacao) {
-        System.out.printf("%.2f%%\n", variacao);
     }
 
 }
