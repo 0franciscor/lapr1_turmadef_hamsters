@@ -14,21 +14,22 @@ public class Projeto {
         }
 
         System.out.println("Quais as gerações que pretende analisar?");
-        double [] populaçõesEstimadas = new double[1000];
-        double [] taxasDeVariação = new double[1000];
+        double [] populacoesEstimadas = new double[1000];
+        double [] taxasDeVariacao = new double[1000];
+        double [][] Nt = new double[1000][matrizLeslie.length];
         int t=ler.nextInt(); // CALCULO DO NUMERO DE GERAÇOES
-        int geração=-1;
+        int geracao=-1;
         while (t>0){
             int u = t+1;
-            geração=geração+1;
-            dimensãoPopulação(matrizLeslie,populacaoInicial,t,populaçõesEstimadas,geração);
-            dimensãoPopulação(matrizLeslie,populacaoInicial,u,populaçõesEstimadas,(geração+1));
-            TaxaVariacao(populaçõesEstimadas,geração,taxasDeVariação);
+            geracao=geracao+1;
+            dimensaoPopulacao(matrizLeslie,populacaoInicial,t,Nt,populacoesEstimadas,geracao);
+            dimensaoPopulacao(matrizLeslie,populacaoInicial,u,Nt,populacoesEstimadas,(geracao+1));
+            TaxaVariacao(populacoesEstimadas,geracao,taxasDeVariacao);
             t=ler.nextInt();
         }
-        for (int l=0; l<=geração;l++){
-            System.out.printf("%.2f\n", populaçõesEstimadas[l]);
-            System.out.printf("%.2f\n", taxasDeVariação[l]);
+        for (int l=0; l<=geracao;l++){
+            System.out.printf("%.2f\n", populacoesEstimadas[l]);
+            System.out.printf("%.2f\n", taxasDeVariacao[l]);
         }
     }
 
@@ -72,7 +73,7 @@ public class Projeto {
         return matrizLeslie;
     }
 
-    public static void dimensãoPopulação (double [][] matrizLeslie, double[] populacaoInicial, int t, double[] populaçõesEstimadas, int geração) throws FileNotFoundException{ //CALCULO DIMENSAO POPULACAO
+    public static void dimensaoPopulacao (double [][] matrizLeslie, double[] populacaoInicial, int t, double[][] Nt,double[] populacoesEstimadas, int geracao) throws FileNotFoundException{ //CALCULO DIMENSAO POPULACAO
         double Lesliemultiplicada[][] = new double[matrizLeslie.length][matrizLeslie.length];
         for(int i =0 ; i<matrizLeslie.length; i++){
             for(int j =0 ; j< matrizLeslie.length; j++){
@@ -87,15 +88,18 @@ public class Projeto {
             for (l=0;l< matrizLeslie.length;l++){
                 somas=somas+Lesliemultiplicada[i][l]*populacaoInicial[l];
             }
-            total=total+somas;
+            Nt[geracao][i]=somas;
         }
-        populaçõesEstimadas[geração]=total;
+        for (i=0;i< matrizLeslie.length;i++){
+            total=total+Nt[geracao][i];
+        }
+        populacoesEstimadas[geracao]=total;
     }
 
-    public static void TaxaVariacao(double [] populaçõesEstimadas, int geração, double[] taxasDeVariação) {
+    public static void TaxaVariacao(double [] populacoesEstimadas, int geracao, double[] taxasDeVariacao) {
         double variacao;
-        variacao=populaçõesEstimadas[geração+1]/populaçõesEstimadas[geração];
-        taxasDeVariação[geração]=variacao;
+        variacao=populacoesEstimadas[geracao+1]/populacoesEstimadas[geracao];
+        taxasDeVariacao[geracao]=variacao;
     }
 
     public static void multiplicarmatrizes (double [][] matriz1, double[][] matriz2, double t){
