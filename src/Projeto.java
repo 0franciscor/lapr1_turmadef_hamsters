@@ -13,7 +13,7 @@ public class Projeto {
             insercaoMatriz(matrizLeslie, leituraDados(args[0], i), i);
         }
 
-        System.out.println("Quais as gerações que pretende analisar?");
+        System.out.println("Quais as geracoes que pretende analisar?");
         int t=ler.nextInt();
         int geracao=-1;
         int [] geracoesEstimadas = new int [1000];
@@ -33,16 +33,16 @@ public class Projeto {
         }
         // colocar esta informação a ser imprimida num método
         for (int l=0; l<=geracao;l++){
-            System.out.print("A população total na geração " + geracoesEstimadas[l] +" é ");
+            System.out.print("A populacao total na geracao " + geracoesEstimadas[l] +" e ");
             System.out.printf("%.2f\n", populacoesEstimadas[l]);
-            System.out.print("Sendo a taxa de variação nesta geração de ");
+            System.out.print("Sendo a taxa de variacao nesta geracao de ");
             System.out.printf("%.2f\n", taxasDeVariacao[l]);
-            System.out.print("A distribuição da população é a seguinte: ");
+            System.out.print("A distribuicao da populacao e a seguinte: ");
             for (int j=0; j< matrizLeslie.length;j++){
                 System.out.printf("%.2f ", Nt[l][j]);
             }
             System.out.println("");
-            System.out.print("A distribuição normalizada da população é a seguinte: ");
+            System.out.print("A distribuicao normalizada da populacao e a seguinte: ");
             for (int j=0; j< matrizLeslie.length;j++){
                 System.out.printf("%.3f ", distribuicaoNormalizada[l][j]);
             }
