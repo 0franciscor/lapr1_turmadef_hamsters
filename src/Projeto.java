@@ -69,6 +69,7 @@ public class Projeto {
             limite= (array.length-1);
         else
             limite = array.length;
+
         for(int i=0; i< limite; i++){
             System.out.println("Insira o valor n" + (i+1) + " da " + elemento);
             array[i] = ler.nextDouble();
@@ -80,15 +81,18 @@ public class Projeto {
         File ficheiro = new File(nomeFicheiro);
         Scanner leituraFicheiro = new Scanner(ficheiro);
         String input = "";
+
         for(int i = 0; i<=numLinha; i++)
             input = leituraFicheiro.nextLine();
         leituraFicheiro.close();
+
         return input;
     }
 
     public static double[] tratamentoDados(String input) {
         String[] dadosInseridos = input.split(", ");
         double [] valoresTratados = new double[dadosInseridos.length];
+
         for(int i = 0; i< dadosInseridos.length; i++) {
             String[] dadosInseridosTratados = dadosInseridos[i].split("=");
             double valorTratado = Double.parseDouble(dadosInseridosTratados[1]);
@@ -119,11 +123,13 @@ public class Projeto {
 
     public static void dimensaoPopulacao (double [][] matrizLeslie, double[] populacaoInicial, int t, double[][] Nt,double[] populacoesEstimadas, int geracao) throws FileNotFoundException{ //CALCULO DIMENSAO POPULACAO
         double [][] Lesliemultiplicada = new double[matrizLeslie.length][matrizLeslie.length];
+
         for(int i =0 ; i<matrizLeslie.length; i++){
             for(int j =0 ; j< matrizLeslie.length; j++){
                 Lesliemultiplicada[i][j]=matrizLeslie[i][j];
             }
         }
+
         for(int temp = t; temp>=2;temp--){
             multiplicarmatrizes(matrizLeslie,Lesliemultiplicada);
         }
