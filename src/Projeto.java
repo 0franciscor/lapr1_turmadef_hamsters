@@ -7,30 +7,32 @@ public class Projeto {
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws FileNotFoundException {
-        double populacaoInicial[] = tratamentoDados((leituraDados(args[0], 0)));     //VETOR INICIAL
+        double populacaoInicial[] = tratamentoDados((leituraDados("Hamsters.txt", 0)));     //VETOR INICIAL
         double matrizLeslie[][] = new double [populacaoInicial.length][populacaoInicial.length];                           //DECLARAÇÃO MATRIZ LESLIE
         for(int i = 1; i<=2; i++){
-            insercaoMatriz(matrizLeslie, leituraDados(args[0], i), i);
+            insercaoMatriz(matrizLeslie, leituraDados("Hamsters.txt", i), i);
         }
 
-        System.out.println("Quais as geracoes que pretende analisar?");
-        int t=ler.nextInt();
-        int geracao=-1;
+        System.out.println("Quais as geracoes que pretende que sejam estudadas?");
+        System.out.println("Para terminar a introducao das geracoes a analisar digite -1");
+
+        int t=ler.nextInt(), geracao=-1;
         int [] geracoesEstimadas = new int [1000];
         double [] populacoesEstimadas = new double[1000];
         double [] taxasDeVariacao = new double[1000];
-        double [][] distribuicaoNormalizada = new double[1000][matrizLeslie.length];
         double [][] Nt = new double[1000][matrizLeslie.length];
+        double [][] distribuicaoNormalizada = new double[1000][matrizLeslie.length];
 
-        while (t>0){
-            int u = t+1;
-            geracao=geracao+1;
+
+        while (t!=-1){
+            geracao+=1;
             geracoesEstimadas [geracao]= t;
             dimensaoPopulacao(matrizLeslie,populacaoInicial,t,Nt,populacoesEstimadas,geracao,distribuicaoNormalizada);
-            dimensaoPopulacao(matrizLeslie,populacaoInicial,u,Nt,populacoesEstimadas,(geracao+1),distribuicaoNormalizada);
+            dimensaoPopulacao(matrizLeslie,populacaoInicial,(t+1),Nt,populacoesEstimadas,(geracao+1),distribuicaoNormalizada);
             TaxaVariacao(populacoesEstimadas,geracao,taxasDeVariacao);
             t=ler.nextInt();
         }
+
         // colocar esta informação a ser imprimida num método
         for (int l=0; l<=geracao;l++){
             System.out.print("A populacao total na geracao " + geracoesEstimadas[l] +" e ");
@@ -47,7 +49,7 @@ public class Projeto {
                 System.out.printf("%.3f ", distribuicaoNormalizada[l][j]);
             }
             System.out.println("");
-            System.out.println("///////////////////////////// ");
+            System.out.println("");
 
         }
     }
@@ -100,7 +102,12 @@ public class Projeto {
                 Lesliemultiplicada[i][j]=matrizLeslie[i][j];
             }
         }
-        multiplicarmatrizes(matrizLeslie,Lesliemultiplicada,t);
+        int g=2;
+        while (g<=t){
+            multiplicarmatrizes(matrizLeslie,Lesliemultiplicada);
+            g+=1;
+        }
+
         double total=0;
         int i,l;
         for (i=0;i<matrizLeslie.length;i++){
@@ -125,24 +132,20 @@ public class Projeto {
         taxasDeVariacao[geracao]=variacao;
     }
 
-    public static void multiplicarmatrizes (double [][] matriz1, double[][] matriz2, double t){
-        double [] aux = new double [matriz1.length];
-        int i,l,c,g;
-        double soma;
-        for (g=2;g<=t;g++){
-            for (l=0;l<matriz1.length;l++){
-                for (i=0;i<matriz1.length;i++){
-                    soma=0;
-                    for (c=0;c<matriz1.length;c++){
-                        soma=soma+matriz2[l][c]*matriz1[c][i];
-                    }
-                    aux[i]=soma;
-                }
+    public static void multiplicarmatrizes (double [][] matriz1, double[][] matriz2){
+        double [] aux = new double [matriz2.length];
+        int i,l,c;
+        for (l=0;l<matriz1.length;l++){
+            for (i=0;i<matriz1.length;i++){
+                double soma=0;
                 for (c=0;c<matriz1.length;c++){
-                    matriz2[l][c]=aux[c];
+                    soma+=matriz2[l][c]*matriz1[c][i];
                 }
+                aux[i]=soma;
+            }
+            for (c=0;c<matriz2.length;c++){
+                matriz2[l][c]=aux[c];
             }
         }
     }
-
 }
