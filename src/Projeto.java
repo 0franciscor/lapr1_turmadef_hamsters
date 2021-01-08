@@ -7,12 +7,19 @@ public class Projeto {
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws FileNotFoundException {
-        String nomeFicheiro = args[0];
-        File ficheiroVerificacao = new File(nomeFicheiro);
-        boolean existe = ficheiroVerificacao.exists();
+        boolean existe;
+        String nomeFicheiro;
+        if(args.length != 0) {
+            nomeFicheiro = args[0];
+            File ficheiroVerificacao = new File(nomeFicheiro);
+            existe = ficheiroVerificacao.exists();
+        }
+        else
+            nomeFicheiro = null;
+            existe = false;
 
-        double populacaoInicial[]; //VETOR INICIAL
-        double matrizLeslie[][];   //DECLARAÇÃO MATRIZ LESLIE
+        double populacaoInicial[] = null; //VETOR INICIAL
+        double matrizLeslie[][] = null;   //DECLARAÇÃO MATRIZ LESLIE
 
         if(existe) {
             populacaoInicial = tratamentoDados((leituraDados(nomeFicheiro, 0)));
@@ -20,7 +27,7 @@ public class Projeto {
             for(int i = 1; i<=2; i++){
                 insercaoMatriz(matrizLeslie, leituraDados(nomeFicheiro, i), i);
             }
-        } else {
+        } else if (!existe ) {
             System.out.println("Quantos intervalos de idade possui a populacao que pretende estudar?");
             int numIntervalos = ler.nextInt();
 
@@ -40,7 +47,7 @@ public class Projeto {
 
         int n=matrizLeslie.length;
 
-        System.out.println("Quais as geracoes que pretende que sejam estudadas?\nPara terminar a introducao das geracoes a analisar digite -1");
+        System.out.println("Quais as geracoes que pretende que sejam estudadas? (Para terminar a introducao das geracoes a analisar digite -1)");
 
         int t=ler.nextInt(), geracao=-1;
         int [] geracoesEstimadas = new int [1000];
@@ -191,8 +198,7 @@ public class Projeto {
             for (int j=0; j<n;j++){
                 System.out.printf("%.2f ", Nt[l][j]);
             }
-            System.out.println("");
-            System.out.print("A distribuicao normalizada da populacao e a seguinte: ");
+            System.out.print("\nA distribuicao normalizada da populacao e a seguinte: ");
             for (int j=0; j<n;j++){
                 System.out.printf("%.3f ", distribuicaoNormalizada[l][j]);
             }
