@@ -7,10 +7,10 @@ public class Projeto {
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws FileNotFoundException {
-        double [] populacaoInicial = tratamentoDados((leituraDados("Hamsters.txt", 0)));     //VETOR INICIAL
+        double [] populacaoInicial = tratamentoDados((leituraDados(args[0], 0)));     //VETOR INICIAL
         double [][] matrizLeslie = new double [populacaoInicial.length][populacaoInicial.length];                           //DECLARAÇÃO MATRIZ LESLIE
         for(int i = 1; i<=2; i++){
-            insercaoMatriz(matrizLeslie, leituraDados("Hamsters.txt", i), i);
+            insercaoMatriz(matrizLeslie, leituraDados(args[0], i), i);
         }
         int n=matrizLeslie.length;
 
