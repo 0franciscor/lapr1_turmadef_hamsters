@@ -17,14 +17,12 @@ public class Projeto {
         double [] populaçõesEstimadas = new double[1000];
         double [] taxasDeVariação = new double[1000];
         int t=ler.nextInt(); // CALCULO DO NUMERO DE GERAÇOES
-        double populaçãoTotal;
-        double [] Nt = new double [matrizLeslie.length];
         int geração=-1;
         while (t>0){
             int u = t+1;
             geração=geração+1;
-            dimensãoPopulação(matrizLeslie,populacaoInicial,Nt,t,populaçõesEstimadas,geração);
-            dimensãoPopulação(matrizLeslie,populacaoInicial,Nt,u,populaçõesEstimadas,(geração+1));
+            dimensãoPopulação(matrizLeslie,populacaoInicial,t,populaçõesEstimadas,geração);
+            dimensãoPopulação(matrizLeslie,populacaoInicial,u,populaçõesEstimadas,(geração+1));
             TaxaVariacao(populaçõesEstimadas,geração,taxasDeVariação);
             t=ler.nextInt();
         }
@@ -74,7 +72,7 @@ public class Projeto {
         return matrizLeslie;
     }
 
-    public static void dimensãoPopulação (double [][] matrizLeslie, double[] populacaoInicial, double [] Nt, int t, double[] populaçõesEstimadas, int geração) throws FileNotFoundException{ //CALCULO DIMENSAO POPULACAO
+    public static void dimensãoPopulação (double [][] matrizLeslie, double[] populacaoInicial, int t, double[] populaçõesEstimadas, int geração) throws FileNotFoundException{ //CALCULO DIMENSAO POPULACAO
         double Lesliemultiplicada[][] = new double[matrizLeslie.length][matrizLeslie.length];
         for(int i =0 ; i<matrizLeslie.length; i++){
             for(int j =0 ; j< matrizLeslie.length; j++){
