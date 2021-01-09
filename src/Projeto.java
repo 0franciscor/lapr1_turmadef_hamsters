@@ -1,3 +1,7 @@
+import org.la4j.Matrix;
+import org.la4j.decomposition.EigenDecompositor;
+import org.la4j.matrix.dense.Basic2DMatrix;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -15,8 +19,8 @@ public class Projeto {
             existe = ficheiroVerificacao.exists();
         }
 
-        double populacaoInicial[]; //VETOR INICIAL
-        double matrizLeslie[][];   //DECLARAÇÃO MATRIZ LESLIE
+        double [] populacaoInicial; //VETOR INICIAL
+        double [][] matrizLeslie;   //DECLARAÇÃO MATRIZ LESLIE
 
         if(existe) {
             populacaoInicial = tratamentoDados((leituraDados(nomeFicheiro, 0)));
@@ -32,7 +36,7 @@ public class Projeto {
             insercaoDados(populacaoInicial, "Populacao");
 
             matrizLeslie = new double [populacaoInicial.length][populacaoInicial.length];
-            double aux [] = new double [matrizLeslie.length];
+            double [] aux  = new double [matrizLeslie.length];
 
             for(int i = 1; i<=2; i++){
                 if(i==1)
@@ -64,6 +68,18 @@ public class Projeto {
         }
 
         imprimirAnaliseGeracoes(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,Nt,n);
+
+        double [] vetor = new double[matrizLeslie.length];
+        double valorProprio;
+        valorProprio=calcularVetorValorProprio(matrizLeslie,vetor);
+
+        System.out.print("O valor Proprio e: ");
+        System.out.printf("%.3f\n", valorProprio);
+        System.out.print("O vetor proprio e: ");
+        for (int f=0; f<matrizLeslie.length;f++){
+            System.out.printf("%.3f ",vetor[f]);
+        }
+
     }
 
     public static double[] insercaoDados(double[] array, String elemento){
@@ -202,5 +218,37 @@ public class Projeto {
             }
             System.out.println("\n");
         }
+    }
+    public static double calcularVetorValorProprio (double[][] matrizLeslie,double[] vetor){
+        Matrix a = new Basic2DMatrix(matrizLeslie);
+        EigenDecompositor eigenD=new EigenDecompositor(a);
+        Matrix [] mattD= eigenD.decompose();
+        double vetoraux [][]= mattD[0].toDenseMatrix().toArray();
+        double valor [][]= mattD[1].toDenseMatrix().toArray();
+
+        double maior=0;
+        int coluna=0;
+        for (int l=0;l<matrizLeslie.length;l++){
+            for (int c=0; c<matrizLeslie.length;c++){
+                if (valor[l][c]>=0){
+                    if (valor[l][c]>maior){
+                        maior=valor[l][c];
+                        coluna=c;
+                    }
+                } else {
+                    if ((-valor[l][c])>maior){
+                        maior=(-valor[l][c]);
+                        coluna=c;
+                    }
+
+                }
+            }
+        }
+
+        for (int i=0;i<matrizLeslie.length;i++){
+            vetor[i]=vetoraux[i][coluna];
+        }
+
+        return maior;
     }
 }

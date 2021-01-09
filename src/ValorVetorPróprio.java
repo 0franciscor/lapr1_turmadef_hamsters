@@ -9,31 +9,49 @@ import java.util.Scanner;
 public class ValorVetorPróprio {
     static Scanner ler = new Scanner(System.in);
     public static void main(String[] args) throws FileNotFoundException {
-        int populacaoInicial[] = leituraVetor("hamsters.txt"/*args[0]*/);
-        double matrizLeslie[][] = leituraMatriz(populacaoInicial, "hamsters.txt"/*args[0]*/);
+        int populacaoInicial[] = leituraVetor("rato.txt"/*args[0]*/);
+        double matrizLeslie[][] = leituraMatriz(populacaoInicial, "rato.txt"/*args[0]*/);
 
         Matrix a = new Basic2DMatrix(matrizLeslie);
         EigenDecompositor eigenD=new EigenDecompositor(a);
         Matrix [] mattD= eigenD.decompose();
+        double vetoraux [][]= mattD[0].toDenseMatrix().toArray();
         double valor [][]= mattD[1].toDenseMatrix().toArray();
+        double [] vetor = new double[matrizLeslie.length];
         double maior=0;
-        //double maiorValorPróprio= matB[0][0];
-        //System.out.printf("%.3f\n",maiorValorPróprio);
+        int coluna=0;
+        for(int i=0; i<2;i++)
+
+        {
+
+            System.out.println(mattD[i]);
+
+        }
+
         for (int l=0;l<matrizLeslie.length;l++){
             for (int c=0; c<matrizLeslie.length;c++){
                 if (valor[l][c]>=0){
                     if (valor[l][c]>maior){
                         maior=valor[l][c];
+                        coluna=c;
                     }
                 } else {
                     if ((-valor[l][c])>maior){
                         maior=(-valor[l][c]);
+                        coluna=c;
                     }
 
                 }
             }
         }
         System.out.printf("%.3f\n",maior);
+        for (int i=0;i<matrizLeslie.length;i++){
+            System.out.println(vetoraux[i][coluna]);
+            //vetor[i]=vetoraux[i][coluna];
+        }
+        /*for (int i=0;i<matrizLeslie.length;i++){
+            System.out.println(vetor[i]);
+        }*/
 
     }
     public static int[] leituraVetor(String nomeFicheiro) throws FileNotFoundException { //LEITURA EXCLUSIVA DO VETOR
