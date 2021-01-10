@@ -10,43 +10,20 @@ public class Projeto {
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws FileNotFoundException {
-        boolean existe = false, naoInterativo = false;
+        boolean existe, naoInterativo;
         String nomeFicheiro = null;
         int[] opcoesExecucao = new int [5];
         int numCiclos = 0;
 
-        if (args.length != 0 && args[0].equals("-t")) { ///// É IMPORTANTE ESCREVER O NOME DE UM FICHEIRO DE SAIDA E ALTERAR PARA 2
-            nomeFicheiro = args[(args.length-1)];
-            existe = existeFicheiro(nomeFicheiro);
+        naoInterativo = nInterativo(opcoesExecucao, args);
+        existe = naoInterativo;
 
-            if (existe) {
-                naoInterativo = true;
-                numCiclos = Integer.parseInt(args[1]);
+        if(existe) {
+            numCiclos = opcoesExecucao[1];
+            nomeFicheiro = args[(args.length - 1)];
+        }
 
-                for (int i = 2; i <= (args.length - 1); i++) {     ///// É IMPORTANTE ESCREVER O NOME DE UM FICHEIRO DE SAIDA E ALTERAR PARA 2
-
-                    if (args[i].equals("-g")) {
-                        if (args[i + 1].equals(String.valueOf(1)) || args[i + 1].equals(String.valueOf(2)) || args[i + 1].equals(String.valueOf(3))) {
-                            for (int j = 0; j <= 3; j++) {
-                                if (args[i + 1].equals(String.valueOf(j)))
-                                    opcoesExecucao[1] = j;
-                            }
-                        }
-                    }
-                    if (args[i].equals("-e")) {
-                        opcoesExecucao[2] = 1;
-                    }
-                    if (args[i].equals("-v")) {
-                        opcoesExecucao[3] = 1;
-                    }
-                    if (args[i].equals("-r")) {
-                        opcoesExecucao[4] = 1;
-                    }
-                }
-            } else if (!existe){
-                System.out.println("O ficheiro inserido não existe. Deste modo o programa será executado em modo interativo.");
-            }
-        } else if (args.length != 0 && args[0].equals("-n")) {
+        if (args.length != 0 && args[0].equals("-n")) {
             nomeFicheiro = args[1];
             existe = existeFicheiro(nomeFicheiro);
         }
@@ -78,7 +55,7 @@ public class Projeto {
             }
         }
 
-        int n = matrizLeslie.length, t=0, geracao=-1;
+        int n = matrizLeslie.length, t, geracao=-1;
 
         int [] geracoesEstimadas = new int [1000];
         double [] populacoesEstimadas = new double[1000];
@@ -98,11 +75,11 @@ public class Projeto {
         else {
             System.out.println("Quais as geracoes que pretende que sejam estudadas? (Para terminar a introducao das geracoes a analisar, digite -1)");
             t = ler.nextInt();
+
             while (t != -1) {
                 geracao++;
                 procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, n);
                 t = ler.nextInt();
-
             }
         }
 
@@ -118,6 +95,43 @@ public class Projeto {
                 System.out.printf("%.3f ", vetor[f]);
             }
         }
+    }
+
+    public static boolean nInterativo(int[] opcoesExecucao, String[] args) {
+        boolean naoInterativo = false;
+
+        if (args.length != 0 && args[0].equals("-t")) { ///// É IMPORTANTE ESCREVER O NOME DE UM FICHEIRO DE SAIDA E ALTERAR PARA 2
+            String nomeFicheiro = args[(args.length - 1)];
+            boolean existe = existeFicheiro(nomeFicheiro);
+
+            if (existe) {
+                naoInterativo = true;
+                opcoesExecucao[1] = Integer.parseInt(args[1]);
+                for (int i = 2; i <= (args.length - 1); i++) {     ///// É IMPORTANTE ESCREVER O NOME DE UM FICHEIRO DE SAIDA E ALTERAR PARA 2
+
+                    if (args[i].equals("-g")) {
+                        if (args[i + 1].equals(String.valueOf(1)) || args[i + 1].equals(String.valueOf(2)) || args[i + 1].equals(String.valueOf(3))) {
+                            for (int j = 0; j <= 3; j++) {
+                                if (args[i + 1].equals(String.valueOf(j)))
+                                    opcoesExecucao[1] = j;
+                            }
+                        }
+                    }
+                    if (args[i].equals("-e")) {
+                        opcoesExecucao[2] = 1;
+                    }
+                    if (args[i].equals("-v")) {
+                        opcoesExecucao[3] = 1;
+                    }
+                    if (args[i].equals("-r")) {
+                        opcoesExecucao[4] = 1;
+                    }
+                }
+            } else if (!existe) {
+                System.out.println("O ficheiro inserido não existe. Deste modo o programa será executado em modo interativo.");
+            }
+        }
+        return naoInterativo;
     }
 
     public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, int[] geracoesEstimadas, double[][] matrizLeslie, double[] populacaoInicial, int t, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] distribuicaoNormalizada, int n){
