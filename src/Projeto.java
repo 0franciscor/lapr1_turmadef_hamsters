@@ -3,6 +3,8 @@ import org.la4j.decomposition.EigenDecompositor;
 import org.la4j.matrix.dense.Basic2DMatrix;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Projeto {
@@ -90,6 +92,7 @@ public class Projeto {
         valorProprio=calcularVetorValorProprio(matrizLeslie,vetor);
 
         imprimirAnaliseGeracoes(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,Nt,n, naoInterativo, opcoesExecucao, matrizLeslie, vetor, valorProprio);
+        escreverParaFicheiro(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n);
     }
 
     public static boolean modoInterativo(String[] args){
@@ -302,35 +305,102 @@ public class Projeto {
         }
     }
 
-    public static double calcularVetorValorProprio (double[][] matrizLeslie,double[] vetor){
+    public static double calcularVetorValorProprio (double[][] matrizLeslie,double[] vetor) {
         Matrix a = new Basic2DMatrix(matrizLeslie);
-        EigenDecompositor eigenD=new EigenDecompositor(a);
-        Matrix [] mattD= eigenD.decompose();
+        EigenDecompositor eigenD = new EigenDecompositor(a);
+        Matrix[] mattD = eigenD.decompose();
         double[][] vetoraux = mattD[0].toDenseMatrix().toArray();
         double[][] valor = mattD[1].toDenseMatrix().toArray();
 
-        double maior=0;
-        int coluna=0;
+        double maior = 0;
+        int coluna = 0;
 
-        for (int l=0;l<matrizLeslie.length;l++){
-            for (int c=0; c<matrizLeslie.length;c++){
-                if (valor[l][c]>=0){
-                    if (valor[l][c]>maior){
-                        maior=valor[l][c];
-                        coluna=c;
+        for (int l = 0; l < matrizLeslie.length; l++) {
+            for (int c = 0; c < matrizLeslie.length; c++) {
+                if (valor[l][c] >= 0) {
+                    if (valor[l][c] > maior) {
+                        maior = valor[l][c];
+                        coluna = c;
                     }
                 } else {
-                    if ((-valor[l][c])>maior){
-                        maior=(-valor[l][c]);
-                        coluna=c;
+                    if ((-valor[l][c]) > maior) {
+                        maior = (-valor[l][c]);
+                        coluna = c;
                     }
                 }
             }
         }
 
-        for (int i=0;i<matrizLeslie.length;i++){
-            vetor[i]=vetoraux[i][coluna];
+        for (int i = 0; i < matrizLeslie.length; i++) {
+            vetor[i] = vetoraux[i][coluna];
         }
         return maior;
+    }
+    public static void escreverParaFicheiro (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n) throws FileNotFoundException {
+        File file = new File("_ModoNaoInterativo.txt");
+        PrintWriter out = new PrintWriter(file);
+        int c;
+        if (geracao == 0) {
+            for (int i = 0; i <= geracao; i++) {
+                out.print("Foi pedido ao programa para ser estudada a geração " + geracoesEstimadas[i] + ". \n");
+            }
+        }
+        if (geracao >= 1) {
+            out.print("Foi pedido ao programa para serem estudadas as gerações " + geracoesEstimadas[0] + ", ");
+            for (int i = 1; i <= geracao; i++) {
+                out.print(geracoesEstimadas[i]);
+                if (i < geracao - 1) {
+                    out.print(", ");
+                }
+                if (i == geracao - 1)
+                    out.print(" e ");
+            }
+            out.print(". ");
+        }
+        for (int i = 0; i <= geracao; i++) {
+            out.println("De acordo com os dados inseridos foram concluídos os seguintes resultados:");
+            for (int j = 0; j <= geracao; j++) {
+                out.print("O número total de indivíduos da geração " + geracoesEstimadas[j] + " é ");
+                out.printf("%.2f", populacoesEstimadas[j]);
+                out.print(". \n");
+            }
+            out.print("\nDesta forma, através do número total de indivíduos, procedeu-se à taxa de variação da população ao longo dos anos.\n");
+            for (int j = 0; j <= geracao; j++) {
+                out.print("A taxa de variação para a geração " + geracoesEstimadas[j] + " é ");
+                out.printf("%.2f", taxasDeVariacao[j]);
+                out.print(". \n");
+            }
+            out.println("\nSabendo a população total e a taxa de variação em cada geração introduzida, segue-se a distribuição da população, isto é, quantos indivíduos existem nas diferentes faixas etárias.");
+            for (int j = 0; j <= geracao; j++) {
+                out.println("A população na geração " + geracoesEstimadas[j] + " encontra-se distribuída da seguinte forma:");
+                for (c = 0; c < n - 1; c++) {
+                    out.print("Idade " + c + ": ");
+                    out.printf("%.2f", Nt[j][c]);
+                    out.print("; \n");
+                }
+                out.print("Idade " + c + ": ");
+                out.printf("%.2f", Nt[j][n - 1]);
+                out.print(". \n");
+                out.print("\n");
+            }
+            out.println("Por fim, apresentamos a população normalizada distribuída pelas várias gerações. Esta resulta da divisão da dimensão da população em cada faixa etária pela população total.");
+            for (int j = 0; j <= geracao; j++) {
+                out.print("A distribuição normalizada da geração " + geracoesEstimadas[j] + "está representada pelas várias faixas etárias: \n");
+                for (c = 0; c < n - 1; c++) {
+                    out.print("Idade " + c + ": ");
+                    out.printf("%.2f", distribuicaoNormalizada[j][c]);
+                    out.print("; \n");
+                }
+                out.print("Idade " + c + ": ");
+                out.printf("%.2f", distribuicaoNormalizada[j][n - 1]);
+                out.print(". \n");
+                out.print("\n");
+            }
+            out.print("Encontra-se concluída a apresentação dos resultados do programa da evolução das espécies.");
+
+            out.close();
+
+
+        }
     }
 }
