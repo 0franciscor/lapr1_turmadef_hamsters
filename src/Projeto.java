@@ -24,10 +24,12 @@ public class Projeto {
             nomeFicheiro = args[(args.length - 1)];
         }
         //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
+
         else {
             existe = modoInterativo(args);
             nomeFicheiro = args[1];
         }
+        //TERMINA AQUI
 
         double[] populacaoInicial; //VETOR INICIAL
         double[][] matrizLeslie;   //DECLARAÇÃO MATRIZ LESLIE
@@ -70,7 +72,6 @@ public class Projeto {
                 t = ler.nextInt();
                 geracao++;
                 procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, n);
-
             }
         }
         else {
@@ -137,8 +138,8 @@ public class Projeto {
                         opcoesExecucao[4] = 1;
                     }
                 }
-            } else if (!existe) {
-                System.out.println("O ficheiro inserido não existe. Deste modo o programa será executado em modo interativo.");
+            } else {
+                System.out.println("O ficheiro inserido não existe. Assim, o programa será executado em modo interativo com inserção manual de dados.");
             }
         }
         return naoInterativo;
