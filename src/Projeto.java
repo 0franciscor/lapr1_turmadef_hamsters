@@ -11,21 +11,22 @@ public class Projeto {
 
     public static void main(String[] args) throws FileNotFoundException {
         boolean existe, naoInterativo;
-        String nomeFicheiro = null;
+        String nomeFicheiro;
         int[] opcoesExecucao = new int [5];
         int numCiclos = 0;
 
-        naoInterativo = nInterativo(opcoesExecucao, args);
+        //RESPOSAVEL POR VERIFICAR SE O CODIGO ESTA A CORRER EM MODO NAO INTERATIVO
+        naoInterativo = modoNInterativo(opcoesExecucao, args);
         existe = naoInterativo;
 
         if(existe) {
             numCiclos = opcoesExecucao[1];
             nomeFicheiro = args[(args.length - 1)];
         }
-
-        if (args.length != 0 && args[0].equals("-n")) {
+        //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
+        else {
+            existe = modoInterativo(args);
             nomeFicheiro = args[1];
-            existe = existeFicheiro(nomeFicheiro);
         }
 
         double[] populacaoInicial; //VETOR INICIAL
@@ -97,7 +98,16 @@ public class Projeto {
         }
     }
 
-    public static boolean nInterativo(int[] opcoesExecucao, String[] args) {
+    public static boolean modoInterativo(String[] args){
+        boolean existe = false;
+        if (args.length != 0 && args[0].equals("-n")) {
+            String nomeFicheiro = args[1];
+            existe = existeFicheiro(nomeFicheiro);
+        }
+        return existe;
+    }
+
+    public static boolean modoNInterativo(int[] opcoesExecucao, String[] args) {
         boolean naoInterativo = false;
 
         if (args.length != 0 && args[0].equals("-t")) { ///// É IMPORTANTE ESCREVER O NOME DE UM FICHEIRO DE SAIDA E ALTERAR PARA 2
