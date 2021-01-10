@@ -22,7 +22,7 @@ public class Projeto {
 
         if(existe) {
             numCiclos = opcoesExecucao[0];
-            nomeFicheiro = args[(args.length - 1)];
+            nomeFicheiro = args[(args.length - 2)];
         }
         //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
 
@@ -88,9 +88,13 @@ public class Projeto {
         double valorProprio;
         valorProprio=calcularVetorValorProprio(matrizLeslie,vetor);
 
-        imprimirAnaliseGeracoes(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,Nt,n, naoInterativo, opcoesExecucao, matrizLeslie, vetor, valorProprio);
-        analiseComportamentoAssintotico(valorProprio);
-        escreverParaFicheiro(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio);
+        if (naoInterativo){
+            escreverParaFicheiro(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,args);
+        } else {
+            imprimirAnaliseGeracoes(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,Nt,n, naoInterativo, opcoesExecucao, matrizLeslie, vetor, valorProprio);
+            analiseComportamentoAssintotico(valorProprio);
+        }
+
     }
 
     public static boolean modoInterativo(String[] args){
@@ -105,14 +109,14 @@ public class Projeto {
     public static boolean modoNInterativo(int[] opcoesExecucao, String[] args) {
         boolean naoInterativo = false;
 
-        if (args.length != 0 && args[0].equals("-t")) { ///// É IMPORTANTE ESCREVER O NOME DE UM FICHEIRO DE SAIDA E ALTERAR PARA 2
-            String nomeFicheiro = args[(args.length - 1)];
+        if (args.length != 0 && args[0].equals("-t")) {
+            String nomeFicheiro = args[(args.length - 2)];
             boolean existe = existeFicheiro(nomeFicheiro);
 
             if (existe) {
                 naoInterativo = true;
                 opcoesExecucao[0] = Integer.parseInt(args[1]);
-                for (int i = 2; i <= (args.length - 1); i++) {     ///// É IMPORTANTE ESCREVER O NOME DE UM FICHEIRO DE SAIDA E ALTERAR PARA 2
+                for (int i = 2; i <= (args.length - 2); i++) {
                     if (args[i].equals("-g")) {
                         if (args[i + 1].equals(String.valueOf(1)) || args[i + 1].equals(String.valueOf(2)) || args[i + 1].equals(String.valueOf(3))) {
                             for (int j = 1; j <= 3; j++) {
@@ -336,8 +340,8 @@ public class Projeto {
         }
         return maior;
     }
-    public static void escreverParaFicheiro (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double maior) throws FileNotFoundException {
-        File file = new File("_ModoNaoInterativo.txt");
+    public static void escreverParaFicheiro (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double maior, String [] args) throws FileNotFoundException {
+        File file = new File(args[args.length-1]);
         PrintWriter out = new PrintWriter(file);
         int c;
         if (geracao == 0) {
