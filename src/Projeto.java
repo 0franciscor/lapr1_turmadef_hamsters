@@ -59,7 +59,7 @@ public class Projeto {
             }
         }
 
-        int n = matrizLeslie.length, t, geracao=-1;
+        int n = matrizLeslie.length, t =0, geracao=-1;
 
         int [] geracoesEstimadas = new int [1000];
         double [] populacoesEstimadas = new double[1000];
@@ -68,21 +68,19 @@ public class Projeto {
         double [][] distribuicaoNormalizada = new double[1000][matrizLeslie.length];
 
         if(naoInterativo) {
-            System.out.println("Quais as geracoes que pretende que sejam estudadas?");
             while ((geracao+1) < numCiclos){
-                t = ler.nextInt();
+                t++;
                 geracao++;
                 procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, n);
             }
         }
         else {
             System.out.println("Quais as geracoes que pretende que sejam estudadas? (Para terminar a introducao das geracoes a analisar, digite -1)");
-            t = ler.nextInt();
-
-            while (t != -1) {
+            int aux = ler.nextInt();
+            while ((geracao+1) < aux) {
+                t++;
                 geracao++;
                 procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, n);
-                t = ler.nextInt();
             }
         }
 
@@ -303,8 +301,7 @@ public class Projeto {
             for (int f = 0; f < matrizLeslie.length; f++) {
                 System.out.printf("%.3f ", vetor[f]);
             }
-            System.out.println("");
-            System.out.println("");
+            System.out.println("\n");
         }
     }
 
@@ -418,7 +415,7 @@ public class Projeto {
             comportamento="menor";
             analise="isto significa que a população irá diminuir ao longo dos anos.";
         }
-        System.out.println("Como o valor próprio é "+comportamento+" que 1,"+analise);
+        System.out.println("Como o valor próprio é " + comportamento + " que 1," + analise);
 
     }
 }
