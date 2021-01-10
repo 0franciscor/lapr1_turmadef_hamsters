@@ -1,7 +1,6 @@
 import org.la4j.Matrix;
 import org.la4j.decomposition.EigenDecompositor;
 import org.la4j.matrix.dense.Basic2DMatrix;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -11,75 +10,124 @@ public class Projeto {
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws FileNotFoundException {
-        boolean existe = false;
+        boolean existe = false, naoInterativo = false;
         String nomeFicheiro = null;
-        if(args.length != 0) {
-            nomeFicheiro = args[0];
-            File ficheiroVerificacao = new File(nomeFicheiro);
-            existe = ficheiroVerificacao.exists();
+        int[] opcoesExecucao = new int [5];
+        int numCiclos = 0;
+
+        if (args.length != 0 && args[0].equals("-t")) {
+            nomeFicheiro = args[(args.length-1)];
+
+            if (existe = existeFicheiro(nomeFicheiro)) {
+                naoInterativo = true;
+                numCiclos = Integer.parseInt(args[1]);
+
+                for (int i = 2; i <= (args.length - 1); i++) {     ///// É IMPORTANTE ESCREVER O NOME DE UM FICHEIRO DE SAIDA E ALTERAR PARA 2
+
+                    if (args[i].equals("-g")) {
+                        if (args[i + 1].equals(String.valueOf(1)) || args[i + 1].equals(String.valueOf(2)) || args[i + 1].equals(String.valueOf(3))) {
+                            for (int j = 0; j <= 3; j++) {
+                                if (args[i + 1].equals(String.valueOf(j)))
+                                    opcoesExecucao[1] = j;
+                            }
+                        }
+                    }
+                    if (args[i].equals("-e")) {
+                        opcoesExecucao[2] = 1;
+                    }
+                    if (args[i].equals("-v")) {
+                        opcoesExecucao[3] = 1;
+                    }
+                    if (args[i].equals("-r")) {
+                        opcoesExecucao[4] = 1;
+                    }
+                }
+            }
+        } else if (args.length != 0 && args[0].equals("-n")) {
+            nomeFicheiro = args[1];
+            existe = existeFicheiro(nomeFicheiro);
         }
 
-        double [] populacaoInicial; //VETOR INICIAL
-        double [][] matrizLeslie;   //DECLARAÇÃO MATRIZ LESLIE
+        double[] populacaoInicial; //VETOR INICIAL
+        double[][] matrizLeslie;   //DECLARAÇÃO MATRIZ LESLIE
 
-        if(existe) {
+        if (existe) {
             populacaoInicial = tratamentoDados((leituraDados(nomeFicheiro, 0)));
-            matrizLeslie = new double [populacaoInicial.length][populacaoInicial.length];
-            for(int i = 1; i<=2; i++){
+            matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
+            for (int i = 1; i <= 2; i++) {
                 insercaoMatriz(matrizLeslie, tratamentoDados(leituraDados(nomeFicheiro, i)), i, true);
             }
         } else {
             System.out.println("Quantos intervalos de idade possui a populacao que pretende estudar?");
             int numIntervalos = ler.nextInt();
 
-            populacaoInicial = new double [numIntervalos];
+            populacaoInicial = new double[numIntervalos];
             insercaoDados(populacaoInicial, "Populacao");
 
-            matrizLeslie = new double [populacaoInicial.length][populacaoInicial.length];
-            double [] aux  = new double [matrizLeslie.length];
+            matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
+            double[] aux = new double[matrizLeslie.length];
 
-            for(int i = 1; i<=2; i++){
-                if(i==1)
+            for (int i = 1; i <= 2; i++) {
+                if (i == 1)
                     insercaoMatriz(matrizLeslie, insercaoDados(aux, "Taxa de sobrevivencia"), i, false);
-                if(i==2)
+                if (i == 2)
                     insercaoMatriz(matrizLeslie, insercaoDados(aux, "Taxa de fecundidade"), i, false);
             }
         }
 
-        int n=matrizLeslie.length;
+        int n = matrizLeslie.length, t=0, geracao=-1;
 
-        System.out.println("Quais as geracoes que pretende que sejam estudadas? (Para terminar a introducao das geracoes a analisar, digite -1)");
-
-        int t=ler.nextInt(), geracao=-1;
         int [] geracoesEstimadas = new int [1000];
         double [] populacoesEstimadas = new double[1000];
         double [] taxasDeVariacao = new double[1000];
         double [][] Nt = new double[1000][matrizLeslie.length];
         double [][] distribuicaoNormalizada = new double[1000][matrizLeslie.length];
 
-        while (t!=-1){
-            geracao+=1;
-            geracoesEstimadas [geracao]= t;
-            dimensaoPopulacao(matrizLeslie,populacaoInicial,t,Nt,populacoesEstimadas,geracao);
-            dimensaoPopulacao(matrizLeslie,populacaoInicial,(t+1),Nt,populacoesEstimadas,(geracao+1));
-            TaxaVariacao(populacoesEstimadas,geracao,taxasDeVariacao);
-            distribuicaoNormalizada(geracao,Nt,populacoesEstimadas,distribuicaoNormalizada,n);
-            t=ler.nextInt();
+        if(naoInterativo) {
+            System.out.println("Quais as geracoes que pretende que sejam estudadas?");
+            while ((geracao+1) < numCiclos){
+                t = ler.nextInt();
+                geracao++;
+                procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, n);
+
+            }
+        }
+        else {
+            System.out.println("Quais as geracoes que pretende que sejam estudadas? (Para terminar a introducao das geracoes a analisar, digite -1)");
+            while (t != -1) {
+                t = ler.nextInt();
+                geracao++;
+                procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, n);
+
+            }
         }
 
-        imprimirAnaliseGeracoes(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,Nt,n);
+        imprimirAnaliseGeracoes(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,Nt,n, naoInterativo, opcoesExecucao);
 
         double [] vetor = new double[matrizLeslie.length];
         double valorProprio;
         valorProprio=calcularVetorValorProprio(matrizLeslie,vetor);
-
-        System.out.print("O valor Proprio e: ");
-        System.out.printf("%.3f\n", valorProprio);
-        System.out.print("O vetor proprio e: ");
-        for (int f=0; f<matrizLeslie.length;f++){
-            System.out.printf("%.3f ",vetor[f]);
+        if(!naoInterativo || opcoesExecucao[2] == 1) {
+            System.out.printf("O valor Proprio e: %.3f\n", valorProprio);
+            System.out.print("O vetor proprio e: ");
+            for (int f = 0; f < matrizLeslie.length; f++) {
+                System.out.printf("%.3f ", vetor[f]);
+            }
         }
+    }
 
+    public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, int[] geracoesEstimadas, double[][] matrizLeslie, double[] populacaoInicial, int t, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] distribuicaoNormalizada, int n){
+        geracoesEstimadas[geracao] = t;
+        dimensaoPopulacao(matrizLeslie, populacaoInicial, t, Nt, populacoesEstimadas, geracao);
+        dimensaoPopulacao(matrizLeslie, populacaoInicial, (t + 1), Nt, populacoesEstimadas, (geracao + 1));
+        TaxaVariacao(populacoesEstimadas, geracao, taxasDeVariacao);
+        distribuicaoNormalizada(geracao, Nt, populacoesEstimadas, distribuicaoNormalizada, n);
+
+    }
+
+    public static boolean existeFicheiro(String nomeFicheiro){
+        File ficheiroVerificacao = new File(nomeFicheiro);
+        return ficheiroVerificacao.exists();
     }
 
     public static double[] insercaoDados(double[] array, String elemento){
@@ -121,7 +169,7 @@ public class Projeto {
         return valoresTratados;
     }
 
-    public static double[][] insercaoMatriz (double[][] matrizLeslie, double[] valoresTratados, int tipologia, boolean automatico) throws FileNotFoundException {
+    public static void insercaoMatriz (double[][] matrizLeslie, double[] valoresTratados, int tipologia, boolean automatico) {
         if (tipologia == 1) {
             int limite;
             if(automatico)
@@ -138,10 +186,9 @@ public class Projeto {
             for (int i = 0; i < valoresTratados.length; i++)
                 matrizLeslie[0][i] = valoresTratados[i];
         }
-        return matrizLeslie;
     }
 
-    public static void dimensaoPopulacao (double [][] matrizLeslie, double[] populacaoInicial, int t, double[][] Nt,double[] populacoesEstimadas, int geracao) throws FileNotFoundException{ //CALCULO DIMENSAO POPULACAO
+    public static void dimensaoPopulacao (double [][] matrizLeslie, double[] populacaoInicial, int t, double[][] Nt,double[] populacoesEstimadas, int geracao) { //CALCULO DIMENSAO POPULACAO
         double [][] Lesliemultiplicada = new double[matrizLeslie.length][matrizLeslie.length];
 
         for(int i =0 ; i<matrizLeslie.length; i++){
@@ -182,6 +229,7 @@ public class Projeto {
     public static void multiplicarmatrizes (double [][] matriz1, double[][] matriz2){
         double [] aux = new double [matriz2.length];
         int c;
+
         for (int l=0;l<matriz1.length;l++){
             for (int i=0;i<matriz1.length;i++){
                 double soma=0;
@@ -202,16 +250,21 @@ public class Projeto {
         }
     }
 
-    public static void imprimirAnaliseGeracoes (int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas,double[] taxasDeVariacao,double [][] distribuicaoNormalizada, double[][] Nt, int n){
+    public static void imprimirAnaliseGeracoes (int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas,double[] taxasDeVariacao,double [][] distribuicaoNormalizada, double[][] Nt, int n, boolean naoInterativo, int[]opcoesExecucao){
         for (int l=0; l<=geracao;l++){
-            System.out.print("\nA populacao total na geracao " + geracoesEstimadas[l] +" e ");
-            System.out.printf("%.15f\n", populacoesEstimadas[l]);
-            System.out.print("Sendo a taxa de variacao nesta geracao de ");
-            System.out.printf("%.4f\n", taxasDeVariacao[l]);
-            System.out.print("A distribuicao da populacao e a seguinte: ");
-            for (int j=0; j<n;j++){
-                System.out.printf("%.2f ", Nt[l][j]);
+            System.out.printf("\nA populacao total na geracao " + geracoesEstimadas[l] +" e %.15f\n", populacoesEstimadas[l]);
+
+            if(!naoInterativo || opcoesExecucao[4] == 1) {
+                System.out.printf("Sendo a taxa de variacao nesta geracao de %.4f\n", taxasDeVariacao[l]);
             }
+
+            if(!naoInterativo || opcoesExecucao[3] == 1) {
+                System.out.print("A distribuicao da populacao e a seguinte: ");
+                for (int j = 0; j < n; j++) {
+                    System.out.printf("%.2f ", Nt[l][j]);
+                }
+            }
+
             System.out.print("\nA distribuicao normalizada da populacao e a seguinte: ");
             for (int j=0; j<n;j++){
                 System.out.printf("%.3f ", distribuicaoNormalizada[l][j]);
@@ -219,15 +272,17 @@ public class Projeto {
             System.out.println("\n");
         }
     }
+
     public static double calcularVetorValorProprio (double[][] matrizLeslie,double[] vetor){
         Matrix a = new Basic2DMatrix(matrizLeslie);
         EigenDecompositor eigenD=new EigenDecompositor(a);
         Matrix [] mattD= eigenD.decompose();
-        double vetoraux [][]= mattD[0].toDenseMatrix().toArray();
-        double valor [][]= mattD[1].toDenseMatrix().toArray();
+        double[][] vetoraux = mattD[0].toDenseMatrix().toArray();
+        double[][] valor = mattD[1].toDenseMatrix().toArray();
 
         double maior=0;
         int coluna=0;
+
         for (int l=0;l<matrizLeslie.length;l++){
             for (int c=0; c<matrizLeslie.length;c++){
                 if (valor[l][c]>=0){
@@ -240,7 +295,6 @@ public class Projeto {
                         maior=(-valor[l][c]);
                         coluna=c;
                     }
-
                 }
             }
         }
@@ -248,7 +302,6 @@ public class Projeto {
         for (int i=0;i<matrizLeslie.length;i++){
             vetor[i]=vetoraux[i][coluna];
         }
-
         return maior;
     }
 }
