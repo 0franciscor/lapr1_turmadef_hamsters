@@ -1,0 +1,22 @@
+Foi pedido ao programa para ser estudada a geração 1. 
+De acordo com os dados inseridos foram concluídos os seguintes resultados:
+O número total de indivíduos da geração 1 é 2291,00. 
+
+Desta forma, através do número total de indivíduos, procedeu-se à taxa de variação da população ao longo dos anos.
+A taxa de variação para a geração 1 é 0,40. 
+
+Sabendo a população total e a taxa de variação em cada geração introduzida, segue-se a distribuição da população, isto é, quantos indivíduos existem nas diferentes faixas etárias.
+A população na geração 1 encontra-se distribuída da seguinte forma:
+Idade 0: 1985,10; 
+Idade 1: 110,00; 
+Idade 2: 87,00; 
+Idade 3: 108,90. 
+
+Por fim, apresentamos a população normalizada distribuída pelas várias gerações. Esta resulta da divisão da dimensão da população em cada faixa etária pela população total.
+A distribuição normalizada da geração 1está representada pelas várias faixas etárias: 
+Idade 0: 0,87; 
+Idade 1: 0,05; 
+Idade 2: 0,04; 
+Idade 3: 0,05. 
+
+Encontra-se concluída a apresentação dos resultados do programa da evolução das espécies.

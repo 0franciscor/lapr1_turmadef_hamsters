@@ -3,7 +3,6 @@ import org.la4j.decomposition.EigenDecompositor;
 import org.la4j.matrix.dense.Basic2DMatrix;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -92,7 +91,8 @@ public class Projeto {
         valorProprio=calcularVetorValorProprio(matrizLeslie,vetor);
 
         imprimirAnaliseGeracoes(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,Nt,n, naoInterativo, opcoesExecucao, matrizLeslie, vetor, valorProprio);
-        escreverParaFicheiro(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n);
+        analiseComportamentoAssintotico(valorProprio);
+        escreverParaFicheiro(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio);
     }
 
     public static boolean modoInterativo(String[] args){
@@ -294,6 +294,7 @@ public class Projeto {
                 System.out.printf("%.3f ", distribuicaoNormalizada[l][j]);
             }
             System.out.println("\n");
+
         }
 
         if(!naoInterativo || opcoesExecucao[2] == 1) {
@@ -302,6 +303,8 @@ public class Projeto {
             for (int f = 0; f < matrizLeslie.length; f++) {
                 System.out.printf("%.3f ", vetor[f]);
             }
+            System.out.println("");
+            System.out.println("");
         }
     }
 
@@ -336,7 +339,7 @@ public class Projeto {
         }
         return maior;
     }
-    public static void escreverParaFicheiro (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n) throws FileNotFoundException {
+    public static void escreverParaFicheiro (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double maior) throws FileNotFoundException {
         File file = new File("_ModoNaoInterativo.txt");
         PrintWriter out = new PrintWriter(file);
         int c;
@@ -399,8 +402,23 @@ public class Projeto {
             out.print("Encontra-se concluída a apresentação dos resultados do programa da evolução das espécies.");
 
             out.close();
-
-
         }
+    }
+
+    public static void analiseComportamentoAssintotico (double valorProprio){
+        System.out.println("Comportamento Assintotico da populacao associado ao maior valor proprio.");
+        System.out.printf("\nO valor próprio de módulo máximo é aproximadamente: %.3f\n", valorProprio);
+        System.out.println("Este valor indica-nos a taxa de crescimento da população.");
+        String comportamento="igual", analise="o que significa que a população se irá manter constante ao longo dos anos.";
+        if (valorProprio>1){
+            comportamento="maior";
+            analise="isto significa que a população irá aumentar ao longo dos anos.";
+        }
+        if (valorProprio<1){
+            comportamento="menor";
+            analise="isto significa que a população irá diminuir ao longo dos anos.";
+        }
+        System.out.println("Como o valor próprio é "+comportamento+" que 1,"+analise);
+
     }
 }
