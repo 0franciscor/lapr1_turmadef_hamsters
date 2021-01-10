@@ -20,7 +20,7 @@ public class Projeto {
         existe = naoInterativo;
 
         if(existe) {
-            numCiclos = opcoesExecucao[1];
+            numCiclos = opcoesExecucao[0];
             nomeFicheiro = args[(args.length - 1)];
         }
         //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
@@ -85,18 +85,11 @@ public class Projeto {
             }
         }
 
-        imprimirAnaliseGeracoes(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,Nt,n, naoInterativo, opcoesExecucao);
-
         double [] vetor = new double[matrizLeslie.length];
         double valorProprio;
         valorProprio=calcularVetorValorProprio(matrizLeslie,vetor);
-        if(!naoInterativo || opcoesExecucao[2] == 1) {
-            System.out.printf("O valor Proprio e: %.3f\n", valorProprio);
-            System.out.print("O vetor proprio e: ");
-            for (int f = 0; f < matrizLeslie.length; f++) {
-                System.out.printf("%.3f ", vetor[f]);
-            }
-        }
+
+        imprimirAnaliseGeracoes(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,Nt,n, naoInterativo, opcoesExecucao, matrizLeslie, vetor, valorProprio);
     }
 
     public static boolean modoInterativo(String[] args){
@@ -117,12 +110,11 @@ public class Projeto {
 
             if (existe) {
                 naoInterativo = true;
-                opcoesExecucao[1] = Integer.parseInt(args[1]);
+                opcoesExecucao[0] = Integer.parseInt(args[1]);
                 for (int i = 2; i <= (args.length - 1); i++) {     ///// É IMPORTANTE ESCREVER O NOME DE UM FICHEIRO DE SAIDA E ALTERAR PARA 2
-
                     if (args[i].equals("-g")) {
                         if (args[i + 1].equals(String.valueOf(1)) || args[i + 1].equals(String.valueOf(2)) || args[i + 1].equals(String.valueOf(3))) {
-                            for (int j = 0; j <= 3; j++) {
+                            for (int j = 1; j <= 3; j++) {
                                 if (args[i + 1].equals(String.valueOf(j)))
                                     opcoesExecucao[1] = j;
                             }
@@ -279,7 +271,7 @@ public class Projeto {
         }
     }
 
-    public static void imprimirAnaliseGeracoes (int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas,double[] taxasDeVariacao,double [][] distribuicaoNormalizada, double[][] Nt, int n, boolean naoInterativo, int[]opcoesExecucao){
+    public static void imprimirAnaliseGeracoes(int geracao, int[] geracoesEstimadas, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] distribuicaoNormalizada, double[][] Nt, int n, boolean naoInterativo, int[] opcoesExecucao, double[][] matrizLeslie, double[] vetor, double valorProprio){
         for (int l=0; l<=geracao;l++){
             System.out.printf("\nA populacao total na geracao " + geracoesEstimadas[l] +" e %.8f\n", populacoesEstimadas[l]);
 
@@ -299,6 +291,14 @@ public class Projeto {
                 System.out.printf("%.3f ", distribuicaoNormalizada[l][j]);
             }
             System.out.println("\n");
+        }
+
+        if(!naoInterativo || opcoesExecucao[2] == 1) {
+            System.out.printf("\nO valor Proprio e: %.3f\n", valorProprio);
+            System.out.print("O vetor proprio e: ");
+            for (int f = 0; f < matrizLeslie.length; f++) {
+                System.out.printf("%.3f ", vetor[f]);
+            }
         }
     }
 
