@@ -59,25 +59,25 @@ public class Projeto {
             }
         }
 
-        int n = matrizLeslie.length, t =0, geracao=-1;
+        int n = matrizLeslie.length, t =-1, geracao=-1;
 
         int [] geracoesEstimadas = new int [1000];
-        double [] populacoesEstimadas = new double[1000];
+        double [] populacoesEstimadas = new double[1001];
         double [] taxasDeVariacao = new double[1000];
-        double [][] Nt = new double[1000][matrizLeslie.length];
+        double [][] Nt = new double[1001][matrizLeslie.length];
         double [][] distribuicaoNormalizada = new double[1000][matrizLeslie.length];
 
         if(naoInterativo) {
-            while ((geracao+1) < numCiclos){
+            while ((geracao+1) <= numCiclos){
                 t++;
                 geracao++;
                 procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, n);
             }
         }
         else {
-            System.out.println("Quais as geracoes que pretende que sejam estudadas? (Para terminar a introducao das geracoes a analisar, digite -1)");
+            System.out.println("Quais as geracoes que pretende que sejam estudadas?");
             int aux = ler.nextInt();
-            while ((geracao+1) < aux) {
+            while ((geracao+1) <= aux) {
                 t++;
                 geracao++;
                 procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, n);
@@ -90,10 +90,10 @@ public class Projeto {
 
         if (naoInterativo){
             escreverParaFicheiro(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,args);
-        } else {
-            imprimirAnaliseGeracoes(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,Nt,n, naoInterativo, opcoesExecucao, matrizLeslie, vetor, valorProprio);
-            analiseComportamentoAssintotico(valorProprio);
         }
+        escreverParaConsola(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,vetor);
+
+
 
     }
 
@@ -276,40 +276,8 @@ public class Projeto {
         }
     }
 
-    public static void imprimirAnaliseGeracoes(int geracao, int[] geracoesEstimadas, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] distribuicaoNormalizada, double[][] Nt, int n, boolean naoInterativo, int[] opcoesExecucao, double[][] matrizLeslie, double[] vetor, double valorProprio){
-        for (int l=0; l<=geracao;l++){
-            System.out.printf("\nA populacao total na geracao " + geracoesEstimadas[l] +" e %.8f\n", populacoesEstimadas[l]);
-
-            if(!naoInterativo || opcoesExecucao[4] == 1) {
-                System.out.printf("Sendo a taxa de variacao nesta geracao de %.4f\n", taxasDeVariacao[l]);
-            }
-
-            if(!naoInterativo || opcoesExecucao[3] == 1) {
-                System.out.print("A distribuicao da populacao e a seguinte: ");
-                for (int j = 0; j < n; j++) {
-                    System.out.printf("%.2f ", Nt[l][j]);
-                }
-            }
-
-            System.out.print("\nA distribuicao normalizada da populacao e a seguinte: ");
-            for (int j=0; j<n;j++){
-                System.out.printf("%.3f ", distribuicaoNormalizada[l][j]);
-            }
-            System.out.println("\n");
-
-        }
-
-        if(!naoInterativo || opcoesExecucao[2] == 1) {
-            System.out.printf("\nO valor Proprio e: %.3f\n", valorProprio);
-            System.out.print("O vetor proprio e: ");
-            for (int f = 0; f < matrizLeslie.length; f++) {
-                System.out.printf("%.3f ", vetor[f]);
-            }
-            System.out.println("\n");
-        }
-    }
-
     public static double calcularVetorValorProprio (double[][] matrizLeslie,double[] vetor) {
+
         Matrix a = new Basic2DMatrix(matrizLeslie);
         EigenDecompositor eigenD = new EigenDecompositor(a);
         Matrix[] mattD = eigenD.decompose();
@@ -320,17 +288,15 @@ public class Projeto {
         int coluna = 0;
 
         for (int l = 0; l < matrizLeslie.length; l++) {
-            for (int c = 0; c < matrizLeslie.length; c++) {
-                if (valor[l][c] >= 0) {
-                    if (valor[l][c] > maior) {
-                        maior = valor[l][c];
-                        coluna = c;
-                    }
-                } else {
-                    if ((-valor[l][c]) > maior) {
-                        maior = (-valor[l][c]);
-                        coluna = c;
-                    }
+            if (valor[l][l] >= 0) {
+                if (valor[l][l] > maior) {
+                    maior = valor[l][l];
+                    coluna = l;
+                }
+            } else {
+                if ((-valor[l][l]) > maior) {
+                    maior = (-valor[l][l]);
+                    coluna = l;
                 }
             }
         }
@@ -340,7 +306,7 @@ public class Projeto {
         }
         return maior;
     }
-    public static void escreverParaFicheiro (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double maior, String [] args) throws FileNotFoundException {
+    public static void escreverParaFicheiro (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double valorProprio, String [] args) throws FileNotFoundException {
         File file = new File(args[args.length-1]);
         PrintWriter out = new PrintWriter(file);
         int c;
@@ -361,7 +327,7 @@ public class Projeto {
             }
             out.print(". ");
         }
-        for (int i = 0; i <= geracao; i++) {
+
             out.println("De acordo com os dados inseridos foram concluídos os seguintes resultados:");
             for (int j = 0; j <= geracao; j++) {
                 out.print("O número total de indivíduos da geração " + geracoesEstimadas[j] + " é ");
@@ -387,7 +353,7 @@ public class Projeto {
                 out.print(". \n");
                 out.print("\n");
             }
-            out.println("Por fim, apresentamos a população normalizada distribuída pelas várias gerações. Esta resulta da divisão da dimensão da população em cada faixa etária pela população total.");
+            out.println("Apresentamos, de seguida, a população normalizada distribuída pelas várias gerações. Esta resulta da divisão da dimensão da população em cada faixa etária pela população total.");
             for (int j = 0; j <= geracao; j++) {
                 out.print("A distribuição normalizada da geração " + geracoesEstimadas[j] + "está representada pelas várias faixas etárias: \n");
                 for (c = 0; c < n - 1; c++) {
@@ -400,26 +366,95 @@ public class Projeto {
                 out.print(". \n");
                 out.print("\n");
             }
+            out.println("Comportamento Assintotico da populacao associado ao maior valor proprio.");
+            out.printf("\nO valor próprio de módulo máximo é aproximadamente: %.3f\n", valorProprio);
+            out.println("Este valor indica-nos a taxa de crescimento da população.");
+            String comportamento="igual", analise="o que significa que a população se irá manter constante ao longo dos anos.";
+            if (valorProprio>1){
+                comportamento="maior";
+                analise="isto significa que a população irá aumentar ao longo dos anos.";
+            }
+            if (valorProprio<1){
+                comportamento="menor";
+                analise="isto significa que a população irá diminuir ao longo dos anos.";
+            }
+            out.println("Como o valor próprio é " + comportamento + " que 1," + analise);
             out.print("Encontra-se concluída a apresentação dos resultados do programa da evolução das espécies.");
 
             out.close();
-        }
+
     }
 
-    public static void analiseComportamentoAssintotico (double valorProprio){
+
+    public static void escreverParaConsola (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double valorProprio, double[] vetorProprio) {
+        int c;
+        System.out.println("");
+        System.out.print("Foi pedido ao programa para serem estudadas as geracoes: " + geracoesEstimadas[0] + " ");
+        for (int i = 1; i <= geracao; i++) {
+            System.out.print(geracoesEstimadas[i]+"");
+        }
+        System.out.println("");
+        System.out.println("De acordo com os dados inseridos foram concluidos os seguintes resultados:");
+        for (int j = 0; j <= geracao; j++) {
+            System.out.print("O numero total de individuos da geracao " + geracoesEstimadas[j] + " é ");
+            System.out.printf("%.2f", populacoesEstimadas[j]);
+            System.out.print(". \n");
+        }
+        System.out.print("\nDesta forma, atraves do numero total de individuos, procedeu-se a taxa de variacao da populacao ao longo dos anos.\n");
+        for (int j = 0; j <= geracao; j++) {
+            System.out.print("A taxa de variacao para a geracao " + geracoesEstimadas[j] + " e ");
+            System.out.printf("%.2f", taxasDeVariacao[j]);
+            System.out.print(". \n");
+        }
+        System.out.println("");
+        for (int j = 0; j <= geracao; j++) {
+            System.out.println("A populacao na geracao " + geracoesEstimadas[j] + " encontra-se distribuida da seguinte forma:");
+            for (c = 0; c < n - 1; c++) {
+                System.out.print("Idade " + c + ": ");
+                System.out.printf("%.2f", Nt[j][c]);
+                System.out.print("; \n");
+            }
+            System.out.print("Idade " + c + ": ");
+            System.out.printf("%.2f", Nt[j][n - 1]);
+            System.out.print(". \n");
+            System.out.print("\n");
+        }
+        System.out.println("Apresentamos, de seguida, a populacao normalizada distribuida pelas varias geracoes. Esta resulta da divisao da dimensao da populacao em cada faixa etaria pela populacao total.");
+        for (int j = 0; j <= geracao; j++) {
+            System.out.print("A distribuicao normalizada da geracao " + geracoesEstimadas[j] + "esta representada pelas varias faixas etarias: \n");
+            for (c = 0; c < n - 1; c++) {
+                System.out.print("Idade " + c + ": ");
+                System.out.printf("%.2f", distribuicaoNormalizada[j][c]);
+                System.out.print("; \n");
+            }
+            System.out.print("Idade " + c + ": ");
+            System.out.printf("%.2f", distribuicaoNormalizada[j][n - 1]);
+            System.out.print(". \n");
+            System.out.print("\n");
+        }
         System.out.println("Comportamento Assintotico da populacao associado ao maior valor proprio.");
-        System.out.printf("\nO valor próprio de módulo máximo é aproximadamente: %.3f\n", valorProprio);
-        System.out.println("Este valor indica-nos a taxa de crescimento da população.");
-        String comportamento="igual", analise="o que significa que a população se irá manter constante ao longo dos anos.";
+        System.out.printf("\nO valor proprio de modulo maximo e aproximadamente: %.3f\n", valorProprio);
+        System.out.println("Este valor indica-nos a taxa de crescimento da populacao.");
+        String comportamento="igual", analise="o que significa que a populacao se ira manter constante ao longo dos anos.";
         if (valorProprio>1){
             comportamento="maior";
-            analise="isto significa que a população irá aumentar ao longo dos anos.";
+            analise="isto significa que a populacao ira aumentar ao longo dos anos.";
         }
         if (valorProprio<1){
             comportamento="menor";
-            analise="isto significa que a população irá diminuir ao longo dos anos.";
+            analise="isto significa que a populacao ira diminuir ao longo dos anos.";
         }
-        System.out.println("Como o valor próprio é " + comportamento + " que 1," + analise);
+        System.out.println("Como o valor proprio e " + comportamento + " que 1, " + analise);
+        System.out.println("O vetor proprio associado ao maior valor proprio indica-nos as proporcoes populacionais constantes.");
+        for (c = 0; c < n; c++) {
+            System.out.print("Idade " + c + ": ");
+            System.out.printf("%.3f", vetorProprio[c]);
+            System.out.print("; \n");
+        }
 
+        System.out.println("");
+        System.out.print("Encontra-se concluida a apresentacao dos resultados do programa da evolucao das especies.");
+        System.out.println("");
     }
+
 }
