@@ -15,10 +15,11 @@ public class Projeto {
         int[] opcoesExecucao = new int [5];
         int numCiclos = 0;
 
-        if (args.length != 0 && args[0].equals("-t")) {
+        if (args.length != 0 && args[0].equals("-t")) { ///// É IMPORTANTE ESCREVER O NOME DE UM FICHEIRO DE SAIDA E ALTERAR PARA 2
             nomeFicheiro = args[(args.length-1)];
+            existe = existeFicheiro(nomeFicheiro);
 
-            if (existe = existeFicheiro(nomeFicheiro)) {
+            if (existe) {
                 naoInterativo = true;
                 numCiclos = Integer.parseInt(args[1]);
 
@@ -42,6 +43,8 @@ public class Projeto {
                         opcoesExecucao[4] = 1;
                     }
                 }
+            } else if (!existe){
+                System.out.println("O ficheiro inserido não existe. Deste modo o programa será executado em modo interativo.");
             }
         } else if (args.length != 0 && args[0].equals("-n")) {
             nomeFicheiro = args[1];
@@ -94,10 +97,11 @@ public class Projeto {
         }
         else {
             System.out.println("Quais as geracoes que pretende que sejam estudadas? (Para terminar a introducao das geracoes a analisar, digite -1)");
+            t = ler.nextInt();
             while (t != -1) {
-                t = ler.nextInt();
                 geracao++;
                 procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, n);
+                t = ler.nextInt();
 
             }
         }
@@ -252,7 +256,7 @@ public class Projeto {
 
     public static void imprimirAnaliseGeracoes (int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas,double[] taxasDeVariacao,double [][] distribuicaoNormalizada, double[][] Nt, int n, boolean naoInterativo, int[]opcoesExecucao){
         for (int l=0; l<=geracao;l++){
-            System.out.printf("\nA populacao total na geracao " + geracoesEstimadas[l] +" e %.15f\n", populacoesEstimadas[l]);
+            System.out.printf("\nA populacao total na geracao " + geracoesEstimadas[l] +" e %.8f\n", populacoesEstimadas[l]);
 
             if(!naoInterativo || opcoesExecucao[4] == 1) {
                 System.out.printf("Sendo a taxa de variacao nesta geracao de %.4f\n", taxasDeVariacao[l]);

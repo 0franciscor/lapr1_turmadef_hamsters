@@ -9,8 +9,8 @@ import java.util.Scanner;
 public class ValorVetorPróprio {
     static Scanner ler = new Scanner(System.in);
     public static void main(String[] args) throws FileNotFoundException {
-        int populacaoInicial[] = leituraVetor("rato.txt"/*args[0]*/);
-        double matrizLeslie[][] = leituraMatriz(populacaoInicial, "rato.txt"/*args[0]*/);
+        int populacaoInicial[] = leituraVetor("hamsters.txt"/*args[0]*/);
+        double matrizLeslie[][] = leituraMatriz(populacaoInicial, "hamsters.txt"/*args[0]*/);
 
         Matrix a = new Basic2DMatrix(matrizLeslie);
         EigenDecompositor eigenD=new EigenDecompositor(a);
