@@ -3,6 +3,7 @@ import org.la4j.decomposition.EigenDecompositor;
 import org.la4j.matrix.dense.Basic2DMatrix;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -10,7 +11,7 @@ public class Projeto {
 
     static Scanner ler = new Scanner(System.in);
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException,IOException {
         boolean existe, naoInterativo;
         String nomeFicheiro;
         int[] opcoesExecucao = new int [5];
@@ -92,9 +93,8 @@ public class Projeto {
             escreverParaFicheiro(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,args);
         }
         escreverParaConsola(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,vetor);
-
-
-
+        PopulacaoTotal(geracao,geracoesEstimadas,populacoesEstimadas,args);
+        Graficopopulacao();
     }
 
     public static boolean modoInterativo(String[] args){
@@ -456,5 +456,18 @@ public class Projeto {
         System.out.print("Encontra-se concluida a apresentacao dos resultados do programa da evolucao das especies.");
         System.out.println("");
     }
+    public static void PopulacaoTotal(int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas,String [] args) throws FileNotFoundException {
+        File file = new File(args[args.length-1]);
+        PrintWriter out = new PrintWriter("populacao.txt");
+        for (int l = 0; l <= geracao; l++) {
+            out.print(geracoesEstimadas[l] + " " + populacoesEstimadas[l]+"\n");
+        }
 
+        out.close();
+    }
+
+    public static void Graficopopulacao() throws IOException {
+        Runtime  rt = Runtime.getRuntime();
+        Process prcs = rt.exec("gnuplot -e \"set terminal png; set output 'Populaçãototal.png'; load 'populacao'\"");
+    }
 }
