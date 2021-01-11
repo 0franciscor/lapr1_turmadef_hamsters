@@ -144,8 +144,8 @@ public class Projeto {
 
     public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, int[] geracoesEstimadas, double[][] matrizLeslie, double[] populacaoInicial, int t, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] distribuicaoNormalizada, int n){
         geracoesEstimadas[geracao] = t;
-        dimensaoPopulacao(matrizLeslie, populacaoInicial, t, Nt, populacoesEstimadas, geracao);
-        dimensaoPopulacao(matrizLeslie, populacaoInicial, (t + 1), Nt, populacoesEstimadas, (geracao + 1));
+        distribuiçãoPopulacao(matrizLeslie, populacaoInicial, t, Nt, populacoesEstimadas, geracao);
+        distribuiçãoPopulacao(matrizLeslie, populacaoInicial, (t + 1), Nt, populacoesEstimadas, (geracao + 1));
         TaxaVariacao(populacoesEstimadas, geracao, taxasDeVariacao);
         distribuicaoNormalizada(geracao, Nt, populacoesEstimadas, distribuicaoNormalizada, n);
 
@@ -214,37 +214,40 @@ public class Projeto {
         }
     }
 
-    public static void dimensaoPopulacao (double [][] matrizLeslie, double[] populacaoInicial, int t, double[][] Nt,double[] populacoesEstimadas, int geracao) { //CALCULO DIMENSAO POPULACAO
+    public static void distribuiçãoPopulacao (double [][] matrizLeslie, double[] populacaoInicial, int t, double[][] Nt,double[] populacoesEstimadas, int geracao) { //CALCULO DIMENSAO POPULACAO
         double [][] Lesliemultiplicada = new double[matrizLeslie.length][matrizLeslie.length];
-
-        for(int i =0 ; i<matrizLeslie.length; i++){
-            for(int j =0 ; j< matrizLeslie.length; j++){
-                Lesliemultiplicada[i][j]=matrizLeslie[i][j];
-            }
-        }
+        copiarMatriz(matrizLeslie,Lesliemultiplicada);
 
         for(int temp = t; temp>=2;temp--){
             multiplicarmatrizes(matrizLeslie,Lesliemultiplicada);
         }
 
-        double total=0;
         if (t==0){
-            for (int a=0;a<matrizLeslie.length;a++){
-                Nt[geracao][a]=populacaoInicial[a];
+            for (int i=0;i<matrizLeslie.length;i++){
+                Nt[geracao][i]=populacaoInicial[i];
             }
         } else {
-            for (int i=0;i<matrizLeslie.length;i++){
-                double somas=0;
-                for (int l=0;l< matrizLeslie.length;l++){
-                    somas=somas+Lesliemultiplicada[i][l]*populacaoInicial[l];
+            for (int l=0;l<matrizLeslie.length;l++){
+                Nt[geracao][l]=0;
+                for (int c=0;c< matrizLeslie.length;c++){
+                    Nt[geracao][l]+=Lesliemultiplicada[l][c]*populacaoInicial[c];
                 }
-                Nt[geracao][i]=somas;
             }
         }
+
+        populacoesEstimadas[geracao]=0;
         for (int i=0;i< matrizLeslie.length;i++){
-            total+=Nt[geracao][i];
+            populacoesEstimadas[geracao]+=Nt[geracao][i];
         }
-        populacoesEstimadas[geracao]=total;
+
+    }
+
+    public static void copiarMatriz (double[][] matrizLeslie, double[][] copia){
+        for(int i =0 ; i<matrizLeslie.length; i++){
+            for(int j =0 ; j< matrizLeslie.length; j++){
+                copia[i][j]=matrizLeslie[i][j];
+            }
+        }
     }
 
     public static void TaxaVariacao(double [] populacoesEstimadas, int geracao, double[] taxasDeVariacao) {
@@ -254,17 +257,16 @@ public class Projeto {
 
     public static void multiplicarmatrizes (double [][] matriz1, double[][] matriz2){
         double [] aux = new double [matriz2.length];
-        int c;
 
         for (int l=0;l<matriz1.length;l++){
             for (int i=0;i<matriz1.length;i++){
                 double soma=0;
-                for (c=0;c<matriz1.length;c++){
+                for (int c=0;c<matriz1.length;c++){
                     soma+=matriz2[l][c]*matriz1[c][i];
                 }
                 aux[i]=soma;
             }
-            for (c=0;c<matriz2.length;c++){
+            for (int c=0;c<matriz2.length;c++){
                 matriz2[l][c]=aux[c];
             }
         }
@@ -291,7 +293,7 @@ public class Projeto {
         }
         return maior;
     }
-    
+
     public static int calcularMaiorValorProprio (double[][] valor){
         double maior = 0;
         int coluna = 0;
