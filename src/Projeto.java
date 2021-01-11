@@ -90,7 +90,7 @@ public class Projeto {
         valorProprio=calcularVetorValorProprio(matrizLeslie,vetor);
 
         if (naoInterativo){
-            escreverParaFicheiro(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,args);
+            escreverParaFicheiro(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,vetor,args);
         }
         escreverParaConsola(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,vetor);
         PopulacaoTotal(geracao,geracoesEstimadas,populacoesEstimadas,args);
@@ -316,16 +316,7 @@ public class Projeto {
         File file = new File(args[args.length-1]);
         PrintWriter out = new PrintWriter(file);
         int c;
-        if (geracao == 0) {
-            for (int i = 0; i <= geracao; i++) {
-                out.print("Foi pedido ao programa para ser estudada a geração " + geracoesEstimadas[i] + ". \n");
-            }
-        }
-        out.print("Foi pedido ao programa para serem estudadas as gerações: " + geracoesEstimadas[0] + " ");
-        for (int i = 1; i <= geracao; i++) {
-            out.print(geracoesEstimadas[i] + " ");
-        }
-        out.println("\nDe acordo com os dados inseridos foram concluídos os seguintes resultados:");
+        out.println("\nDe acordo com os dados inseridos foram obtidos os seguintes resultados:");
         for (int j = 0; j <= geracao; j++) {
             out.println("\nGeração: " + geracoesEstimadas[j]);
             out.print("\nO número total de indivíduos da geração " + geracoesEstimadas[j] + " é ");
@@ -384,19 +375,11 @@ public class Projeto {
 
     public static void escreverParaConsola (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double valorProprio, double[] vetorProprio) {
         int c;
-        System.out.println("");
-        System.out.print("Foi pedido ao programa para serem estudadas as geracoes: " + geracoesEstimadas[0] + " ");
-        for (int i = 1; i <= geracao; i++) {
-            System.out.print(geracoesEstimadas[i]+" ");
-        }
-        System.out.println("");
-        System.out.println("\nDe acordo com os dados inseridos foram concluídos os seguintes resultados:");
+        System.out.println("\nDe acordo com os dados inseridos foram obtidos os seguintes resultados:");
         for (int j = 0; j <= geracao; j++) {
-            System.out.print("\nGeração: " + geracoesEstimadas[j] + "\n");
-            System.out.print("\nO número total de indivíduos da geração " + geracoesEstimadas[j] + " é ");
-            System.out.printf("%.2f", populacoesEstimadas[j]);
-            System.out.print(". \n");
-            System.out.print("\nA taxa de variação da população ao longo dos anos para a geração " + geracoesEstimadas[j] + " é ");
+            System.out.println("\nGeração: " + geracoesEstimadas[j]);
+            System.out.printf("\nO número total de indivíduos é %.2f", populacoesEstimadas[j],". \n");
+            System.out.print("\nA taxa de variação da população ao longo dos anos é ");
             System.out.printf("%.2f", taxasDeVariacao[j]);
             System.out.print(". \n");
             System.out.println("\nSegue-se a distribuição da população, isto é, quantos indivíduos existem nas diferentes faixas etárias.");
@@ -438,7 +421,7 @@ public class Projeto {
         for (c = 0; c < n; c++) {
             System.out.print("Idade " + c + ": ");
             System.out.printf("%.3f", vetorProprio[c]);
-            System.out.print("; \n");
+            System.out.print("\n");
         }
 
         System.out.println("");
