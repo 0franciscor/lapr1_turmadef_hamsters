@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Scanner;
 
 public class Projeto {
@@ -337,95 +339,98 @@ public class Projeto {
         File file = new File(args[args.length-1]);
         PrintWriter out = new PrintWriter(file);
         int c;
-        out.println("\nDe acordo com os dados inseridos foram obtidos os seguintes resultados:");
-        for (int j = 0; j <= geracao; j++) {
-            out.println("\nGeração: " + geracoesEstimadas[j]);
-            if(opcoesExecucao[3] == 1) {
-                out.print("\nO número total de indivíduos da geração " + geracoesEstimadas[j] + " é ");
-                out.printf("%.2f", populacoesEstimadas[j]);
-                out.print(". \n");
+            out.println("De acordo com os dados inseridos foram obtidos os seguintes resultados:");
+            for (int j = 0; j <= geracao; j++) {
+                if (opcoesExecucao[3] == 1) {
+                    out.print("\nO número total de indivíduos da geração " + geracoesEstimadas[j] + " é ");
+                    out.printf("%.2f.", populacoesEstimadas[j]);
+                }
             }
-
-            if(opcoesExecucao[4] == 1) {
-                out.print("\nA taxa de variação da população ao longo dos anos para a geração " + geracoesEstimadas[j] + " é ");
-                out.printf("%.2f", taxasDeVariacao[j]);
-                out.print(". \n");
+            out.println("");
+            for (int j = 0; j <= geracao; j++) {
+                if (opcoesExecucao[4] == 1) {
+                    out.print("\nA taxa de variação para a geração " + geracoesEstimadas[j] + " é ");
+                    out.printf("%.2f.", taxasDeVariacao[j]);
+                }
             }
+            out.print("\n");
             out.println("\nSegue-se a distribuição da população, isto é, quantos indivíduos existem nas diferentes faixas etárias.");
-            out.println("A população encontra-se distribuída da seguinte forma:");
-            for (c = 0; c < n - 1; c++) {
+            for (int j = 0; j <= geracao; j++) {
+                out.println("\nA população na geração " + geracoesEstimadas[j] + " encontra-se distribuída da seguinte forma:");
+                for (c = 0; c < n - 1; c++) {
+                    out.print("Idade " + c + ": ");
+                    out.printf("%.2f", Nt[j][c]);
+                    out.print("\n");
+                }
                 out.print("Idade " + c + ": ");
-                out.printf("%.2f", Nt[j][c]);
+                out.printf("%.2f", Nt[j][n - 1]);
                 out.print("\n");
             }
-            out.print("Idade " + c + ": ");
-            out.printf("%.2f", Nt[j][n - 1]);
-            out.print("\n");
-            out.print("\nA distribuição normalizada, que resulta da divisão da dimensão da população em cada faixa etária pela população total, representada pelas várias faixas etárias: \n");
-            for (c = 0; c < n - 1; c++) {
+            out.print("\nA distribuição normalizada resulta da divisão da dimensão da população em cada faixa etária pela população total.\n");
+            for (int j = 0; j <= geracao; j++) {
+                out.print("\nA distribuição normalizada da geração " + geracoesEstimadas[j] + " está representada pelas várias faixas etárias:\n");
+                for (c = 0; c < n - 1; c++) {
+                    out.print("Idade " + c + ": ");
+                    out.printf("%.2f", distribuicaoNormalizada[j][c]);
+                    out.print("\n");
+                }
                 out.print("Idade " + c + ": ");
-                out.printf("%.2f", distribuicaoNormalizada[j][c]);
+                out.printf("%.2f", distribuicaoNormalizada[j][n - 1]);
                 out.print("\n");
             }
-            out.print("Idade " + c + ": ");
-            out.printf("%.2f", distribuicaoNormalizada[j][n - 1]);
-            out.print("\n");
-
-        }
-        if(opcoesExecucao[2] == 1) {
-            out.println("\nComportamento Assintotico da populacao associado ao maior valor proprio.");
-            out.printf("\nO valor próprio de módulo máximo é aproximadamente: %.3f\n", valorProprio);
-            out.println("Este valor indica-nos a taxa de crescimento da população.");
-            String comportamento = "igual", analise = "o que significa que a população se irá manter constante ao longo dos anos.";
-            if (valorProprio > 1) {
-                comportamento = "maior";
-                analise = "isto significa que a população irá aumentar ao longo dos anos.";
+            if (opcoesExecucao[2] == 1) {
+                out.println("\nComportamento Assintótico da população associado ao maior valor próprio.");
+                out.printf("\nO valor próprio de módulo máximo é aproximadamente: %.3f\n", valorProprio);
+                out.println("Este valor indica-nos a taxa de crescimento da população.");
+                String comportamento = "igual", analise = "o que significa que a população se irá manter constante ao longo dos anos.";
+                if (valorProprio > 1) {
+                    comportamento = "maior";
+                    analise = "isto significa que a população irá aumentar ao longo dos anos.";
+                }
+                if (valorProprio < 1) {
+                    comportamento = "menor";
+                    analise = " isto significa que a população irá diminuir ao longo dos anos.";
+                }
+                out.println("Como o valor próprio é " + comportamento + " que 1," + analise);
+                out.println("\nO vetor próprio associado ao maior valor próprio indica-nos as proporções populacionais constantes.");
+                for (c = 0; c < n; c++) {
+                    out.print("Idade " + c + ": ");
+                    out.printf("%.3f\n", vetorProprio[c]);
+                }
             }
-            if (valorProprio < 1) {
-                comportamento = "menor";
-                analise = " isto significa que a população irá diminuir ao longo dos anos.";
-            }
-            out.println("Como o valor próprio é " + comportamento + " que 1," + analise);
-            out.println("Como o valor proprio e " + comportamento + " que 1, " + analise);
-            out.println("\nO vetor proprio associado ao maior valor proprio indica-nos as proporcoes populacionais constantes.");
-            for (c = 0; c < n; c++) {
-                out.print("Idade " + c + ": ");
-                out.printf("%.3f", vetorProprio[c]);
-                out.print("; \n");
-            }
-        }
-        out.print("\nEncontra-se concluída a apresentação dos resultados do programa da evolução das espécies.");
-
-        out.close();
-
+            out.print("\nEncontra-se concluída a apresentação dos resultados do programa da evolução das espécies.");
+            out.close();
     }
-
-
     public static void escreverParaConsola (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double valorProprio, double[] vetorProprio) {
         int c;
+        int a = 0;
         System.out.println("\nDe acordo com os dados inseridos foram obtidos os seguintes resultados:");
         for (int j = 0; j <= geracao; j++) {
-            System.out.println("\nGeração: " + geracoesEstimadas[j]);
-            System.out.printf("\nO número total de indivíduos é %.2f.\n", populacoesEstimadas[j]);
-            if (j< geracao){
-                System.out.printf("\nA taxa de variação da população ao longo dos anos é %.2f.\n", taxasDeVariacao[j]);
+            System.out.printf("\nO número total de indivíduos na geracao " + geracoesEstimadas[j] + " é %.2f.", populacoesEstimadas[j]);
+        }
+        System.out.println("");
+        for (a = 0; a <= geracao; a++) {
+            if (a < geracao) {
+                System.out.printf("\nA taxa de variação para a geração " + geracoesEstimadas[a] + " da população ao longo dos anos é %.2f.", taxasDeVariacao[a]);
             }
-            System.out.println("\nSegue-se a distribuição da população, isto é, quantos indivíduos existem nas diferentes faixas etárias.");
-            System.out.println("A população encontra-se distribuída da seguinte forma:");
+        }
+        System.out.println("");
+        System.out.println("\nSegue-se a distribuição da população, isto é, quantos indivíduos existem nas diferentes faixas etárias.");
+        for (int j = 0; j <= geracao; j++) {
+            System.out.print("\nA população na geração " + geracoesEstimadas[j] + " encontra-se distribuída da seguinte forma:\n");
             for (c = 0; c < n - 1; c++) {
                 System.out.printf("Idade " + c + ": %.2f\n", Nt[j][c]);
             }
-
             System.out.printf("Idade " + c + ": %.2f\n", Nt[j][n - 1]);
-
-            System.out.print("\nA distribuição normalizada, que resulta da divisão da dimensão da população em cada faixa etária pela população total, representada pelas várias faixas etárias: \n");
-
+        }
+        System.out.print("\nA distribuição normalizada resulta da divisão da dimensão da população em cada faixa etária pela população total.\n");
+        for (int j = 0; j <= geracao; j++) {
+            System.out.print("\nA distribuição normalizada da geração " + geracoesEstimadas[j] + " está representada pelas várias faixas etárias:\n");
             for (c = 0; c < n - 1; c++) {
                 System.out.printf("Idade " + c + ": %.2f\n", distribuicaoNormalizada[j][c]);
             }
             System.out.printf("Idade " + c + ": %.2f\n", distribuicaoNormalizada[j][n - 1]);
         }
-
         System.out.println("\nComportamento Assintotico da populacao associado ao maior valor proprio.");
         System.out.printf("\nO valor proprio de modulo maximo e aproximadamente: %.3f\n", valorProprio);
         System.out.println("Este valor indica-nos a taxa de crescimento da populacao.");
