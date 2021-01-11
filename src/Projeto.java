@@ -277,17 +277,25 @@ public class Projeto {
     }
 
     public static double calcularVetorValorProprio (double[][] matrizLeslie,double[] vetor) {
-
         Matrix a = new Basic2DMatrix(matrizLeslie);
         EigenDecompositor eigenD = new EigenDecompositor(a);
         Matrix[] mattD = eigenD.decompose();
         double[][] vetoraux = mattD[0].toDenseMatrix().toArray();
         double[][] valor = mattD[1].toDenseMatrix().toArray();
 
+        int coluna = calcularMaiorValorProprio(valor);
+        double maior = valor[coluna][coluna];
+
+        for (int i = 0; i < matrizLeslie.length; i++) {
+            vetor[i] = vetoraux[i][coluna];
+        }
+        return maior;
+    }
+    
+    public static int calcularMaiorValorProprio (double[][] valor){
         double maior = 0;
         int coluna = 0;
-
-        for (int l = 0; l < matrizLeslie.length; l++) {
+        for (int l = 0; l < valor.length; l++) {
             if (valor[l][l] >= 0) {
                 if (valor[l][l] > maior) {
                     maior = valor[l][l];
@@ -300,11 +308,7 @@ public class Projeto {
                 }
             }
         }
-
-        for (int i = 0; i < matrizLeslie.length; i++) {
-            vetor[i] = vetoraux[i][coluna];
-        }
-        return maior;
+        return coluna;
     }
     public static void escreverParaFicheiro (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double valorProprio, String [] args) throws FileNotFoundException {
         File file = new File(args[args.length-1]);
