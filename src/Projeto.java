@@ -88,6 +88,7 @@ public class Projeto {
         double [] vetor = new double[matrizLeslie.length];
         double valorProprio;
         valorProprio=calcularVetorValorProprio(matrizLeslie,vetor);
+        normalizarVetorProprio(vetor);
 
         if (naoInterativo){
             escreverParaFicheiro(opcoesExecucao, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,vetor,args);
@@ -318,6 +319,20 @@ public class Projeto {
         }
         return coluna;
     }
+    public static void normalizarVetorProprio (double[] vetor){
+        double soma=0;
+        for (int i=0;i<vetor.length;i++){
+            soma+=vetor[i];
+        }
+        if (soma!=1){
+            normalizar(vetor,soma);
+        }
+    }
+    public static void normalizar(double[] vetor, double soma){
+        for (int i=0;i<vetor.length;i++){
+            vetor[i]/=soma;
+        }
+    }
     public static void escreverParaFicheiro (int[] opcoesExecucao, int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double valorProprio, double[] vetorProprio, String [] args) throws FileNotFoundException {
         File file = new File(args[args.length-1]);
         PrintWriter out = new PrintWriter(file);
@@ -392,8 +407,9 @@ public class Projeto {
         for (int j = 0; j <= geracao; j++) {
             System.out.println("\nGeração: " + geracoesEstimadas[j]);
             System.out.printf("\nO número total de indivíduos é %.2f.\n", populacoesEstimadas[j]);
-            System.out.printf("\nA taxa de variação da população ao longo dos anos é %.2f.\n", taxasDeVariacao[j]);
-
+            if (j< geracao){
+                System.out.printf("\nA taxa de variação da população ao longo dos anos é %.2f.\n", taxasDeVariacao[j]);
+            }
             System.out.println("\nSegue-se a distribuição da população, isto é, quantos indivíduos existem nas diferentes faixas etárias.");
             System.out.println("A população encontra-se distribuída da seguinte forma:");
             for (c = 0; c < n - 1; c++) {
