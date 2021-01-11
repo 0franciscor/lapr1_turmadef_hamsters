@@ -13,7 +13,7 @@ public class Projeto {
 
     public static void main(String[] args) throws IOException {
         boolean existe, naoInterativo;
-        String nomeFicheiro;
+        String nomeFicheiro = null;
         int[] opcoesExecucao = new int [5];
         int numCiclos = 0;
 
@@ -27,7 +27,7 @@ public class Projeto {
         }
         //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
 
-        else {
+        else if(args.length != 0){
             existe = modoInterativo(args);
             nomeFicheiro = args[1];
         }
@@ -391,30 +391,23 @@ public class Projeto {
         System.out.println("\nDe acordo com os dados inseridos foram obtidos os seguintes resultados:");
         for (int j = 0; j <= geracao; j++) {
             System.out.println("\nGeração: " + geracoesEstimadas[j]);
-            System.out.printf("\nO número total de indivíduos é %.2f", populacoesEstimadas[j],". \n");
-            System.out.print("\nA taxa de variação da população ao longo dos anos é ");
-            System.out.printf("%.2f", taxasDeVariacao[j]);
-            System.out.print(". \n");
+            System.out.printf("\nO número total de indivíduos é %.2f.\n", populacoesEstimadas[j]);
+            System.out.printf("\nA taxa de variação da população ao longo dos anos é %.2f.\n", taxasDeVariacao[j]);
+
             System.out.println("\nSegue-se a distribuição da população, isto é, quantos indivíduos existem nas diferentes faixas etárias.");
             System.out.println("A população encontra-se distribuída da seguinte forma:");
             for (c = 0; c < n - 1; c++) {
-                System.out.print("Idade " + c + ": ");
-                System.out.printf("%.2f", Nt[j][c]);
-                System.out.print("\n");
+                System.out.printf("Idade " + c + ": %.2f\n", Nt[j][c]);
             }
-            System.out.print("Idade " + c + ": ");
-            System.out.printf("%.2f", Nt[j][n - 1]);
-            System.out.print("\n");
-            System.out.print("\nA distribuição normalizada, que resulta da divisão da dimensão da população em cada faixa etária pela população total, representada pelas várias faixas etárias: \n");
-            for (c = 0; c < n - 1; c++) {
-                System.out.print("Idade " + c + ": ");
-                System.out.printf("%.2f", distribuicaoNormalizada[j][c]);
-                System.out.print("\n");
-            }
-            System.out.print("Idade " + c + ": ");
-            System.out.printf("%.2f", distribuicaoNormalizada[j][n - 1]);
-            System.out.print("\n");
 
+            System.out.printf("Idade " + c + ": %.2f\n", Nt[j][n - 1]);
+
+            System.out.print("\nA distribuição normalizada, que resulta da divisão da dimensão da população em cada faixa etária pela população total, representada pelas várias faixas etárias: \n");
+
+            for (c = 0; c < n - 1; c++) {
+                System.out.printf("Idade " + c + ": %.2f\n", distribuicaoNormalizada[j][c]);
+            }
+            System.out.printf("Idade " + c + ": %.2f\n", distribuicaoNormalizada[j][n - 1]);
         }
 
         System.out.println("\nComportamento Assintotico da populacao associado ao maior valor proprio.");
@@ -432,9 +425,7 @@ public class Projeto {
         System.out.println("Como o valor proprio e " + comportamento + " que 1, " + analise);
         System.out.println("\nO vetor proprio associado ao maior valor proprio indica-nos as proporcoes populacionais constantes.");
         for (c = 0; c < n; c++) {
-            System.out.print("Idade " + c + ": ");
-            System.out.printf("%.3f", vetorProprio[c]);
-            System.out.print("\n");
+            System.out.printf("Idade " + c + ": %.3f\n", vetorProprio[c]);
         }
         System.out.println("\nEncontra-se concluida a apresentacao dos resultados do programa da evolucao das especies.\n");
     }
