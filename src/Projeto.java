@@ -11,7 +11,7 @@ public class Projeto {
 
     static Scanner ler = new Scanner(System.in);
 
-    public static void main(String[] args) throws FileNotFoundException,IOException {
+    public static void main(String[] args) throws IOException {
         boolean existe, naoInterativo;
         String nomeFicheiro;
         int[] opcoesExecucao = new int [5];
@@ -90,11 +90,17 @@ public class Projeto {
         valorProprio=calcularVetorValorProprio(matrizLeslie,vetor);
 
         if (naoInterativo){
-            escreverParaFicheiro(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,vetor,args);
+            escreverParaFicheiro(opcoesExecucao, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,vetor,args);
+            if(opcoesExecucao[1]!=0) {
+                PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas, args);
+                Graficopopulacao();
+            }
         }
-        escreverParaConsola(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,vetor);
-        PopulacaoTotal(geracao,geracoesEstimadas,populacoesEstimadas,args);
-        Graficopopulacao();
+        else {
+            escreverParaConsola(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n, valorProprio, vetor);
+            PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas, args);
+            Graficopopulacao();
+        }
     }
 
     public static boolean modoInterativo(String[] args){
@@ -144,8 +150,8 @@ public class Projeto {
 
     public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, int[] geracoesEstimadas, double[][] matrizLeslie, double[] populacaoInicial, int t, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] distribuicaoNormalizada, int n){
         geracoesEstimadas[geracao] = t;
-        distribuiçãoPopulacao(matrizLeslie, populacaoInicial, t, Nt, populacoesEstimadas, geracao);
-        distribuiçãoPopulacao(matrizLeslie, populacaoInicial, (t + 1), Nt, populacoesEstimadas, (geracao + 1));
+        distribuicaoPopulacao(matrizLeslie, populacaoInicial, t, Nt, populacoesEstimadas, geracao);
+        distribuicaoPopulacao(matrizLeslie, populacaoInicial, (t + 1), Nt, populacoesEstimadas, (geracao + 1));
         TaxaVariacao(populacoesEstimadas, geracao, taxasDeVariacao);
         distribuicaoNormalizada(geracao, Nt, populacoesEstimadas, distribuicaoNormalizada, n);
 
@@ -214,7 +220,7 @@ public class Projeto {
         }
     }
 
-    public static void distribuiçãoPopulacao (double [][] matrizLeslie, double[] populacaoInicial, int t, double[][] Nt,double[] populacoesEstimadas, int geracao) { //CALCULO DIMENSAO POPULACAO
+    public static void distribuicaoPopulacao (double [][] matrizLeslie, double[] populacaoInicial, int t, double[][] Nt,double[] populacoesEstimadas, int geracao) { //CALCULO DIMENSAO POPULACAO
         double [][] Lesliemultiplicada = new double[matrizLeslie.length][matrizLeslie.length];
         copiarMatriz(matrizLeslie,Lesliemultiplicada);
 
@@ -312,19 +318,24 @@ public class Projeto {
         }
         return coluna;
     }
-    public static void escreverParaFicheiro (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double valorProprio, double[] vetorProprio, String [] args) throws FileNotFoundException {
+    public static void escreverParaFicheiro (int[] opcoesExecucao, int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double valorProprio, double[] vetorProprio, String [] args) throws FileNotFoundException {
         File file = new File(args[args.length-1]);
         PrintWriter out = new PrintWriter(file);
         int c;
         out.println("\nDe acordo com os dados inseridos foram obtidos os seguintes resultados:");
         for (int j = 0; j <= geracao; j++) {
             out.println("\nGeração: " + geracoesEstimadas[j]);
-            out.print("\nO número total de indivíduos da geração " + geracoesEstimadas[j] + " é ");
-            out.printf("%.2f", populacoesEstimadas[j]);
-            out.print(". \n");
-            out.print("\nA taxa de variação da população ao longo dos anos para a geração " + geracoesEstimadas[j] + " é ");
-            out.printf("%.2f", taxasDeVariacao[j]);
-            out.print(". \n");
+            if(opcoesExecucao[3] == 1) {
+                out.print("\nO número total de indivíduos da geração " + geracoesEstimadas[j] + " é ");
+                out.printf("%.2f", populacoesEstimadas[j]);
+                out.print(". \n");
+            }
+
+            if(opcoesExecucao[4] == 1) {
+                out.print("\nA taxa de variação da população ao longo dos anos para a geração " + geracoesEstimadas[j] + " é ");
+                out.printf("%.2f", taxasDeVariacao[j]);
+                out.print(". \n");
+            }
             out.println("\nSegue-se a distribuição da população, isto é, quantos indivíduos existem nas diferentes faixas etárias.");
             out.println("A população encontra-se distribuída da seguinte forma:");
             for (c = 0; c < n - 1; c++) {
@@ -346,25 +357,27 @@ public class Projeto {
             out.print("\n");
 
         }
-        out.println("\nComportamento Assintotico da populacao associado ao maior valor proprio.");
-        out.printf("\nO valor próprio de módulo máximo é aproximadamente: %.3f\n", valorProprio);
-        out.println("Este valor indica-nos a taxa de crescimento da população.");
-        String comportamento="igual", analise="o que significa que a população se irá manter constante ao longo dos anos.";
-        if (valorProprio>1){
-            comportamento="maior";
-            analise="isto significa que a população irá aumentar ao longo dos anos.";
-        }
-        if (valorProprio<1){
-            comportamento="menor";
-            analise=" isto significa que a população irá diminuir ao longo dos anos.";
-        }
-        out.println("Como o valor próprio é " + comportamento + " que 1," + analise);
-        out.println("Como o valor proprio e " + comportamento + " que 1, " + analise);
-        out.println("\nO vetor proprio associado ao maior valor proprio indica-nos as proporcoes populacionais constantes.");
-        for (c = 0; c < n; c++) {
-            out.print("Idade " + c + ": ");
-            out.printf("%.3f", vetorProprio[c]);
-            out.print("; \n");
+        if(opcoesExecucao[2] == 1) {
+            out.println("\nComportamento Assintotico da populacao associado ao maior valor proprio.");
+            out.printf("\nO valor próprio de módulo máximo é aproximadamente: %.3f\n", valorProprio);
+            out.println("Este valor indica-nos a taxa de crescimento da população.");
+            String comportamento = "igual", analise = "o que significa que a população se irá manter constante ao longo dos anos.";
+            if (valorProprio > 1) {
+                comportamento = "maior";
+                analise = "isto significa que a população irá aumentar ao longo dos anos.";
+            }
+            if (valorProprio < 1) {
+                comportamento = "menor";
+                analise = " isto significa que a população irá diminuir ao longo dos anos.";
+            }
+            out.println("Como o valor próprio é " + comportamento + " que 1," + analise);
+            out.println("Como o valor proprio e " + comportamento + " que 1, " + analise);
+            out.println("\nO vetor proprio associado ao maior valor proprio indica-nos as proporcoes populacionais constantes.");
+            for (c = 0; c < n; c++) {
+                out.print("Idade " + c + ": ");
+                out.printf("%.3f", vetorProprio[c]);
+                out.print("; \n");
+            }
         }
         out.print("\nEncontra-se concluída a apresentação dos resultados do programa da evolução das espécies.");
 
@@ -402,8 +415,8 @@ public class Projeto {
             System.out.printf("%.2f", distribuicaoNormalizada[j][n - 1]);
             System.out.print("\n");
 
-
         }
+
         System.out.println("\nComportamento Assintotico da populacao associado ao maior valor proprio.");
         System.out.printf("\nO valor proprio de modulo maximo e aproximadamente: %.3f\n", valorProprio);
         System.out.println("Este valor indica-nos a taxa de crescimento da populacao.");
@@ -423,10 +436,7 @@ public class Projeto {
             System.out.printf("%.3f", vetorProprio[c]);
             System.out.print("\n");
         }
-
-        System.out.println("");
-        System.out.print("Encontra-se concluida a apresentacao dos resultados do programa da evolucao das especies.");
-        System.out.println("");
+        System.out.println("\nEncontra-se concluida a apresentacao dos resultados do programa da evolucao das especies.\n");
     }
     public static void PopulacaoTotal(int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas,String [] args) throws FileNotFoundException {
         File file = new File(args[args.length-1]);
