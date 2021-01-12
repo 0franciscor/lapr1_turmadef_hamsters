@@ -41,9 +41,16 @@ public class Projeto {
         if (existe) {
             populacaoInicial = tratamentoDados((leituraDados(nomeFicheiro, 0)));
             matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
+
             for (int i = 1; i <= 2; i++) {
-                insercaoMatriz(matrizLeslie, tratamentoDados(leituraDados(nomeFicheiro, i)), i, true);
+                double [] array = tratamentoDados(leituraDados(nomeFicheiro, i));
+
+                if(array.length == (populacaoInicial.length-1))
+                    insercaoMatriz(matrizLeslie, array, 1, true);
+                else
+                    insercaoMatriz(matrizLeslie, array, 2, true);
             }
+
         } else {
             System.out.println("Quantos intervalos de idade possui a populacao que pretende estudar?");
             int numIntervalos = ler.nextInt();
@@ -94,9 +101,9 @@ public class Projeto {
 
         if (naoInterativo){
             escreverParaFicheiro(opcoesExecucao, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,vetor,args);
-            if(opcoesExecucao[1]!=0) {
+            //if(opcoesExecucao[1]!=0) {
 
-            }
+            //}
         }
         else {
             escreverParaConsola(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n, valorProprio, vetor);
@@ -173,6 +180,36 @@ public class Projeto {
         File ficheiroVerificacao = new File(nomeFicheiro);
         return ficheiroVerificacao.exists();
     }
+    public static String leituraDados(String nomeFicheiro, int numLinha) throws FileNotFoundException { //LEITURA EXCLUSIVA DO VETOR
+        File ficheiro = new File(nomeFicheiro);
+        Scanner leituraFicheiro = new Scanner(ficheiro);
+        String letra = leituraDadosAuxiliar(leituraFicheiro, ficheiro, numLinha);
+        String input;
+        boolean stringCerta = false;
+        int aux = 0;
+        do{
+            input = leituraFicheiro.nextLine();
+            if (String.valueOf(input.charAt(0)).equals(letra))
+                stringCerta = true;
+            aux++;
+        } while(aux < ficheiro.length() && !stringCerta);
+        leituraFicheiro.close();
+
+        return input;
+    }
+
+    public static String leituraDadosAuxiliar(Scanner leituraFicheiro, File ficheiro, int numLinha){
+        String letra = null;
+
+        if(numLinha==0)
+            letra = "x";
+        else if(numLinha==1)
+            letra = "s";
+        else if(numLinha==2)
+            letra = "f";
+
+        return letra;
+    }
 
     public static double[] insercaoDados(double[] array, String elemento){
         int limite;
@@ -189,17 +226,6 @@ public class Projeto {
         return array;
     }
 
-    public static String leituraDados(String nomeFicheiro, int numLinha) throws FileNotFoundException { //LEITURA EXCLUSIVA DO VETOR
-        File ficheiro = new File(nomeFicheiro);
-        Scanner leituraFicheiro = new Scanner(ficheiro);
-        String input = null;
-
-        for(int i = 0; i<=numLinha; i++)
-            input = leituraFicheiro.nextLine();
-        leituraFicheiro.close();
-
-        return input;
-    }
 
     public static double[] tratamentoDados(String input) {
         String[] dadosInseridos = input.split(", ");
@@ -497,7 +523,9 @@ public class Projeto {
         }
 
         out.close();
-    }public static void Populaçãodistribuida(int n,double[][] Nt,String s,int geracao,int [] geracoesEstimadas,String [] args) throws FileNotFoundException {
+    }
+
+    public static void Populaçãodistribuida(int n,double[][] Nt,String s,int geracao,int [] geracoesEstimadas,String [] args) throws FileNotFoundException {
         File file = new File(args[args.length-1]);
         PrintWriter out = new PrintWriter(s);
         for (int l = 0; l <= geracao; l++) {
