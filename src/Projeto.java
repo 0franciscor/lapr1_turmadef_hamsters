@@ -398,7 +398,7 @@ public class Projeto {
     }
     public static void normalizar(double[] vetor, double soma){
         for (int i=0;i<vetor.length;i++){
-            vetor[i]/=soma;
+            vetor[i]=(vetor[i]/soma)*100;
         }
     }
     public static void escreverParaFicheiro (int[] opcoesExecucao, int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double valorProprio, double[] vetorProprio, String [] args) throws FileNotFoundException {
@@ -562,8 +562,8 @@ public class Projeto {
                 comportamento="menor";
                 analise="isto significa que a populacao ira diminuir ao longo dos anos.";
             }
-            System.out.println("Como o valor proprio e " + comportamento + " que 1, " + analise);
-            System.out.println("\nO vetor proprio associado ao maior valor proprio indica-nos as proporcoes populacionais constantes.");
+            System.out.println("Como o valor proprio é " + comportamento + " que 1, " + analise);
+            System.out.println("\nO vetor próprio associado ao maior valor próprio indica-nos as percentagens populacionais constantes.");
             for (c = 0; c < n; c++) {
                 System.out.printf("Idade " + c + ": %.3f\n", vetorProprio[c]);
             }
