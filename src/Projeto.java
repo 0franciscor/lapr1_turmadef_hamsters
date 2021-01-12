@@ -23,7 +23,7 @@ public class Projeto {
         erro = modoNInterativo(opcoesExecucao, args, erro);
         if(erro == 1) {
             naoInterativo = true;
-            existe = naoInterativo;
+            existe = true;
             numCiclos = opcoesExecucao[0];
             nomeFicheiro = args[(args.length - 2)];
         }
@@ -38,6 +38,7 @@ public class Projeto {
         double[] populacaoInicial; //VETOR INICIAL
         double[][] matrizLeslie;   //DECLARAÇÃO MATRIZ LESLIE
         if(erro != 2) {
+            //matrizAuto(existe, nomeFicheiro);
             if (existe) {
                 populacaoInicial = tratamentoDados((leituraDados(nomeFicheiro, 0)));
                 matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
@@ -72,7 +73,7 @@ public class Projeto {
             int n = matrizLeslie.length, t = -1, geracao = -1;
 
             int[] geracoesEstimadas = new int[1000];
-            double[] populacoesEstimadas = new double[1001];
+            double[] populacoesEstimadas = new double[1000];
             double[] taxasDeVariacao = new double[1000];
             double[][] Nt = new double[1001][matrizLeslie.length];
             double[][] distribuicaoNormalizada = new double[1000][matrizLeslie.length];
@@ -106,31 +107,6 @@ public class Projeto {
                 interfaceUtilizador(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n, valorProprio, vetor);
             }
         }
-    }
-
-    public static void interfaceUtilizador(int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double valorProprio, double[] vetorProprio) throws IOException {
-        int leitura;
-        do {
-            int [] opcoesVisualizacao = new int[6];
-            System.out.println("Quais os dados que gostaria de visualizar? (Insira os números associados a cada parâmetro e prima Enter");
-            System.out.println("1 - População total a cada geração.");
-            System.out.println("2 - Taxa de variação.");
-            System.out.println("3 - Distribuição da população.");
-            System.out.println("4 - Distribuição normalizada da população.");
-            System.out.println("5 - Comportamento assimtótico associado ao maior valor próprio.");
-            System.out.println("6 - Gráficos.");
-            System.out.println("0 - Quando não quiser inserir mais parâmetros.");
-            System.out.println("-1 - Para sair do programa. Parâmetro isolado");
-            do{
-                leitura = ler.nextInt();
-                if (leitura>0){
-                    opcoesVisualizacao[leitura-1]=1;
-                }
-            } while(leitura > 0);
-            if (leitura>0){
-                escreverParaConsola(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n, valorProprio, vetorProprio,opcoesVisualizacao);
-            }
-        } while(leitura != -1);
     }
 
     public static boolean modoInterativo(String[] args){
@@ -177,6 +153,22 @@ public class Projeto {
         }
         return erro;
     }
+
+    /*public static void matrizAuto(boolean existe, String nomeFicheiro) throws IOException {
+        if (existe) {
+            double[] populacaoInicial = tratamentoDados((leituraDados(nomeFicheiro, 0)));
+            double[][] matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
+
+            for (int i = 1; i <= 2; i++) {
+                double[] array = tratamentoDados(leituraDados(nomeFicheiro, i));
+
+                if (array.length == (populacaoInicial.length - 1))
+                    insercaoMatriz(matrizLeslie, array, 1, true);
+                else
+                    insercaoMatriz(matrizLeslie, array, 2, true);
+            }
+        }
+    }*/
 
     public static boolean existeFicheiro(String nomeFicheiro){
         File ficheiroVerificacao = new File(nomeFicheiro);
@@ -257,6 +249,31 @@ public class Projeto {
             for (int i = 0; i < valoresTratados.length; i++)
                 matrizLeslie[0][i] = valoresTratados[i];
         }
+    }
+
+    public static void interfaceUtilizador(int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double valorProprio, double[] vetorProprio) throws IOException {
+        int leitura;
+        do {
+            int [] opcoesVisualizacao = new int[6];
+            System.out.println("Quais os dados que gostaria de visualizar? (Insira os números associados a cada parâmetro e prima Enter");
+            System.out.println("1 - População total a cada geração.");
+            System.out.println("2 - Taxa de variação.");
+            System.out.println("3 - Distribuição da população.");
+            System.out.println("4 - Distribuição normalizada da população.");
+            System.out.println("5 - Comportamento assimtótico associado ao maior valor próprio.");
+            System.out.println("6 - Gráficos.");
+            System.out.println("0 - Quando não quiser inserir mais parâmetros.");
+            System.out.println("-1 - Para sair do programa. Parâmetro isolado");
+            do{
+                leitura = ler.nextInt();
+                if (leitura>0){
+                    opcoesVisualizacao[leitura-1]=1;
+                }
+            } while(leitura > 0);
+
+            escreverParaConsola(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n, valorProprio, vetorProprio,opcoesVisualizacao);
+
+        } while(leitura != -1);
     }
 
     public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, int[] geracoesEstimadas, double[][] matrizLeslie, double[] populacaoInicial, int t, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] distribuicaoNormalizada, int n){
@@ -383,7 +400,7 @@ public class Projeto {
     public static void escreverParaFicheiro (int[] opcoesExecucao, int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double valorProprio, double[] vetorProprio, String [] args) throws FileNotFoundException {
         File file = new File(args[args.length-1]);
         PrintWriter out = new PrintWriter(file);
-        NumberFormat formatter = new DecimalFormat();
+        NumberFormat formatter;
         formatter = new DecimalFormat("0.###E0");
         int c;
             out.println("De acordo com os dados inseridos foram obtidos os seguintes resultados:");
@@ -482,7 +499,7 @@ public class Projeto {
             for (int j = 0; j <= geracao; j++) {
                 System.out.printf("\nO número total de indivíduos na geracao " + geracoesEstimadas[j] + " é %.2f.", populacoesEstimadas[j]);
             }
-            System.out.println("");
+            System.out.println();
         }
         if (opcoesVisualizaco[1]==1){
             for (int a = 0; a <= geracao; a++) {
@@ -490,7 +507,7 @@ public class Projeto {
                     System.out.printf("\nA taxa de variação para a geração " + geracoesEstimadas[a] + " da população ao longo dos anos é %.2f.", taxasDeVariacao[a]);
                 }
             }
-            System.out.println("");
+            System.out.println();
         }
         if (opcoesVisualizaco[2]==1){
             System.out.println("\nA distribuição da população, isto é, quantos indivíduos existem nas diferentes faixas etárias.");
@@ -572,7 +589,7 @@ public class Projeto {
 
     public static void Graficopopulacao(String d) throws IOException {
         Runtime  rt = Runtime.getRuntime();
-        Process prcs = rt.exec("gnuplot -p -e \"plot "+d+"\"");
+        rt.exec("gnuplot -p -e \"plot "+d+"\"");
     }
 
     public static void SalvarGrafico(String s,String d,String terminal) throws IOException {
