@@ -280,14 +280,15 @@ public class Projeto {
 
     public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, int[] geracoesEstimadas, double[][] matrizLeslie, double[] populacaoInicial, int t, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] distribuicaoNormalizada, int n){
         geracoesEstimadas[geracao] = t;
-        distribuicaoPopulacao(matrizLeslie, populacaoInicial, t, Nt, populacoesEstimadas, geracao);
-        distribuicaoPopulacao(matrizLeslie, populacaoInicial, (t + 1), Nt, populacoesEstimadas, (geracao + 1));
+        distribuicaoPopulacao(matrizLeslie, populacaoInicial, t, Nt, geracao);
+        totalPopulacao(geracao,populacoesEstimadas,Nt);
+        distribuicaoPopulacao(matrizLeslie, populacaoInicial, (t + 1), Nt, (geracao + 1));
         TaxaVariacao(populacoesEstimadas, geracao, taxasDeVariacao);
         distribuicaoNormalizada(geracao, Nt, populacoesEstimadas, distribuicaoNormalizada, n);
 
     }
 
-    public static void distribuicaoPopulacao (double [][] matrizLeslie, double[] populacaoInicial, int t, double[][] Nt,double[] populacoesEstimadas, int geracao) { //CALCULO DIMENSAO POPULACAO
+    public static void distribuicaoPopulacao (double [][] matrizLeslie, double[] populacaoInicial, int t, double[][] Nt,int geracao) { //CALCULO DIMENSAO POPULACAO
         double [][] Lesliemultiplicada = new double[matrizLeslie.length][matrizLeslie.length];
         copiarMatriz(matrizLeslie,Lesliemultiplicada);
 
@@ -308,11 +309,12 @@ public class Projeto {
             }
         }
 
+    }
+    public static void totalPopulacao (int geracao, double[]populacoesEstimadas,double [][] Nt){
         populacoesEstimadas[geracao]=0;
-        for (int i=0;i< matrizLeslie.length;i++){
+        for (int i=0;i< Nt[0].length;i++){
             populacoesEstimadas[geracao]+=Nt[geracao][i];
         }
-
     }
 
     public static void copiarMatriz (double[][] matrizLeslie, double[][] copia){
