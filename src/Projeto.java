@@ -613,6 +613,7 @@ public class Projeto {
         resposta = ler.nextInt();
         if (resposta == 1) {
             System.out.println("Qual o formato do ficheiro?");
+            System.out.println("1- Formato PNG;\n2- Formato TXT;\n3- Formato EPS.");
             resposta = ler.nextInt();
             switch (resposta) {
                 case 1:
@@ -681,11 +682,9 @@ public class Projeto {
         return formatter.format(numero);
     }
     public static boolean DoubleparaIntVer(double num) {
-        boolean flag;
+        boolean flag=false;
         if(num % 1 == 0) {
             flag = true;
-        } else {
-            flag = false;
         }
         return flag;
     }
