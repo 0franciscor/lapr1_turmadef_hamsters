@@ -255,7 +255,7 @@ public class Projeto {
         int leitura;
         do {
             int [] opcoesVisualizacao = new int[6];
-            System.out.println("Quais os dados que gostaria de visualizar? (Insira os números associados a cada parâmetro e prima Enter");
+            System.out.println("Quais os dados que gostaria de visualizar? (Insira os números associados a cada parâmetro e prima Enter)");
             System.out.println("1 - População total a cada geração.");
             System.out.println("2 - Taxa de variação.");
             System.out.println("3 - Distribuição da população.");
