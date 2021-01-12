@@ -95,14 +95,23 @@ public class Projeto {
         if (naoInterativo){
             escreverParaFicheiro(opcoesExecucao, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,vetor,args);
             if(opcoesExecucao[1]!=0) {
-                PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas, args);
-                Graficopopulacao();
+
             }
         }
         else {
             escreverParaConsola(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n, valorProprio, vetor);
-            PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas, args);
-            Graficopopulacao();
+            int lol;
+            System.out.println("Que gráfico quer representar?");
+            lol =ler.nextInt();
+            if (lol==1) {
+                PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas);
+                Graficopopulacao("'valores.txt' title 'População' with lines lc 'blue' lw 3");
+                PerguntaGrafico("População","blue");
+            }else {
+                PopulacaoTotal(geracao, geracoesEstimadas, taxasDeVariacao);
+                Graficopopulacao("'valores.txt' title 'População' with lines lc 'red' lw 3");
+                PerguntaGrafico("Taxa de Variação","red");
+            }
         }
     }
 
@@ -480,18 +489,55 @@ public class Projeto {
         }
         System.out.println("\nEncontra-se concluida a apresentacao dos resultados do programa da evolucao das especies.\n");
     }
-    public static void PopulacaoTotal(int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas,String [] args) throws FileNotFoundException {
-        File file = new File(args[args.length-1]);
-        PrintWriter out = new PrintWriter("populacao.txt");
+    public static void PopulacaoTotal(int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas) throws FileNotFoundException {
+        File file = new File("valores.txt");
+        PrintWriter out = new PrintWriter(file);
         for (int l = 0; l <= geracao; l++) {
             out.print(geracoesEstimadas[l] + " " + populacoesEstimadas[l]+"\n");
         }
 
         out.close();
+    }public static void Populaçãodistribuida(int n,double[][] Nt,String s,int geracao,int [] geracoesEstimadas,String [] args) throws FileNotFoundException {
+        File file = new File(args[args.length-1]);
+        PrintWriter out = new PrintWriter(s);
+        for (int l = 0; l <= geracao; l++) {
+            out.print(geracoesEstimadas[l] + " ");
+            for (int c = 0; c < n; c++) {
+                out.print(Nt[l][c]+" ");
+            }
+            out.print("\n");
+        }
+        out.close();
     }
 
-    public static void Graficopopulacao() throws IOException {
+    public static void Graficopopulacao(String d) throws IOException {
         Runtime  rt = Runtime.getRuntime();
-        Process prcs = rt.exec("gnuplot -e \"set terminal png; set output 'Populaçãototal.png'; load 'populacao'\"");
+        Process prcs = rt.exec("gnuplot -p -e \"plot "+d+"\"");
+    }
+
+    public static void SalvarGrafico(String s,String d,String terminal) throws IOException {
+        Runtime  rt = Runtime.getRuntime();
+        Process prcs = rt.exec("gnuplot -e \"set terminal "+terminal+"; set output '"+s+"'; plot "+d+"\"");
+    }
+
+    public static void PerguntaGrafico(String s,String d) throws IOException {
+        int resposta;
+        System.out.println("Deseja Salvar o Gráfico?(Se sim digite 1)");
+        resposta = ler.nextInt();
+        if (resposta == 1) {
+            System.out.println("Qual o formato do ficheiro?");
+            resposta = ler.nextInt();
+            switch (resposta) {
+                case 1:
+                    SalvarGrafico(s+".png", "'valores.txt' title '"+s+"' with lines lc '"+d+"' lw 3", "png");
+                    break;
+                case 2:
+                    SalvarGrafico(s+".txt", "'valores.txt' title '"+s+"' with lines lc '"+d+"' lw 3", "txt");
+                    break;
+                case 3:
+                    SalvarGrafico(s+".eps", "'valores.txt' title '"+s+"' with lines lc '"+d+"' lw 3", "eps");
+                    break;
+            }
+        }
     }
 }
