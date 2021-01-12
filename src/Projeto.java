@@ -95,14 +95,23 @@ public class Projeto {
         if (naoInterativo){
             escreverParaFicheiro(opcoesExecucao, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,vetor,args);
             if(opcoesExecucao[1]!=0) {
-                PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas, args);
-                Graficopopulacao();
+
             }
         }
         else {
             escreverParaConsola(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n, valorProprio, vetor);
-            PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas, args);
-            Graficopopulacao();
+            int lol;
+            System.out.println("Que gráfico quer representar?");
+            lol =ler.nextInt();
+            if (lol==1) {
+                PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas);
+                Graficopopulacao("'valores.txt' title 'População' with lines lc 'blue' lw 3");
+                PerguntaGrafico("População","blue");
+            }else {
+                PopulacaoTotal(geracao, geracoesEstimadas, taxasDeVariacao);
+                Graficopopulacao("'valores.txt' title 'População' with lines lc 'red' lw 3");
+                PerguntaGrafico("Taxa de Variação","red");
+            }
         }
     }
 
@@ -338,19 +347,29 @@ public class Projeto {
     public static void escreverParaFicheiro (int[] opcoesExecucao, int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double valorProprio, double[] vetorProprio, String [] args) throws FileNotFoundException {
         File file = new File(args[args.length-1]);
         PrintWriter out = new PrintWriter(file);
+        NumberFormat formatter = new DecimalFormat();
+        formatter = new DecimalFormat("0.###E0");
         int c;
             out.println("De acordo com os dados inseridos foram obtidos os seguintes resultados:");
             for (int j = 0; j <= geracao; j++) {
                 if (opcoesExecucao[3] == 1) {
                     out.print("\nO número total de indivíduos da geração " + geracoesEstimadas[j] + " é ");
-                    out.printf("%.2f.", populacoesEstimadas[j]);
+                    if (populacoesEstimadas[j] > 99999 || populacoesEstimadas[j] < 0.001) {
+                        out.printf(formatter.format(populacoesEstimadas[j]));
+                    } else {
+                        out.printf("%.2f.", populacoesEstimadas[j]);
+                    }
                 }
             }
             out.println("");
             for (int j = 0; j <= geracao; j++) {
                 if (opcoesExecucao[4] == 1) {
                     out.print("\nA taxa de variação para a geração " + geracoesEstimadas[j] + " é ");
-                    out.printf("%.2f.", taxasDeVariacao[j]);
+                    if (taxasDeVariacao[j] > 99999 || taxasDeVariacao[j] < 0.001) {
+                        out.printf(formatter.format(taxasDeVariacao[j]));
+                    } else {
+                        out.printf("%.2f.", taxasDeVariacao[j]);
+                    }
                 }
             }
             out.print("\n");
@@ -359,11 +378,19 @@ public class Projeto {
                 out.println("\nA população na geração " + geracoesEstimadas[j] + " encontra-se distribuída da seguinte forma:");
                 for (c = 0; c < n - 1; c++) {
                     out.print("Idade " + c + ": ");
-                    out.printf("%.2f", Nt[j][c]);
+                    if (Nt[j][c] > 99999 || Nt[j][c] < 0.001) {
+                        out.printf(formatter.format(Nt[j][c]));
+                    } else {
+                        out.printf("%.2f", Nt[j][c]);
+                    }
                     out.print("\n");
                 }
                 out.print("Idade " + c + ": ");
-                out.printf("%.2f", Nt[j][n - 1]);
+                if (Nt[j][c] > 99999 || Nt[j][c] < 0.001) {
+                    out.printf(formatter.format(Nt[j][n-1]));
+                } else {
+                    out.printf("%.2f", Nt[j][n - 1]);
+                }
                 out.print("\n");
             }
             out.print("\nA distribuição normalizada resulta da divisão da dimensão da população em cada faixa etária pela população total.\n");
@@ -371,11 +398,19 @@ public class Projeto {
                 out.print("\nA distribuição normalizada da geração " + geracoesEstimadas[j] + " está representada pelas várias faixas etárias:\n");
                 for (c = 0; c < n - 1; c++) {
                     out.print("Idade " + c + ": ");
-                    out.printf("%.2f", distribuicaoNormalizada[j][c]);
+                    if (distribuicaoNormalizada[j][c] > 99999 || distribuicaoNormalizada[j][c] < 0.001) {
+                        out.printf(formatter.format(distribuicaoNormalizada[j][c]));
+                    } else {
+                        out.printf("%.2f", distribuicaoNormalizada[j][c]);
+                    }
                     out.print("\n");
                 }
                 out.print("Idade " + c + ": ");
-                out.printf("%.2f", distribuicaoNormalizada[j][n - 1]);
+                if (distribuicaoNormalizada[j][c] > 99999 || distribuicaoNormalizada[j][c] < 0.001) {
+                    out.printf(formatter.format(distribuicaoNormalizada[j][n-1]));
+                } else {
+                    out.printf("%.2f", distribuicaoNormalizada[j][n - 1]);
+                }
                 out.print("\n");
             }
             if (opcoesExecucao[2] == 1) {
@@ -385,7 +420,7 @@ public class Projeto {
                 String comportamento = "igual", analise = "o que significa que a população se irá manter constante ao longo dos anos.";
                 if (valorProprio > 1) {
                     comportamento = "maior";
-                    analise = "isto significa que a população irá aumentar ao longo dos anos.";
+                    analise = " isto significa que a população irá aumentar ao longo dos anos.";
                 }
                 if (valorProprio < 1) {
                     comportamento = "menor";
@@ -395,7 +430,11 @@ public class Projeto {
                 out.println("\nO vetor próprio associado ao maior valor próprio indica-nos as proporções populacionais constantes.");
                 for (c = 0; c < n; c++) {
                     out.print("Idade " + c + ": ");
-                    out.printf("%.3f\n", vetorProprio[c]);
+                    if (vetorProprio[c] > 99999 || vetorProprio[c] < 0.001) {
+                        out.printf(formatter.format(vetorProprio[c]));
+                    } else {
+                        out.printf("%.3f\n", vetorProprio[c]);
+                    }
                 }
             }
             out.print("\nEncontra-se concluída a apresentação dos resultados do programa da evolução das espécies.");
@@ -450,18 +489,55 @@ public class Projeto {
         }
         System.out.println("\nEncontra-se concluida a apresentacao dos resultados do programa da evolucao das especies.\n");
     }
-    public static void PopulacaoTotal(int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas,String [] args) throws FileNotFoundException {
-        File file = new File(args[args.length-1]);
-        PrintWriter out = new PrintWriter("populacao.txt");
+    public static void PopulacaoTotal(int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas) throws FileNotFoundException {
+        File file = new File("valores.txt");
+        PrintWriter out = new PrintWriter(file);
         for (int l = 0; l <= geracao; l++) {
             out.print(geracoesEstimadas[l] + " " + populacoesEstimadas[l]+"\n");
         }
 
         out.close();
+    }public static void Populaçãodistribuida(int n,double[][] Nt,String s,int geracao,int [] geracoesEstimadas,String [] args) throws FileNotFoundException {
+        File file = new File(args[args.length-1]);
+        PrintWriter out = new PrintWriter(s);
+        for (int l = 0; l <= geracao; l++) {
+            out.print(geracoesEstimadas[l] + " ");
+            for (int c = 0; c < n; c++) {
+                out.print(Nt[l][c]+" ");
+            }
+            out.print("\n");
+        }
+        out.close();
     }
 
-    public static void Graficopopulacao() throws IOException {
+    public static void Graficopopulacao(String d) throws IOException {
         Runtime  rt = Runtime.getRuntime();
-        Process prcs = rt.exec("gnuplot -e \"set terminal png; set output 'Populaçãototal.png'; load 'populacao'\"");
+        Process prcs = rt.exec("gnuplot -p -e \"plot "+d+"\"");
+    }
+
+    public static void SalvarGrafico(String s,String d,String terminal) throws IOException {
+        Runtime  rt = Runtime.getRuntime();
+        Process prcs = rt.exec("gnuplot -e \"set terminal "+terminal+"; set output '"+s+"'; plot "+d+"\"");
+    }
+
+    public static void PerguntaGrafico(String s,String d) throws IOException {
+        int resposta;
+        System.out.println(" Deseja Salvar o Gráfico?(Se sim digite 1)");
+        resposta = ler.nextInt();
+        if (resposta == 1) {
+            System.out.println("Qual o formato do ficheiro?");
+            resposta = ler.nextInt();
+            switch (resposta) {
+                case 1:
+                    SalvarGrafico(s+".png", "'valores.txt' title '"+s+"' with lines lc '"+d+"' lw 3", "png");
+                    break;
+                case 2:
+                    SalvarGrafico(s+".txt", "'valores.txt' title '"+s+"' with lines lc '"+d+"' lw 3", "txt");
+                    break;
+                case 3:
+                    SalvarGrafico(s+".eps", "'valores.txt' title '"+s+"' with lines lc '"+d+"' lw 3", "eps");
+                    break;
+            }
+        }
     }
 }
