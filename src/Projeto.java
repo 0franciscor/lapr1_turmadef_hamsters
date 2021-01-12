@@ -91,6 +91,7 @@ public class Projeto {
                     geracao++;
                     procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, n);
                 }
+                interfaceUtilizador();
             }
 
             double[] vetor = new double[matrizLeslie.length];
@@ -117,6 +118,27 @@ public class Projeto {
                 }
             }
         }
+    }
+
+    public static void interfaceUtilizador(){
+        int leitura;
+        do {
+            int [] opcoesVisualizacao = new int[6];
+            System.out.println("Quais os dados que gostaria de visualizar? (Insira os números associados a cada parâmetro e prima Enter");
+            System.out.println("1 - População total a cada geração.");
+            System.out.println("2 - Taxa de variação.");
+            System.out.println("3 - Distribuição da população.");
+            System.out.println("4 - Distribuição normalizada da população.");
+            System.out.println("5 - Comportamento assimtótico associado ao maior valor próprio.");
+            System.out.println("6 - Gráficos.");
+            System.out.println("0 - Quando não quiser inserir mais parâmetros.");
+            System.out.println("-1 - Para sair do programa. Parâmetro isolado");
+            do{
+                leitura = ler.nextInt();
+                                    
+            } while(leitura > 0);
+
+        } while(leitura != -1);
     }
 
     public static boolean modoInterativo(String[] args){
@@ -162,15 +184,6 @@ public class Projeto {
             }
         }
         return erro;
-    }
-
-    public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, int[] geracoesEstimadas, double[][] matrizLeslie, double[] populacaoInicial, int t, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] distribuicaoNormalizada, int n){
-        geracoesEstimadas[geracao] = t;
-        distribuicaoPopulacao(matrizLeslie, populacaoInicial, t, Nt, populacoesEstimadas, geracao);
-        distribuicaoPopulacao(matrizLeslie, populacaoInicial, (t + 1), Nt, populacoesEstimadas, (geracao + 1));
-        TaxaVariacao(populacoesEstimadas, geracao, taxasDeVariacao);
-        distribuicaoNormalizada(geracao, Nt, populacoesEstimadas, distribuicaoNormalizada, n);
-
     }
 
     public static boolean existeFicheiro(String nomeFicheiro){
@@ -243,16 +256,24 @@ public class Projeto {
                 limite = valoresTratados.length;
             else
                 limite = (valoresTratados.length-1);
-            int colunaCorrente = 0;
+
             for (int i = 1; i <= limite; i++) {
-                matrizLeslie[i][colunaCorrente] = valoresTratados[i - 1];
-                colunaCorrente++;
+                matrizLeslie[i][i-1] = valoresTratados[i - 1];
             }
         }
         else{
             for (int i = 0; i < valoresTratados.length; i++)
                 matrizLeslie[0][i] = valoresTratados[i];
         }
+    }
+
+    public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, int[] geracoesEstimadas, double[][] matrizLeslie, double[] populacaoInicial, int t, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] distribuicaoNormalizada, int n){
+        geracoesEstimadas[geracao] = t;
+        distribuicaoPopulacao(matrizLeslie, populacaoInicial, t, Nt, populacoesEstimadas, geracao);
+        distribuicaoPopulacao(matrizLeslie, populacaoInicial, (t + 1), Nt, populacoesEstimadas, (geracao + 1));
+        TaxaVariacao(populacoesEstimadas, geracao, taxasDeVariacao);
+        distribuicaoNormalizada(geracao, Nt, populacoesEstimadas, distribuicaoNormalizada, n);
+
     }
 
     public static void distribuicaoPopulacao (double [][] matrizLeslie, double[] populacaoInicial, int t, double[][] Nt,double[] populacoesEstimadas, int geracao) { //CALCULO DIMENSAO POPULACAO
