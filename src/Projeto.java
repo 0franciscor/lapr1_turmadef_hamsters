@@ -522,7 +522,7 @@ public class Projeto {
 
     public static void PerguntaGrafico(String s,String d) throws IOException {
         int resposta;
-        System.out.println("Deseja Salvar o Gráfico?(Se sim digite 1)");
+        System.out.println(" Deseja Salvar o Gráfico?(Se sim digite 1)");
         resposta = ler.nextInt();
         if (resposta == 1) {
             System.out.println("Qual o formato do ficheiro?");
