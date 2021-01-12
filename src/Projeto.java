@@ -10,7 +10,9 @@ import java.text.NumberFormat;
 import java.util.Scanner;
 
 public class Projeto {
-
+    public static final double maximo = 99999;
+    public static final double minimo = 0.005;
+    public static final int constante = 1;
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
@@ -400,82 +402,91 @@ public class Projeto {
     public static void escreverParaFicheiro (int[] opcoesExecucao, int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double valorProprio, double[] vetorProprio, String [] args) throws FileNotFoundException {
         File file = new File(args[args.length-1]);
         PrintWriter out = new PrintWriter(file);
-        NumberFormat formatter;
-        formatter = new DecimalFormat("0.###E0");
+        boolean flag;
         int c;
             out.println("De acordo com os dados inseridos foram obtidos os seguintes resultados:");
             for (int j = 0; j <= geracao; j++) {
                 if (opcoesExecucao[3] == 1) {
                     out.print("\nO número total de indivíduos da geração " + geracoesEstimadas[j] + " é ");
-                    if (populacoesEstimadas[j] > 99999 || populacoesEstimadas[j] < 0.001) {
-                        out.printf(formatter.format(populacoesEstimadas[j]));
+                    flag = NotCientifica(populacoesEstimadas[j]);
+                    if (flag) {
+                        out.printf(ConverterNotacaoCientifica(populacoesEstimadas[j]));
                     } else {
-                        out.printf("%.2f.", populacoesEstimadas[j]);
+                        flag = DoubleparaIntVer(populacoesEstimadas[j]);
+                        if (flag) {
+                            out.printf(DoubleToInt(populacoesEstimadas[j]));
+                        } else {
+                            out.printf("%.2f", populacoesEstimadas[j]);
+                        }
                     }
                 }
             }
-            out.println("");
-            for (int j = 0; j <= geracao; j++) {
+        out.print("\n");
+            for (int j = 0; j < geracao; j++) {
                 if (opcoesExecucao[4] == 1) {
                     out.print("\nA taxa de variação para a geração " + geracoesEstimadas[j] + " é ");
-                    if (taxasDeVariacao[j] > 99999 || taxasDeVariacao[j] < 0.001) {
-                        out.printf(formatter.format(taxasDeVariacao[j]));
+                    flag = NotCientifica(taxasDeVariacao[j]);
+                    if (flag) {
+                        out.printf(ConverterNotacaoCientifica(taxasDeVariacao[j]));
                     } else {
-                        out.printf("%.2f.", taxasDeVariacao[j]);
+                        flag = DoubleparaIntVer(taxasDeVariacao[j]);
+                        if (flag) {
+                            out.printf(DoubleToInt(taxasDeVariacao[j]));
+                        } else {
+                            out.printf("%.2f", taxasDeVariacao[j]);
+                        }
                     }
                 }
             }
-            out.print("\n");
-            out.println("\nSegue-se a distribuição da população, isto é, quantos indivíduos existem nas diferentes faixas etárias.");
+        out.print("\n");
+            out.println("\nA distribuição da população, isto é, quantos indivíduos existem nas diferentes faixas etárias.");
             for (int j = 0; j <= geracao; j++) {
                 out.println("\nA população na geração " + geracoesEstimadas[j] + " encontra-se distribuída da seguinte forma:");
-                for (c = 0; c < n - 1; c++) {
+                for (c = 0; c < n; c++) {
                     out.print("Idade " + c + ": ");
-                    if (Nt[j][c] > 99999 || Nt[j][c] < 0.001) {
-                        out.printf(formatter.format(Nt[j][c]));
+                    flag = NotCientifica(Nt[j][c]);
+                    if (flag) {
+                        out.printf(ConverterNotacaoCientifica(Nt[j][c]) + "\n");
                     } else {
-                        out.printf("%.2f", Nt[j][c]);
+                        flag = DoubleparaIntVer(Nt[j][c]);
+                        if (flag) {
+                            out.printf(DoubleToInt(Nt[j][c]) + "\n");
+                        } else {
+                            out.printf("%.2f", Nt[j][c]);
+                            out.print("\n");
+                        }
                     }
-                    out.print("\n");
                 }
-                out.print("Idade " + c + ": ");
-                if (Nt[j][c] > 99999 || Nt[j][c] < 0.001) {
-                    out.printf(formatter.format(Nt[j][n-1]));
-                } else {
-                    out.printf("%.2f", Nt[j][n - 1]);
-                }
-                out.print("\n");
             }
             out.print("\nA distribuição normalizada resulta da divisão da dimensão da população em cada faixa etária pela população total.\n");
             for (int j = 0; j <= geracao; j++) {
                 out.print("\nA distribuição normalizada da geração " + geracoesEstimadas[j] + " está representada pelas várias faixas etárias:\n");
-                for (c = 0; c < n - 1; c++) {
+                for (c = 0; c < n; c++) {
                     out.print("Idade " + c + ": ");
-                    if (distribuicaoNormalizada[j][c] > 99999 || distribuicaoNormalizada[j][c] < 0.001) {
-                        out.printf(formatter.format(distribuicaoNormalizada[j][c]));
+                    flag = NotCientifica(distribuicaoNormalizada[j][c]);
+                    if (flag) {
+                        out.printf(ConverterNotacaoCientifica(distribuicaoNormalizada[j][c]) + "\n");
                     } else {
-                        out.printf("%.2f", distribuicaoNormalizada[j][c]);
+                        flag = DoubleparaIntVer(distribuicaoNormalizada[j][c]);
+                        if (flag) {
+                            out.printf(DoubleToInt(distribuicaoNormalizada[j][c]) + "\n");
+                        } else {
+                            out.printf("%.2f", distribuicaoNormalizada[j][c]);
+                            out.print("\n");
+                        }
                     }
-                    out.print("\n");
                 }
-                out.print("Idade " + c + ": ");
-                if (distribuicaoNormalizada[j][c] > 99999 || distribuicaoNormalizada[j][c] < 0.001) {
-                    out.printf(formatter.format(distribuicaoNormalizada[j][n-1]));
-                } else {
-                    out.printf("%.2f", distribuicaoNormalizada[j][n - 1]);
-                }
-                out.print("\n");
             }
             if (opcoesExecucao[2] == 1) {
                 out.println("\nComportamento Assintótico da população associado ao maior valor próprio.");
                 out.printf("\nO valor próprio de módulo máximo é aproximadamente: %.3f\n", valorProprio);
                 out.println("Este valor indica-nos a taxa de crescimento da população.");
                 String comportamento = "igual", analise = "o que significa que a população se irá manter constante ao longo dos anos.";
-                if (valorProprio > 1) {
+                if (valorProprio > constante) {
                     comportamento = "maior";
                     analise = " isto significa que a população irá aumentar ao longo dos anos.";
                 }
-                if (valorProprio < 1) {
+                if (valorProprio < constante) {
                     comportamento = "menor";
                     analise = " isto significa que a população irá diminuir ao longo dos anos.";
                 }
@@ -483,10 +494,17 @@ public class Projeto {
                 out.println("\nO vetor próprio associado ao maior valor próprio indica-nos as proporções populacionais constantes.");
                 for (c = 0; c < n; c++) {
                     out.print("Idade " + c + ": ");
-                    if (vetorProprio[c] > 99999 || vetorProprio[c] < 0.001) {
-                        out.printf(formatter.format(vetorProprio[c]));
+                    flag = NotCientifica(vetorProprio[c]);
+                    if (flag) {
+                        out.printf(ConverterNotacaoCientifica(vetorProprio[c]) + "\n");
                     } else {
-                        out.printf("%.3f\n", vetorProprio[c]);
+                        flag = DoubleparaIntVer(vetorProprio[c]);
+                        if (flag) {
+                            out.printf(DoubleToInt(vetorProprio[c]) + "\n");
+                        } else {
+                            out.printf("%.2f", vetorProprio[c]);
+                            out.print("\n");
+                        }
                     }
                 }
             }
@@ -646,5 +664,35 @@ public class Projeto {
                 PerguntaGrafico("População Normalizada",s);
                 break;
         }
+    }
+    public static boolean NotCientifica(double numero) {
+        boolean flag;
+        if (numero > maximo || numero <= minimo) {
+            flag = true;
+        } else {
+            flag = false;
+
+        }
+        return flag;
+    }
+    public static String ConverterNotacaoCientifica(double numero) {
+        NumberFormat formatter;
+        formatter = new DecimalFormat("0.##E0");
+        return formatter.format(numero);
+    }
+    public static boolean DoubleparaIntVer(double num) {
+        boolean flag;
+        if(num % 1 == 0) {
+            flag = true;
+        } else {
+            flag = false;
+        }
+        return flag;
+    }
+    public static String DoubleToInt(double num) {
+        String s = String.valueOf(num);
+        DecimalFormat decimalFormat = new DecimalFormat("0.#####");
+        String a = decimalFormat.format(Double.valueOf(s));
+        return a;
     }
 }
