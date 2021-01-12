@@ -549,19 +549,10 @@ public class Projeto {
             }
         }
         if (opcoesVisualizaco[5]==1){
-            int lol;
             System.out.println("Que gráfico quer representar?");
             System.out.println("1-Evolução da População Total;\n2-Evolução da taxa de variação;\n3-Distribuição da População;\n4-Distribuição normalizada da população.");
-            lol = ler.nextInt();
-            if (lol == 1) {
-                PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas);
-                Graficopopulacao("'valores.txt' title 'População' with lines lc 'blue' lw 3");
-                PerguntaGrafico("População", "blue");
-            } else {
-                PopulacaoTotal(geracao, geracoesEstimadas, taxasDeVariacao);
-                Graficopopulacao("'valores.txt' title 'População' with lines lc 'red' lw 3");
-                PerguntaGrafico("Taxa de Variação", "red");
-            }
+            int num = ler.nextInt();
+            Graficos(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,n,Nt,distribuicaoNormalizada,num);
         }
     }
     public static void PopulacaoTotal(int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas) throws FileNotFoundException {
@@ -572,11 +563,9 @@ public class Projeto {
         }
 
         out.close();
-    }
-
-    public static void populacaodistribuida(int n,double[][] Nt,String s,int geracao,int [] geracoesEstimadas,String [] args) throws FileNotFoundException {
-        File file = new File(args[args.length-1]);
-        PrintWriter out = new PrintWriter(s);
+    }public static void Populaçãodistribuida(int n,double[][] Nt,int geracao,int [] geracoesEstimadas) throws FileNotFoundException {
+        File file = new File("valores.txt");
+        PrintWriter out = new PrintWriter(file);
         for (int l = 0; l <= geracao; l++) {
             out.print(geracoesEstimadas[l] + " ");
             for (int c = 0; c < n; c++) {
@@ -589,33 +578,73 @@ public class Projeto {
 
     public static void Graficopopulacao(String d) throws IOException {
         Runtime  rt = Runtime.getRuntime();
-        rt.exec("gnuplot -p -e \"plot "+d+"\"");
+        Process prcs = rt.exec("gnuplot -p -e \""+d+"\"");
     }
 
     public static void SalvarGrafico(String s,String d,String terminal) throws IOException {
         Runtime  rt = Runtime.getRuntime();
-        rt.exec("gnuplot -e \"set terminal "+terminal+"; set output '"+s+"'; plot "+d+"\"");
+        Process prcs = rt.exec("gnuplot -e \"set terminal "+terminal+"; set output '"+s+"'; "+d+"\"");
     }
 
     public static void PerguntaGrafico(String s,String d) throws IOException {
         int resposta;
-        System.out.println("Deseja Salvar o Gráfico?(1- Sim;2- Não)");
+        System.out.println("Deseja Salvar o Gráfico?(Se sim digite 1)");
         resposta = ler.nextInt();
         if (resposta == 1) {
             System.out.println("Qual o formato do ficheiro?");
-            System.out.println("1- Formato PNG\n2- Formato TXT\n3- Formato EPS");
             resposta = ler.nextInt();
             switch (resposta) {
                 case 1:
-                    SalvarGrafico(s+".png", "'valores.txt' title '"+s+"' with lines lc '"+d+"' lw 3", "png");
+                    SalvarGrafico(s+".png", d, "png");
                     break;
                 case 2:
-                    SalvarGrafico(s+".txt", "'valores.txt' title '"+s+"' with lines lc '"+d+"' lw 3", "txt");
+                    SalvarGrafico(s+".txt", d, "txt");
                     break;
                 case 3:
-                    SalvarGrafico(s+".eps", "'valores.txt' title '"+s+"' with lines lc '"+d+"' lw 3", "eps");
+                    SalvarGrafico(s+".eps", d, "eps");
                     break;
             }
+        }
+    }
+
+    public static String DistribuidaNormalizada(int n,String ylabel,String titulo) throws IOException {
+        int o=3;
+        int p=0;
+        String [] cores={"blue","red","purple","orange","green","yellow","cyan","black","grey","brown"};
+        String s = "set xlabel 'Gerações'; set ylabel '"+ylabel+"' ; set title '"+titulo+"' font 'arial,20'; plot 'valores.txt' u 1:2 w lp t 'Idade 0' lc '"+cores[p]+"' lw 3";
+        for(int e=1;e<n+1;e++) {
+            p++;
+            String d = " ,'valores.txt' u 1:" + o + "w lp t 'Idade "+e+"' lc '"+cores[p]+"' lw 3";
+            s = s+d;
+            o++;
+        }
+        Graficopopulacao(s);
+        return s;
+    }
+
+    public static void Graficos(int geracao,int[] geracoesEstimadas,double[] populacoesEstimadas,double[] taxasDeVariacao,int n,double[][] Nt,double[][] distribuicaoNormalizada,int num) throws IOException {
+        String s;
+        switch(num){
+            case 1:
+                PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas);
+                Graficopopulacao("plot 'valores.txt' title 'População' with lines lc 'blue' lw 3; set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'");
+                PerguntaGrafico("População Total","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3");
+                break;
+            case 2:
+                PopulacaoTotal(geracao, geracoesEstimadas, taxasDeVariacao);
+                Graficopopulacao("plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3; set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'");
+                PerguntaGrafico("Taxa de Variação","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3");
+                break;
+            case 3:
+                Populaçãodistribuida(n,Nt,geracao,geracoesEstimadas);
+                s=DistribuidaNormalizada(n,"População","População Distribuida");
+                PerguntaGrafico("População Distribuida",s);
+                break;
+            case 4:
+                Populaçãodistribuida(n,distribuicaoNormalizada,geracao,geracoesEstimadas);
+                s=DistribuidaNormalizada(n,"Distribuição","Distribuição Normalizada");
+                PerguntaGrafico("População Normalizada",s);
+                break;
         }
     }
 }
