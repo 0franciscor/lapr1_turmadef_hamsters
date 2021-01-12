@@ -14,22 +14,22 @@ public class Projeto {
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
-        boolean existe, naoInterativo;
+        boolean existe = false, naoInterativo = false;
         String nomeFicheiro = null;
         int[] opcoesExecucao = new int [5];
-        int numCiclos = 0;
+        int numCiclos = 0, erro = 0; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
 
         //RESPOSAVEL POR VERIFICAR SE O CODIGO ESTA A CORRER EM MODO NAO INTERATIVO
-        naoInterativo = modoNInterativo(opcoesExecucao, args);
-        existe = naoInterativo;
-
-        if(existe) {
+        erro = modoNInterativo(opcoesExecucao, args, erro);
+        if(erro == 1) {
+            naoInterativo = true;
+            existe = naoInterativo;
             numCiclos = opcoesExecucao[0];
             nomeFicheiro = args[(args.length - 2)];
         }
         //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
 
-        else if(args.length != 0){
+        else if(args.length != 0 && erro !=2){
             existe = modoInterativo(args);
             nomeFicheiro = args[1];
         }
@@ -37,87 +37,84 @@ public class Projeto {
 
         double[] populacaoInicial; //VETOR INICIAL
         double[][] matrizLeslie;   //DECLARAÇÃO MATRIZ LESLIE
+        if(erro != 2) {
+            if (existe) {
+                populacaoInicial = tratamentoDados((leituraDados(nomeFicheiro, 0)));
+                matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
 
-        if (existe) {
-            populacaoInicial = tratamentoDados((leituraDados(nomeFicheiro, 0)));
-            matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
+                for (int i = 1; i <= 2; i++) {
+                    double[] array = tratamentoDados(leituraDados(nomeFicheiro, i));
 
-            for (int i = 1; i <= 2; i++) {
-                double [] array = tratamentoDados(leituraDados(nomeFicheiro, i));
+                    if (array.length == (populacaoInicial.length - 1))
+                        insercaoMatriz(matrizLeslie, array, 1, true);
+                    else
+                        insercaoMatriz(matrizLeslie, array, 2, true);
+                }
 
-                if(array.length == (populacaoInicial.length-1))
-                    insercaoMatriz(matrizLeslie, array, 1, true);
-                else
-                    insercaoMatriz(matrizLeslie, array, 2, true);
+            } else {
+                System.out.println("Quantos intervalos de idade possui a populacao que pretende estudar?");
+                int numIntervalos = ler.nextInt();
+
+                populacaoInicial = new double[numIntervalos];
+                insercaoDados(populacaoInicial, "Populacao");
+
+                matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
+                double[] aux = new double[matrizLeslie.length];
+
+                for (int i = 1; i <= 2; i++) {
+                    if (i == 1)
+                        insercaoMatriz(matrizLeslie, insercaoDados(aux, "Taxa de sobrevivencia"), i, false);
+                    if (i == 2)
+                        insercaoMatriz(matrizLeslie, insercaoDados(aux, "Taxa de fecundidade"), i, false);
+                }
             }
 
-        } else {
-            System.out.println("Quantos intervalos de idade possui a populacao que pretende estudar?");
-            int numIntervalos = ler.nextInt();
+            int n = matrizLeslie.length, t = -1, geracao = -1;
 
-            populacaoInicial = new double[numIntervalos];
-            insercaoDados(populacaoInicial, "Populacao");
+            int[] geracoesEstimadas = new int[1000];
+            double[] populacoesEstimadas = new double[1001];
+            double[] taxasDeVariacao = new double[1000];
+            double[][] Nt = new double[1001][matrizLeslie.length];
+            double[][] distribuicaoNormalizada = new double[1000][matrizLeslie.length];
 
-            matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
-            double[] aux = new double[matrizLeslie.length];
-
-            for (int i = 1; i <= 2; i++) {
-                if (i == 1)
-                    insercaoMatriz(matrizLeslie, insercaoDados(aux, "Taxa de sobrevivencia"), i, false);
-                if (i == 2)
-                    insercaoMatriz(matrizLeslie, insercaoDados(aux, "Taxa de fecundidade"), i, false);
+            if (naoInterativo) {
+                while ((geracao + 1) <= numCiclos) {
+                    t++;
+                    geracao++;
+                    procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, n);
+                }
+            } else {
+                System.out.println("Quais as geracoes que pretende que sejam estudadas?");
+                int aux = ler.nextInt();
+                while ((geracao + 1) <= aux) {
+                    t++;
+                    geracao++;
+                    procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, n);
+                }
             }
-        }
 
-        int n = matrizLeslie.length, t =-1, geracao=-1;
+            double[] vetor = new double[matrizLeslie.length];
+            double valorProprio;
+            valorProprio = calcularVetorValorProprio(matrizLeslie, vetor);
+            normalizarVetorProprio(vetor);
 
-        int [] geracoesEstimadas = new int [1000];
-        double [] populacoesEstimadas = new double[1001];
-        double [] taxasDeVariacao = new double[1000];
-        double [][] Nt = new double[1001][matrizLeslie.length];
-        double [][] distribuicaoNormalizada = new double[1000][matrizLeslie.length];
+            if (naoInterativo) {
+                escreverParaFicheiro(opcoesExecucao, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n, valorProprio, vetor, args);
 
-        if(naoInterativo) {
-            while ((geracao+1) <= numCiclos){
-                t++;
-                geracao++;
-                procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, n);
-            }
-        }
-        else {
-            System.out.println("Quais as geracoes que pretende que sejam estudadas?");
-            int aux = ler.nextInt();
-            while ((geracao+1) <= aux) {
-                t++;
-                geracao++;
-                procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, n);
-            }
-        }
-
-        double [] vetor = new double[matrizLeslie.length];
-        double valorProprio;
-        valorProprio=calcularVetorValorProprio(matrizLeslie,vetor);
-        normalizarVetorProprio(vetor);
-
-        if (naoInterativo){
-            escreverParaFicheiro(opcoesExecucao, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n,valorProprio,vetor,args);
-            //if(opcoesExecucao[1]!=0) {
-
-            //}
-        }
-        else {
-            escreverParaConsola(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n, valorProprio, vetor);
-            int lol;
-            System.out.println("Que gráfico quer representar?");
-            lol =ler.nextInt();
-            if (lol==1) {
-                PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas);
-                Graficopopulacao("'valores.txt' title 'População' with lines lc 'blue' lw 3");
-                PerguntaGrafico("População","blue");
-            }else {
-                PopulacaoTotal(geracao, geracoesEstimadas, taxasDeVariacao);
-                Graficopopulacao("'valores.txt' title 'População' with lines lc 'red' lw 3");
-                PerguntaGrafico("Taxa de Variação","red");
+            } else {
+                escreverParaConsola(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, n, valorProprio, vetor);
+                int lol;
+                System.out.println("Que gráfico quer representar?");
+                lol = ler.nextInt();
+                if (lol == 1) {
+                    PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas);
+                    Graficopopulacao("'valores.txt' title 'População' with lines lc 'blue' lw 3");
+                    PerguntaGrafico("População", "blue");
+                } else {
+                    PopulacaoTotal(geracao, geracoesEstimadas, taxasDeVariacao);
+                    Graficopopulacao("'valores.txt' title 'População' with lines lc 'red' lw 3");
+                    PerguntaGrafico("Taxa de Variação", "red");
+                }
             }
         }
     }
@@ -131,15 +128,14 @@ public class Projeto {
         return existe;
     }
 
-    public static boolean modoNInterativo(int[] opcoesExecucao, String[] args) {
-        boolean naoInterativo = false;
+    public static int modoNInterativo(int[] opcoesExecucao, String[] args, int erro) {
 
         if (args.length != 0 && args[0].equals("-t")) {
             String nomeFicheiro = args[(args.length - 2)];
             boolean existe = existeFicheiro(nomeFicheiro);
 
             if (existe) {
-                naoInterativo = true;
+                erro = 1;
                 opcoesExecucao[0] = Integer.parseInt(args[1]);
                 for (int i = 2; i <= (args.length - 2); i++) {
                     if (args[i].equals("-g")) {
@@ -161,10 +157,11 @@ public class Projeto {
                     }
                 }
             } else {
-                System.out.println("O ficheiro inserido não existe. Assim, o programa será executado em modo interativo com inserção manual de dados.");
+                System.out.println("A síntaxe do comando não é a correta. Verifique a mesma ou a inserção dos ficheiros.");
+                erro = 2;
             }
         }
-        return naoInterativo;
+        return erro;
     }
 
     public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, int[] geracoesEstimadas, double[][] matrizLeslie, double[] populacaoInicial, int t, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] distribuicaoNormalizada, int n){
@@ -525,7 +522,7 @@ public class Projeto {
         out.close();
     }
 
-    public static void Populaçãodistribuida(int n,double[][] Nt,String s,int geracao,int [] geracoesEstimadas,String [] args) throws FileNotFoundException {
+    public static void populacaodistribuida(int n,double[][] Nt,String s,int geracao,int [] geracoesEstimadas,String [] args) throws FileNotFoundException {
         File file = new File(args[args.length-1]);
         PrintWriter out = new PrintWriter(s);
         for (int l = 0; l <= geracao; l++) {
