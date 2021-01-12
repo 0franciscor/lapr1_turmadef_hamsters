@@ -392,9 +392,9 @@ public class Projeto {
         for (int i=0;i<vetor.length;i++){
             soma+=vetor[i];
         }
-        if (soma!=1){
+        //if (soma!=1){
             normalizar(vetor,soma);
-        }
+        //}
     }
     public static void normalizar(double[] vetor, double soma){
         for (int i=0;i<vetor.length;i++){
@@ -583,7 +583,8 @@ public class Projeto {
         }
 
         out.close();
-    }public static void Populaçãodistribuida(int n,double[][] Nt,int geracao,int [] geracoesEstimadas) throws FileNotFoundException {
+    }
+    public static void Populaçãodistribuida(int n,double[][] Nt,int geracao,int [] geracoesEstimadas) throws FileNotFoundException {
         File file = new File("valores.txt");
         PrintWriter out = new PrintWriter(file);
         for (int l = 0; l <= geracao; l++) {
@@ -598,12 +599,12 @@ public class Projeto {
 
     public static void Graficopopulacao(String d) throws IOException {
         Runtime  rt = Runtime.getRuntime();
-        Process prcs = rt.exec("gnuplot -p -e \""+d+"\"");
+        rt.exec("gnuplot -p -e \""+d+"\"");
     }
 
     public static void SalvarGrafico(String s,String d,String terminal) throws IOException {
         Runtime  rt = Runtime.getRuntime();
-        Process prcs = rt.exec("gnuplot -e \"set terminal "+terminal+"; set output '"+s+"'; "+d+"\"");
+        rt.exec("gnuplot -e \"set terminal "+terminal+"; set output '"+s+"'; "+d+"\"");
     }
 
     public static void PerguntaGrafico(String s,String d) throws IOException {
@@ -668,12 +669,9 @@ public class Projeto {
         }
     }
     public static boolean NotCientifica(double numero) {
-        boolean flag;
+        boolean flag=false;
         if (numero > maximo || numero <= minimo) {
             flag = true;
-        } else {
-            flag = false;
-
         }
         return flag;
     }
