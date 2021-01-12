@@ -515,38 +515,81 @@ public class Projeto {
     }
     public static void escreverParaConsola (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada, int n,double valorProprio, double[] vetorProprio,int[] opcoesVisualizaco) throws IOException {
         int c;
+        boolean flag;
         if (opcoesVisualizaco[0]==1){
             for (int j = 0; j <= geracao; j++) {
-                System.out.printf("\nO número total de indivíduos na geracao " + geracoesEstimadas[j] + " é %.2f.", populacoesEstimadas[j]);
-            }
-            System.out.println();
-        }
-        if (opcoesVisualizaco[1]==1){
-            for (int a = 0; a <= geracao; a++) {
-                if (a < geracao) {
-                    System.out.printf("\nA taxa de variação para a geração " + geracoesEstimadas[a] + " da população ao longo dos anos é %.2f.", taxasDeVariacao[a]);
+                System.out.print("\nO número total de indivíduos da geração " + geracoesEstimadas[j] + " é ");
+                flag = NotCientifica(populacoesEstimadas[j]);
+                if (flag) {
+                    System.out.print(ConverterNotacaoCientifica(populacoesEstimadas[j]));
+                } else {
+                    flag = DoubleparaIntVer(populacoesEstimadas[j]);
+                    if (flag) {
+                        System.out.print(DoubleToInt(populacoesEstimadas[j]));
+                    } else {
+                        System.out.printf("%.2f", populacoesEstimadas[j]);
+                    }
                 }
             }
-            System.out.println();
         }
-        if (opcoesVisualizaco[2]==1){
+        System.out.print("\n");
+        if (opcoesVisualizaco[1]==1){
+            for (int j = 0; j < geracao; j++) {
+                System.out.print("\nA taxa de variação para a geração " + geracoesEstimadas[j] + " é ");
+                flag = NotCientifica(taxasDeVariacao[j]);
+                if (flag) {
+                    System.out.print(ConverterNotacaoCientifica(taxasDeVariacao[j]));
+                } else {
+                    flag = DoubleparaIntVer(taxasDeVariacao[j]);
+                    if (flag) {
+                        System.out.print(DoubleToInt(taxasDeVariacao[j]));
+                    } else {
+                        System.out.printf("%.2f", taxasDeVariacao[j]);
+                    }
+                }
+            }
+        }
+        System.out.print("\n");
+        if (opcoesVisualizaco[2]==1) {
             System.out.println("\nA distribuição da população, isto é, quantos indivíduos existem nas diferentes faixas etárias.");
             for (int j = 0; j <= geracao; j++) {
                 System.out.print("\nA população na geração " + geracoesEstimadas[j] + " encontra-se distribuída da seguinte forma:\n");
-                for (c = 0; c < n - 1; c++) {
-                    System.out.printf("Idade " + c + ": %.2f\n", Nt[j][c]);
+                for (c = 0; c < n; c++) {
+                    System.out.print("Idade " + c + ": ");
+                    flag = NotCientifica(Nt[j][c]);
+                    if (flag) {
+                        System.out.print(ConverterNotacaoCientifica(Nt[j][c]) + "\n");
+                    } else {
+                        flag = DoubleparaIntVer(Nt[j][c]);
+                        if (flag) {
+                            System.out.print(DoubleToInt(Nt[j][c]) + "\n");
+                        } else {
+                            System.out.printf("%.2f", Nt[j][c]);
+                            System.out.print("\n");
+                        }
+                    }
                 }
-                System.out.printf("Idade " + c + ": %.2f\n", Nt[j][n - 1]);
             }
         }
-        if (opcoesVisualizaco[3]==1){
+        if (opcoesVisualizaco[3]==1) {
             System.out.print("\nA distribuição normalizada resulta da divisão da dimensão da população em cada faixa etária pela população total.\n");
             for (int j = 0; j <= geracao; j++) {
                 System.out.print("\nA distribuição normalizada da geração " + geracoesEstimadas[j] + " está representada pelas várias faixas etárias:\n");
-                for (c = 0; c < n - 1; c++) {
-                    System.out.printf("Idade " + c + ": %.2f\n", distribuicaoNormalizada[j][c]);
+                for (c = 0; c < n; c++) {
+                    System.out.print("Idade " + c + ": ");
+                    flag = NotCientifica(distribuicaoNormalizada[j][c]);
+                    if (flag) {
+                        System.out.print(ConverterNotacaoCientifica(distribuicaoNormalizada[j][c]) + "\n");
+                    } else {
+                        flag = DoubleparaIntVer(distribuicaoNormalizada[j][c]);
+                        if (flag) {
+                            System.out.print(DoubleToInt(distribuicaoNormalizada[j][c]) + "\n");
+                        } else {
+                            System.out.printf("%.2f", distribuicaoNormalizada[j][c]);
+                            System.out.print("\n");
+                        }
+                    }
                 }
-                System.out.printf("Idade " + c + ": %.2f\n", distribuicaoNormalizada[j][n - 1]);
             }
         }
         if (opcoesVisualizaco[4]==1){
@@ -554,18 +597,30 @@ public class Projeto {
             System.out.printf("\nO valor proprio de modulo maximo e aproximadamente: %.3f\n", valorProprio);
             System.out.println("Este valor indica-nos a taxa de crescimento da populacao.");
             String comportamento="igual", analise="o que significa que a populacao se ira manter constante ao longo dos anos.";
-            if (valorProprio>1){
+            if (valorProprio>constante){
                 comportamento="maior";
                 analise="isto significa que a populacao ira aumentar ao longo dos anos.";
             }
-            if (valorProprio<1){
+            if (valorProprio<constante){
                 comportamento="menor";
                 analise="isto significa que a populacao ira diminuir ao longo dos anos.";
             }
             System.out.println("Como o valor proprio é " + comportamento + " que 1, " + analise);
             System.out.println("\nO vetor próprio associado ao maior valor próprio indica-nos as percentagens populacionais constantes.");
             for (c = 0; c < n; c++) {
-                System.out.printf("Idade " + c + ": %.3f\n", vetorProprio[c]);
+                System.out.print("Idade " + c + ": ");
+                flag = NotCientifica(vetorProprio[c]);
+                if (flag) {
+                    System.out.print(ConverterNotacaoCientifica(vetorProprio[c]) + "\n");
+                } else {
+                    flag = DoubleparaIntVer(vetorProprio[c]);
+                    if (flag) {
+                        System.out.print(DoubleToInt(vetorProprio[c]) + "\n");
+                    } else {
+                        System.out.printf("%.2f", vetorProprio[c]);
+                        System.out.print("\n");
+                    }
+                }
             }
         }
         if (opcoesVisualizaco[5]==1){
