@@ -183,7 +183,7 @@ public class Projeto {
     public static String leituraDados(String nomeFicheiro, int numLinha) throws FileNotFoundException { //LEITURA EXCLUSIVA DO VETOR
         File ficheiro = new File(nomeFicheiro);
         Scanner leituraFicheiro = new Scanner(ficheiro);
-        String letra = leituraDadosAuxiliar(leituraFicheiro, ficheiro, numLinha);
+        String letra = leituraDadosAuxiliar(numLinha);
         String input;
         boolean stringCerta = false;
         int aux = 0;
@@ -198,7 +198,7 @@ public class Projeto {
         return input;
     }
 
-    public static String leituraDadosAuxiliar(Scanner leituraFicheiro, File ficheiro, int numLinha){
+    public static String leituraDadosAuxiliar(int numLinha){
         String letra = null;
 
         if(numLinha==0)
