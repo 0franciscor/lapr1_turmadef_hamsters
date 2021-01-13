@@ -283,6 +283,7 @@ public class Projeto {
         distribuicaoPopulacao(matrizLeslie, populacaoInicial, t, Nt, geracao);
         totalPopulacao(geracao,populacoesEstimadas,Nt);
         distribuicaoPopulacao(matrizLeslie, populacaoInicial, (t + 1), Nt, (geracao + 1));
+        totalPopulacao(geracao+1,populacoesEstimadas,Nt);
         TaxaVariacao(populacoesEstimadas, geracao, taxasDeVariacao);
         distribuicaoNormalizada(geracao, Nt, populacoesEstimadas, distribuicaoNormalizada, n);
 
@@ -392,9 +393,9 @@ public class Projeto {
         for (int i=0;i<vetor.length;i++){
             soma+=vetor[i];
         }
-        //if (soma!=1){
+        if (soma!=1){
             normalizar(vetor,soma);
-        //}
+        }
     }
     public static void normalizar(double[] vetor, double soma){
         for (int i=0;i<vetor.length;i++){
