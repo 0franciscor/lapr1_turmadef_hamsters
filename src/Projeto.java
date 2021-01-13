@@ -84,7 +84,6 @@ public class Projeto {
             double[] vetor = new double[matrizLeslie.length];
             double valorProprio;
             valorProprio = calcularVetorValorProprio(matrizLeslie, vetor);
-            normalizarVetorProprio(vetor);
 
             if (naoInterativo) {
                 dadosGeracoes(geracao, numCiclos, t, Nt, geracoesEstimadas, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
@@ -110,7 +109,7 @@ public class Projeto {
             escreverParaFicheiro(opcoesExecucao, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
 
         } else {
-            interfaceUtilizador(numCiclos, matrizLeslie,geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, nomepop,numCiclos,args);
+            interfaceUtilizador(numCiclos, matrizLeslie,geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, nomepop, args);
         }
     }
 
@@ -263,7 +262,7 @@ public class Projeto {
         }
     }
 
-    public static void interfaceUtilizador(int numCiclos, double[][] matrizLeslie,int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio, String nomepop,int t,String[] args) throws IOException {
+    public static void interfaceUtilizador(int numCiclos, double[][] matrizLeslie, int geracao, int[] geracoesEstimadas, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] Nt, double[][] distribuicaoNormalizada, double valorProprio, double[] vetorProprio, String nomepop, String[] args) throws IOException {
         int leitura;
         boolean naoInterativo=false;
         do {
@@ -288,9 +287,9 @@ public class Projeto {
                     double[] populacaoInicial=vetorAuto(nomeFicheiro);
                     matrizAuto(matrizLeslie,nomeFicheiro);
                     valorProprio = calcularVetorValorProprio(matrizLeslie, vetorProprio);
-                    normalizarVetorProprio(vetorProprio);
+                    int t;
                     geracao = t = -1;
-                    dadosGeracoes(geracao,numCiclos,t,Nt,geracoesEstimadas,matrizLeslie,populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
+                    dadosGeracoes(geracao,numCiclos, t,Nt,geracoesEstimadas,matrizLeslie,populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
                 }
             } while(leitura > 0);
 
@@ -385,6 +384,7 @@ public class Projeto {
         for (int i = 0; i < matrizLeslie.length; i++) {
             vetor[i] = vetoraux[i][coluna];
         }
+        normalizarVetorProprio(vetor);
         return maior;
     }
 
