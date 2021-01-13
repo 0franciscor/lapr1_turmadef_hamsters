@@ -85,7 +85,7 @@ public class Projeto {
 
             }
         }
-    //}
+    
     public static void dadosGeracoes(int geracao,int numCiclos,int t,double [][] Nt, int[] geracoesEstimadas,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double valorProprio,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args) throws IOException {
         while ((geracao + 1) <= numCiclos) {
             t++;
@@ -172,7 +172,7 @@ public class Projeto {
                 insercaoMatriz(matrizLeslie, array, 2, true);
         }
     }
-    
+
     public static String leituraDados(String nomeFicheiro, int numLinha) throws FileNotFoundException { //LEITURA EXCLUSIVA DO VETOR
         File ficheiro = new File(nomeFicheiro);
         Scanner leituraFicheiro = new Scanner(ficheiro);
