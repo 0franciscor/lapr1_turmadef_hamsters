@@ -691,6 +691,7 @@ public class Projeto {
     public static void PerguntaGrafico(String s,String d, String nomepop) throws IOException {
         int resposta;
         String tempo = determinarDataCriacao();
+        nomepop = RetirarExtensao(nomepop);
         System.out.println("Deseja Salvar o Gráfico?(1- Sim; 2- Não)");
         resposta = ler.nextInt();
         if (resposta == 1) {
@@ -732,22 +733,22 @@ public class Projeto {
             case 1:
                 PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas);
                 Graficopopulacao("plot 'valores.txt' title 'População' with lines lc 'blue' lw 3; set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'");
-                PerguntaGrafico("População Total_","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3", nomepop);
+                PerguntaGrafico("PopulaçãoTotal_","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3", nomepop);
                 break;
             case 2:
                 PopulacaoTotal(geracao, geracoesEstimadas, taxasDeVariacao);
                 Graficopopulacao("plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3; set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'");
-                PerguntaGrafico("Taxa de Variação_","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3", nomepop);
+                PerguntaGrafico("TaxadeVariação_","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3", nomepop);
                 break;
             case 3:
                 PopulacaoDistribuida(Nt[0].length,Nt,geracao,geracoesEstimadas);
                 s=DistribuidaNormalizada(Nt[0].length,"População","População Distribuida");
-                PerguntaGrafico("População Distribuida_",s, nomepop);
+                PerguntaGrafico("PopulaçãoDistribuida_",s, nomepop);
                 break;
             case 4:
                 PopulacaoDistribuida(Nt[0].length,distribuicaoNormalizada,geracao,geracoesEstimadas);
                 s=DistribuidaNormalizada(Nt[0].length,"Distribuição","Distribuição Normalizada");
-                PerguntaGrafico("População Normalizada_",s, nomepop);
+                PerguntaGrafico("PopulaçãoNormalizada_",s, nomepop);
                 break;
         }
     }
@@ -795,5 +796,9 @@ public class Projeto {
     }
     public static void EliminarFicheiroTextoGrafico(File file) {
         file.delete();
+    }
+    public static String RetirarExtensao(String palavra) {
+        palavra = palavra.replace(".txt", "");
+        return palavra;
     }
 }
