@@ -91,7 +91,7 @@ public class Projeto {
         while ((geracao + 1) <= numCiclos) {
             t++;
             geracao++;
-            procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada);
+            procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, distribuicaoNormalizada);
         }
         for (int n=0;n<=geracao;n++) {
             TaxaVariacao(populacoesEstimadas, n, taxasDeVariacao);
@@ -276,7 +276,7 @@ public class Projeto {
         } while(leitura != -1);
     }
 
-    public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, int[] geracoesEstimadas, double[][] matrizLeslie, double[] populacaoInicial, int t, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] distribuicaoNormalizada){
+    public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, int[] geracoesEstimadas, double[][] matrizLeslie, double[] populacaoInicial, int t, double[] populacoesEstimadas, double[][] distribuicaoNormalizada){
         geracoesEstimadas[geracao] = t;
         distribuicaoPopulacao(matrizLeslie, populacaoInicial, t, Nt, geracao);
         totalPopulacao(geracao,populacoesEstimadas,Nt);
