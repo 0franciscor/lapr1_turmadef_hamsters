@@ -110,7 +110,7 @@ public class Projeto {
             escreverParaFicheiro(opcoesExecucao, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
 
         } else {
-            interfaceUtilizador(matrizLeslie,geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, nomepop,numCiclos,args);
+            interfaceUtilizador(numCiclos, matrizLeslie,geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, nomepop,numCiclos,args);
         }
     }
 
@@ -233,7 +233,6 @@ public class Projeto {
         return array;
     }
 
-
     public static double[] tratamentoDados(String input) {
         String[] dadosInseridos = input.split(", ");
         double [] valoresTratados = new double[dadosInseridos.length];
@@ -264,7 +263,7 @@ public class Projeto {
         }
     }
 
-    public static void interfaceUtilizador(double[][] matrizLeslie,int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio, String nomepop,int t,String[] args) throws IOException {
+    public static void interfaceUtilizador(int numCiclos, double[][] matrizLeslie,int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio, String nomepop,int t,String[] args) throws IOException {
         int leitura;
         boolean naoInterativo=false;
         do {
@@ -288,10 +287,10 @@ public class Projeto {
                     String nomeFicheiro=ler.next();
                     double[] populacaoInicial=vetorAuto(nomeFicheiro);
                     matrizAuto(matrizLeslie,nomeFicheiro);
-                    for (int i=0;i<matrizLeslie.length;i++){
-                        System.out.println(populacaoInicial);
-                    }
-                    dadosGeracoes(geracao,t,t,Nt,geracoesEstimadas,matrizLeslie,populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
+                    valorProprio = calcularVetorValorProprio(matrizLeslie, vetorProprio);
+                    normalizarVetorProprio(vetorProprio);
+                    geracao = t = -1;
+                    dadosGeracoes(geracao,numCiclos,t,Nt,geracoesEstimadas,matrizLeslie,populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
                 }
             } while(leitura > 0);
 
@@ -328,7 +327,6 @@ public class Projeto {
                 }
             }
         }
-
     }
 
     public static void totalPopulacao (int geracao, double[]populacoesEstimadas,double [][] Nt){
