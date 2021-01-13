@@ -31,7 +31,7 @@ public class Projeto {
         }
         //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
 
-        else if(args.length != 0 && erro !=2){
+        else if(erro !=2 && args.length == 2){
             existe = modoInterativo(args);
             nomeFicheiro = args[1];
         }
@@ -39,6 +39,7 @@ public class Projeto {
 
         double[] populacaoInicial; //VETOR INICIAL
         double[][] matrizLeslie;   //DECLARAÇÃO MATRIZ LESLIE
+
         if(erro != 2) {
             //matrizAuto(existe, nomeFicheiro);
             if (existe) {
@@ -122,7 +123,7 @@ public class Projeto {
 
     public static int modoNInterativo(int[] opcoesExecucao, String[] args, int erro) {
 
-        if (args.length != 0 && args[0].equals("-t")) {
+        if (/*args.length != 0 &&*/ args.length>2) {
             String nomeFicheiro = args[(args.length - 2)];
             boolean existe = existeFicheiro(nomeFicheiro);
 
@@ -130,8 +131,13 @@ public class Projeto {
                 erro = 1;
                 opcoesExecucao[0] = Integer.parseInt(args[1]);
                 for (int i = 2; i <= (args.length - 2); i++) {
+                    if(args[i].equals("-t")){
+                        if(Integer.parseInt(args[i+1]) <= 999 && 0 <= Integer.parseInt(args[i+1])){
+                            opcoesExecucao[0] = Integer.parseInt(args[i+1]);
+                        }
+                    }
                     if (args[i].equals("-g")) {
-                        if (args[i + 1].equals(String.valueOf(1)) || args[i + 1].equals(String.valueOf(2)) || args[i + 1].equals(String.valueOf(3))) {
+                        if (0 < Integer.parseInt(args[i + 1]) && Integer.parseInt(args[i+1]) <= 3){
                             for (int j = 1; j <= 3; j++) {
                                 if (args[i + 1].equals(String.valueOf(j)))
                                     opcoesExecucao[1] = j;
@@ -257,7 +263,7 @@ public class Projeto {
         int leitura;
         do {
             int [] opcoesVisualizacao = new int[6];
-            System.out.println("Quais os dados que gostaria de visualizar? (Insira os números associados a cada parâmetro e prima Enter)");
+            System.out.println("\nQuais os dados que gostaria de visualizar? (Insira os números associados a cada parâmetro e prima Enter)");
             System.out.println("1 - População total a cada geração.");
             System.out.println("2 - Taxa de variação.");
             System.out.println("3 - Distribuição da população.");
