@@ -37,23 +37,14 @@ public class Projeto {
         }
         //TERMINA AQUI
 
-        double[] populacaoInicial; //VETOR INICIAL
-        double[][] matrizLeslie;   //DECLARAÇÃO MATRIZ LESLIE
+        double[] populacaoInicial = null; //VETOR INICIAL
+        double[][] matrizLeslie;  //DECLARAÇÃO MATRIZ LESLIE
 
         if(erro != 2) {
-            //matrizAuto(existe, nomeFicheiro);
-            if (existe) {
-                populacaoInicial = tratamentoDados((leituraDados(nomeFicheiro, 0)));
-                matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
-
-                for (int i = 1; i <= 2; i++) {
-                    double[] array = tratamentoDados(leituraDados(nomeFicheiro, i));
-
-                    if (array.length == (populacaoInicial.length - 1))
-                        insercaoMatriz(matrizLeslie, array, 1, true);
-                    else
-                        insercaoMatriz(matrizLeslie, array, 2, true);
-                }
+            if(existe)
+            populacaoInicial = vetorAuto(nomeFicheiro);
+            matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
+            matrizAuto(matrizLeslie, nomeFicheiro);
 
             } else {
                 System.out.println("Quantos intervalos de idade possui a populacao que pretende estudar?");
@@ -94,7 +85,7 @@ public class Projeto {
 
             }
         }
-    }
+    //}
     public static void dadosGeracoes(int geracao,int numCiclos,int t,double [][] Nt, int[] geracoesEstimadas,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double valorProprio,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args) throws IOException {
         while ((geracao + 1) <= numCiclos) {
             t++;
@@ -162,26 +153,26 @@ public class Projeto {
         return erro;
     }
 
-    /*public static void matrizAuto(boolean existe, String nomeFicheiro) throws IOException {
-        if (existe) {
-            double[] populacaoInicial = tratamentoDados((leituraDados(nomeFicheiro, 0)));
-            double[][] matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
-
-            for (int i = 1; i <= 2; i++) {
-                double[] array = tratamentoDados(leituraDados(nomeFicheiro, i));
-
-                if (array.length == (populacaoInicial.length - 1))
-                    insercaoMatriz(matrizLeslie, array, 1, true);
-                else
-                    insercaoMatriz(matrizLeslie, array, 2, true);
-            }
-        }
-    }*/
-
     public static boolean existeFicheiro(String nomeFicheiro){
         File ficheiroVerificacao = new File(nomeFicheiro);
         return ficheiroVerificacao.exists();
     }
+
+    public static double[] vetorAuto(String nomeFicheiro) throws FileNotFoundException {
+        return tratamentoDados((leituraDados(nomeFicheiro, 0)));
+    }
+
+    public static void matrizAuto(double[][] matrizLeslie, String nomeFicheiro) throws IOException {
+        for (int i = 1; i <= 2; i++) {
+            double[] array = tratamentoDados(leituraDados(nomeFicheiro, i));
+
+            if (array.length == (matrizLeslie.length - 1))
+                insercaoMatriz(matrizLeslie, array, 1, true);
+            else
+                insercaoMatriz(matrizLeslie, array, 2, true);
+        }
+    }
+    
     public static String leituraDados(String nomeFicheiro, int numLinha) throws FileNotFoundException { //LEITURA EXCLUSIVA DO VETOR
         File ficheiro = new File(nomeFicheiro);
         Scanner leituraFicheiro = new Scanner(ficheiro);
