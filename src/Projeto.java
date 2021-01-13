@@ -504,7 +504,7 @@ public class Projeto {
             }
             if (opcoesExecucao[2] == 1) {
                 out.println("\nComportamento Assintótico da população associado ao maior valor próprio.");
-                out.printf("\nO valor próprio de módulo máximo é aproximadamente: %.3f\n", valorProprio);
+                out.printf("\nO valor próprio de módulo máximo é aproximadamente: %.4f\n", valorProprio);
                 out.println("Este valor indica-nos a taxa de crescimento da população.");
                 String comportamento = "igual", analise = "o que significa que a população se irá manter constante ao longo dos anos.";
                 if (valorProprio > constante) {
@@ -618,7 +618,7 @@ public class Projeto {
         }
         if (opcoesVisualizaco[4]==1){
             System.out.println("\nComportamento Assintotico da populacao associado ao maior valor proprio.");
-            System.out.printf("\nO valor proprio de modulo maximo e aproximadamente: %.3f\n", valorProprio);
+            System.out.printf("\nO valor proprio de modulo maximo e aproximadamente: %.4f\n", valorProprio);
             System.out.println("Este valor indica-nos a taxa de crescimento da populacao.");
             String comportamento="igual", analise="o que significa que a populacao se ira manter constante ao longo dos anos.";
             if (valorProprio>constante){
@@ -777,8 +777,7 @@ public class Projeto {
     public static String DoubleToInt(double num) {
         String s = String.valueOf(num);
         DecimalFormat decimalFormat = new DecimalFormat("0.#####");
-        String a = decimalFormat.format(Double.valueOf(s));
-        return a;
+        return decimalFormat.format(Double.valueOf(s));
     }
     public static String determinarDataCriacao() throws IOException {
         String nomeFich = "./";
