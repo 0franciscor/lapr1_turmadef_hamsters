@@ -369,19 +369,20 @@ public class Projeto {
         double maior = 0;
         int coluna = 0;
         for (int l = 0; l < valor.length; l++) {
-            if (valor[l][l] >= 0) {
-                if (valor[l][l] > maior) {
-                    maior = valor[l][l];
-                    coluna = l;
-                }
-            } else {
-                if ((-valor[l][l]) > maior) {
-                    maior = (-valor[l][l]);
-                    coluna = l;
-                }
+            valor[l][l]=valorModulo(valor[l][l]);
+            if (valor[l][l] > maior) {
+                maior = valor[l][l];
+                coluna = l;
             }
         }
         return coluna;
+    }
+
+    public static double valorModulo(double num){
+        if (num< 0) {
+            num=(-num);
+        }
+        return num;
     }
 
     public static void normalizarVetorProprio (double[] vetor){
