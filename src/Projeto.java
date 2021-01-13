@@ -505,7 +505,7 @@ public class Projeto {
                 out.println("\nComportamento Assintótico da população associado ao maior valor próprio.");
                 out.printf("\nO valor próprio de módulo máximo é aproximadamente: %.4f\n", valorProprio);
                 out.println("Este valor indica-nos a taxa de crescimento da população.");
-                String comportamento = "igual", analise = "o que significa que a população se irá manter constante ao longo dos anos.";
+                String comportamento = "igual", analise = "o que significa que a população vai-se manter constante ao longo dos anos.";
                 if (valorProprio > constante) {
                     comportamento = "maior";
                     analise = " isto significa que a população irá aumentar ao longo dos anos.";
@@ -616,19 +616,19 @@ public class Projeto {
             }
         }
         if (opcoesVisualizaco[4]==1){
-            System.out.println("\nComportamento Assintotico da populacao associado ao maior valor proprio.");
-            System.out.printf("\nO valor proprio de modulo maximo e aproximadamente: %.4f\n", valorProprio);
-            System.out.println("Este valor indica-nos a taxa de crescimento da populacao.");
-            String comportamento="igual", analise="o que significa que a populacao se ira manter constante ao longo dos anos.";
+            System.out.println("\nComportamento Assintótico da população associado ao maior valor próprio.");
+            System.out.printf("\nO valor próprio de módulo máximo é aproximadamente: %.4f\n", valorProprio);
+            System.out.println("Este valor indica-nos a taxa de crescimento da população.");
+            String comportamento="igual", analise="o que significa que a população vai-se manter constante ao longo dos anos.";
             if (valorProprio>constante){
                 comportamento="maior";
-                analise="isto significa que a populacao ira aumentar ao longo dos anos.";
+                analise="isto significa que a população irá aumentar ao longo dos anos.";
             }
             if (valorProprio<constante){
                 comportamento="menor";
-                analise="isto significa que a populacao ira diminuir ao longo dos anos.";
+                analise="isto significa que a população irá diminuir ao longo dos anos.";
             }
-            System.out.println("Como o valor proprio é " + comportamento + " que 1, " + analise);
+            System.out.println("Como o valor próprio é " + comportamento + " que 1, " + analise);
             System.out.println("\nO vetor próprio associado ao maior valor próprio indica-nos as percentagens populacionais constantes.");
             for (c = 0; c < Nt[0].length; c++) {
                 System.out.print("Idade " + c + ": ");
