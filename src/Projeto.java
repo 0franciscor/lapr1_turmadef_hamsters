@@ -91,7 +91,6 @@ public class Projeto {
                 System.out.println("Quais as geracoes que pretende que sejam estudadas?");
                 numCiclos = ler.nextInt();
                 dadosGeracoes(geracao, numCiclos, t, Nt, geracoesEstimadas, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
-
             }
         }
     }
@@ -318,6 +317,7 @@ public class Projeto {
         }
 
     }
+
     public static void totalPopulacao (int geracao, double[]populacoesEstimadas,double [][] Nt){
         populacoesEstimadas[geracao]=0;
         for (int i=0;i< Nt[0].length;i++){
