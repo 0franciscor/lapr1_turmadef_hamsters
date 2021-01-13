@@ -295,7 +295,7 @@ public class Projeto {
         boolean naoInterativo=false;
         do {
             int [] opcoesVisualizacao = new int[6];
-            System.out.println("\nQuais os dados que gostaria de visualizar? (Insira os números associados a cada parâmetro e prima Enter)");
+            System.out.println("\nQuais os dados que gostaria de visualizar? (Insira os números associados a cada parâmetro e prima Enter. Em parâmetros isolados, apenas insira o número que pretende.)");
             System.out.println("<1> - População total a cada geração.");
             System.out.println("<2> - Taxa de variação.");
             System.out.println("<3> - Distribuição da população.");
@@ -303,7 +303,7 @@ public class Projeto {
             System.out.println("<5> - Comportamento assimtótico associado ao maior valor próprio.");
             System.out.println("<6> - Gráficos.");
             System.out.println("<0> - Quando não quiser inserir mais parâmetros.");
-            System.out.println(("<10> - Alterar o ficheiro de entrada."));
+            System.out.println(("<10> - Modificar dados de entrada. Parâmetro isolado"));
             System.out.println("<-1> - Para sair do programa. Parâmetro isolado.");
             do{
                 leitura = ler.nextInt();
