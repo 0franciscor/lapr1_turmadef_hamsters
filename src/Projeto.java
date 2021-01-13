@@ -5,14 +5,23 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Scanner;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class Projeto {
     public static final double maximo = 99999;
     public static final double minimo = 0.005;
     public static final int constante = 1;
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd_MM_yyyy");
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
@@ -77,17 +86,17 @@ public class Projeto {
             normalizarVetorProprio(vetor);
 
             if (naoInterativo) {
-                dadosGeracoes(geracao, numCiclos, t, Nt, geracoesEstimadas, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args);
+                dadosGeracoes(geracao, numCiclos, t, Nt, geracoesEstimadas, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
             } else {
                 System.out.println("Quais as geracoes que pretende que sejam estudadas?");
                 numCiclos = ler.nextInt();
-                dadosGeracoes(geracao, numCiclos, t, Nt, geracoesEstimadas, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args);
+                dadosGeracoes(geracao, numCiclos, t, Nt, geracoesEstimadas, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
 
             }
         }
     }
 
-    public static void dadosGeracoes(int geracao,int numCiclos,int t,double [][] Nt, int[] geracoesEstimadas,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double valorProprio,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args) throws IOException {
+    public static void dadosGeracoes(int geracao,int numCiclos,int t,double [][] Nt, int[] geracoesEstimadas,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double valorProprio,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args, String nomepop) throws IOException {
         while ((geracao + 1) <= numCiclos) {
             t++;
             geracao++;
@@ -100,7 +109,7 @@ public class Projeto {
             escreverParaFicheiro(opcoesExecucao, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
 
         } else {
-            interfaceUtilizador(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor);
+            interfaceUtilizador(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, nomepop);
         }
     }
 
@@ -254,7 +263,7 @@ public class Projeto {
         }
     }
 
-    public static void interfaceUtilizador(int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio) throws IOException {
+    public static void interfaceUtilizador(int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio, String nomepop) throws IOException {
         int leitura;
         do {
             int [] opcoesVisualizacao = new int[6];
@@ -274,7 +283,7 @@ public class Projeto {
                 }
             } while(leitura > 0);
 
-            escreverParaConsola(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao);
+            escreverParaConsola(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
 
         } while(leitura != -1);
     }
@@ -517,7 +526,7 @@ public class Projeto {
             out.close();
     }
 
-    public static void escreverParaConsola (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,int[] opcoesVisualizaco) throws IOException {
+    public static void escreverParaConsola (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,int[] opcoesVisualizaco, String nomepop) throws IOException {
         int c;
         boolean flag;
         if (opcoesVisualizaco[0]==1){
@@ -631,7 +640,7 @@ public class Projeto {
             System.out.println("Que gráfico quer representar?");
             System.out.println("<1>-Evolução da População Total;\n<2>-Evolução da taxa de variação;\n<3>-Distribuição da População;\n<4>-Distribuição normalizada da população.");
             int num = ler.nextInt();
-            Graficos(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,num);
+            Graficos(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,num, nomepop);
         }
     }
 
@@ -668,8 +677,9 @@ public class Projeto {
         rt.exec("gnuplot -e \"set terminal "+terminal+"; set output '"+s+"'; "+d+"\"");
     }
 
-    public static void PerguntaGrafico(String s,String d) throws IOException {
+    public static void PerguntaGrafico(String s,String d, String nomepop) throws IOException {
         int resposta;
+        String tempo = determinarDataCriacao();
         System.out.println("Deseja Salvar o Gráfico?(1- Sim; 2- Não)");
         resposta = ler.nextInt();
         if (resposta == 1) {
@@ -678,13 +688,13 @@ public class Projeto {
             resposta = ler.nextInt();
             switch (resposta) {
                 case 1:
-                    SalvarGrafico(s+".png", d, "png");
+                    SalvarGrafico(s+ nomepop + "_" + tempo + ".png", d, "png");
                     break;
                 case 2:
-                    SalvarGrafico(s+".txt", d, "dumb");
+                    SalvarGrafico(s+ nomepop + "_" + tempo +".txt", d, "dumb");
                     break;
                 case 3:
-                    SalvarGrafico(s+".eps", d, "eps");
+                    SalvarGrafico(s+ nomepop + "_" + tempo +".eps", d, "eps");
                     break;
             }
         }
@@ -705,28 +715,28 @@ public class Projeto {
         return s;
     }
 
-    public static void Graficos(int geracao,int[] geracoesEstimadas,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,int num) throws IOException {
+    public static void Graficos(int geracao,int[] geracoesEstimadas,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,int num, String nomepop) throws IOException {
         String s;
         switch(num){
             case 1:
                 PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas);
                 Graficopopulacao("plot 'valores.txt' title 'População' with lines lc 'blue' lw 3; set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'");
-                PerguntaGrafico("População Total","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3");
+                PerguntaGrafico("População Total_","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3", nomepop);
                 break;
             case 2:
                 PopulacaoTotal(geracao, geracoesEstimadas, taxasDeVariacao);
                 Graficopopulacao("plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3; set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'");
-                PerguntaGrafico("Taxa de Variação","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3");
+                PerguntaGrafico("Taxa de Variação_","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3", nomepop);
                 break;
             case 3:
                 PopulacaoDistribuida(Nt[0].length,Nt,geracao,geracoesEstimadas);
                 s=DistribuidaNormalizada(Nt[0].length,"População","População Distribuida");
-                PerguntaGrafico("População Distribuida",s);
+                PerguntaGrafico("População Distribuida_",s, nomepop);
                 break;
             case 4:
                 PopulacaoDistribuida(Nt[0].length,distribuicaoNormalizada,geracao,geracoesEstimadas);
                 s=DistribuidaNormalizada(Nt[0].length,"Distribuição","Distribuição Normalizada");
-                PerguntaGrafico("População Normalizada",s);
+                PerguntaGrafico("População Normalizada_",s, nomepop);
                 break;
         }
     }
@@ -758,5 +768,19 @@ public class Projeto {
         DecimalFormat decimalFormat = new DecimalFormat("0.#####");
         String a = decimalFormat.format(Double.valueOf(s));
         return a;
+    }
+    public static String determinarDataCriacao() throws IOException {
+        String nomeFich = "./";
+        Path file = Paths.get(nomeFich);
+        BasicFileAttributes time = Files.readAttributes(file, BasicFileAttributes.class);
+        FileTime filetime = time.creationTime();
+        String data = formatDateTime(filetime);
+
+        return data;
+    }
+    public static String formatDateTime (FileTime fileTime) {
+        LocalDateTime tempo = fileTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+        return tempo.format(DATE_FORMATTER);
     }
 }
