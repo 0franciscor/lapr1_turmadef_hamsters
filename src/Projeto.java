@@ -182,8 +182,11 @@ public class Projeto {
         int aux = 0;
         do{
             input = leituraFicheiro.nextLine();
-            if (String.valueOf(input.charAt(0)).equals(letra))
-                stringCerta = true;
+            if(!input.equals("")) {
+                if (String.valueOf(input.charAt(0)).equals(letra)) {
+                    stringCerta = true;
+                }
+            }
             aux++;
         } while(aux < ficheiro.length() && !stringCerta);
         leituraFicheiro.close();
