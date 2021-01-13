@@ -80,35 +80,35 @@ public class Projeto {
             double[] taxasDeVariacao = new double[1000];
             double[][] Nt = new double[1001][matrizLeslie.length];
             double[][] distribuicaoNormalizada = new double[1000][matrizLeslie.length];
-
-            if (naoInterativo) {
-                while ((geracao + 1) <= numCiclos) {
-                    t++;
-                    geracao++;
-                    procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada);
-                }
-            } else {
-                System.out.println("Quais as geracoes que pretende que sejam estudadas?");
-                int aux = ler.nextInt();
-                while ((geracao + 1) <= aux) {
-                    t++;
-                    geracao++;
-                    procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada);
-                }
-
-            }
-
             double[] vetor = new double[matrizLeslie.length];
             double valorProprio;
             valorProprio = calcularVetorValorProprio(matrizLeslie, vetor);
             normalizarVetorProprio(vetor);
 
             if (naoInterativo) {
-                escreverParaFicheiro(opcoesExecucao, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
-
+                dadosGeracoes(geracao,numCiclos,t,Nt,geracoesEstimadas,matrizLeslie,populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetor,naoInterativo,opcoesExecucao,args);
             } else {
-                interfaceUtilizador(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor);
+                System.out.println("Quais as geracoes que pretende que sejam estudadas?");
+                numCiclos = ler.nextInt();
+                dadosGeracoes(geracao,numCiclos,t,Nt,geracoesEstimadas,matrizLeslie,populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetor,naoInterativo,opcoesExecucao,args);
+
             }
+        }
+    }
+    public static void dadosGeracoes(int geracao,int numCiclos,int t,double [][] Nt, int[] geracoesEstimadas,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double valorProprio,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args) throws IOException {
+        while ((geracao + 1) <= numCiclos) {
+            t++;
+            geracao++;
+            procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, t, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada);
+        }
+        for (int n=0;n<=geracao;n++) {
+            TaxaVariacao(populacoesEstimadas, n, taxasDeVariacao);
+        }
+        if (naoInterativo) {
+            escreverParaFicheiro(opcoesExecucao, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
+
+        } else {
+            interfaceUtilizador(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor);
         }
     }
 
@@ -288,9 +288,6 @@ public class Projeto {
         geracoesEstimadas[geracao] = t;
         distribuicaoPopulacao(matrizLeslie, populacaoInicial, t, Nt, geracao);
         totalPopulacao(geracao,populacoesEstimadas,Nt);
-        distribuicaoPopulacao(matrizLeslie, populacaoInicial, (t + 1), Nt, (geracao + 1));
-        totalPopulacao(geracao+1,populacoesEstimadas,Nt);
-        TaxaVariacao(populacoesEstimadas, geracao, taxasDeVariacao);
         distribuicaoNormalizada(geracao, Nt, populacoesEstimadas, distribuicaoNormalizada);
 
     }
@@ -682,7 +679,7 @@ public class Projeto {
                     SalvarGrafico(s+".png", d, "png");
                     break;
                 case 2:
-                    SalvarGrafico(s+".txt", d, "txt");
+                    SalvarGrafico(s+".txt", d, "dumb");
                     break;
                 case 3:
                     SalvarGrafico(s+".eps", d, "eps");
