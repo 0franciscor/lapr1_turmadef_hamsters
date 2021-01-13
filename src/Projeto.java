@@ -18,12 +18,12 @@ public class Projeto {
     public static void main(String[] args) throws IOException {
         boolean existe = false, naoInterativo = false;
         String nomeFicheiro = null;
-        int[] opcoesExecucao = new int [5];
+        int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = 0; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
 
         //RESPOSAVEL POR VERIFICAR SE O CODIGO ESTA A CORRER EM MODO NAO INTERATIVO
         erro = modoNInterativo(opcoesExecucao, args, erro);
-        if(erro == 1) {
+        if (erro == 1) {
             naoInterativo = true;
             existe = true;
             numCiclos = opcoesExecucao[0];
@@ -31,26 +31,26 @@ public class Projeto {
         }
         //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
 
-        else if(erro !=2 && args.length == 2){
+        else if (erro != 2 && args.length == 2) {
             existe = modoInterativo(args);
             nomeFicheiro = args[1];
         }
         //TERMINA AQUI
 
-        double[] populacaoInicial = null; //VETOR INICIAL
+        double[] populacaoInicial; //DECLARAÇÃO VETOR INICIAL
         double[][] matrizLeslie;  //DECLARAÇÃO MATRIZ LESLIE
 
-        if(erro != 2) {
-            if(existe)
-            populacaoInicial = vetorAuto(nomeFicheiro);
-            matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
-            matrizAuto(matrizLeslie, nomeFicheiro);
+        if (erro != 2) {
+            if (existe) {
+                populacaoInicial = vetorAuto(nomeFicheiro);
+                matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
+                matrizAuto(matrizLeslie, nomeFicheiro);
 
             } else {
-                System.out.println("Quantos intervalos de idade possui a populacao que pretende estudar?");
-                int numIntervalos = ler.nextInt();
+                System.out.print("Quantos intervalos de idade possui a populacao que pretende estudar? ");
+                populacaoInicial = new double[ler.nextInt()];
+                System.out.println();
 
-                populacaoInicial = new double[numIntervalos];
                 insercaoDados(populacaoInicial, "Populacao");
 
                 matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
@@ -77,15 +77,16 @@ public class Projeto {
             normalizarVetorProprio(vetor);
 
             if (naoInterativo) {
-                dadosGeracoes(geracao,numCiclos,t,Nt,geracoesEstimadas,matrizLeslie,populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetor,naoInterativo,opcoesExecucao,args);
+                dadosGeracoes(geracao, numCiclos, t, Nt, geracoesEstimadas, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args);
             } else {
                 System.out.println("Quais as geracoes que pretende que sejam estudadas?");
                 numCiclos = ler.nextInt();
-                dadosGeracoes(geracao,numCiclos,t,Nt,geracoesEstimadas,matrizLeslie,populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetor,naoInterativo,opcoesExecucao,args);
+                dadosGeracoes(geracao, numCiclos, t, Nt, geracoesEstimadas, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args);
 
             }
         }
-    
+    }
+
     public static void dadosGeracoes(int geracao,int numCiclos,int t,double [][] Nt, int[] geracoesEstimadas,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double valorProprio,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args) throws IOException {
         while ((geracao + 1) <= numCiclos) {
             t++;
@@ -113,7 +114,6 @@ public class Projeto {
     }
 
     public static int modoNInterativo(int[] opcoesExecucao, String[] args, int erro) {
-
         if (args.length>2) {
             String nomeFicheiro = args[(args.length - 2)];
             boolean existe = existeFicheiro(nomeFicheiro);
@@ -213,8 +213,9 @@ public class Projeto {
             limite = array.length;
 
         for(int i=0; i< limite; i++){
-            System.out.println("Insira o valor n" + (i+1) + " da " + elemento);
+            System.out.print("Insira o valor nº" + (i+1) + " da " + elemento + ": ");
             array[i] = ler.nextDouble();
+            System.out.println();
         }
         return array;
     }
