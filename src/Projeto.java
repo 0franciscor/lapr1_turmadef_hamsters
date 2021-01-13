@@ -322,8 +322,7 @@ public class Projeto {
                     }
 
                     valorProprio = calcularVetorValorProprio(matrizLeslie, vetorProprio);
-                    int t;
-                    geracao = t = -1;
+                    geracao = -1;
                     dadosGeracoes(existe, geracao,numCiclos,Nt,geracoesEstimadas,matrizLeslie, populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
                 }
             } while(leitura > 0);
