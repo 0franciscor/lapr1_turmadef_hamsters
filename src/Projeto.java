@@ -109,7 +109,7 @@ public class Projeto {
             escreverParaFicheiro(opcoesExecucao, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
 
         } else {
-            interfaceUtilizador(geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, nomepop);
+            interfaceUtilizador(matrizLeslie,geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, nomepop,numCiclos,args);
         }
     }
 
@@ -263,8 +263,9 @@ public class Projeto {
         }
     }
 
-    public static void interfaceUtilizador(int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio, String nomepop) throws IOException {
+    public static void interfaceUtilizador(double[][] matrizLeslie,int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio, String nomepop,int t,String[] args) throws IOException {
         int leitura;
+        boolean naoInterativo=false;
         do {
             int [] opcoesVisualizacao = new int[6];
             System.out.println("\nQuais os dados que gostaria de visualizar? (Insira os números associados a cada parâmetro e prima Enter)");
@@ -275,11 +276,21 @@ public class Projeto {
             System.out.println("<5> - Comportamento assimtótico associado ao maior valor próprio.");
             System.out.println("<6> - Gráficos.");
             System.out.println("<0> - Quando não quiser inserir mais parâmetros.");
+            System.out.println(("<10> - Alterar o ficheiro de entrada."));
             System.out.println("<-1> - Para sair do programa. Parâmetro isolado.");
             do{
                 leitura = ler.nextInt();
-                if (leitura>0){
+                if (leitura>0 && leitura !=10){
                     opcoesVisualizacao[leitura-1]=1;
+                } else if (leitura==10){
+                    System.out.print("Qual o nome do novo ficheiro? ");
+                    String nomeFicheiro=ler.next();
+                    double[] populacaoInicial=vetorAuto(nomeFicheiro);
+                    matrizAuto(matrizLeslie,nomeFicheiro);
+                    for (int i=0;i<matrizLeslie.length;i++){
+                        System.out.println(populacaoInicial);
+                    }
+                    dadosGeracoes(geracao,t,t,Nt,geracoesEstimadas,matrizLeslie,populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
                 }
             } while(leitura > 0);
 
