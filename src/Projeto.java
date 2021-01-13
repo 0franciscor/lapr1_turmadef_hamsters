@@ -383,6 +383,7 @@ public class Projeto {
         }
         return coluna;
     }
+
     public static void normalizarVetorProprio (double[] vetor){
         double soma=0;
         for (int i=0;i<vetor.length;i++){
@@ -392,11 +393,13 @@ public class Projeto {
             normalizar(vetor,soma);
         }
     }
+
     public static void normalizar(double[] vetor, double soma){
         for (int i=0;i<vetor.length;i++){
             vetor[i]=(vetor[i]/soma)*100;
         }
     }
+
     public static void escreverParaFicheiro (int[] opcoesExecucao, int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio, String [] args) throws FileNotFoundException {
         File file = new File(args[args.length-1]);
         PrintWriter out = new PrintWriter(file);
@@ -509,6 +512,7 @@ public class Projeto {
             out.print("\nEncontra-se concluída a apresentação dos resultados do programa da evolução das espécies.");
             out.close();
     }
+
     public static void escreverParaConsola (int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,int[] opcoesVisualizaco) throws IOException {
         int c;
         boolean flag;
@@ -626,6 +630,7 @@ public class Projeto {
             Graficos(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,num);
         }
     }
+
     public static void PopulacaoTotal(int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas) throws FileNotFoundException {
         File file = new File("valores.txt");
         PrintWriter out = new PrintWriter(file);
@@ -635,6 +640,7 @@ public class Projeto {
 
         out.close();
     }
+
     public static void PopulacaoDistribuida(int n,double[][] Nt,int geracao,int [] geracoesEstimadas) throws FileNotFoundException {
         File file = new File("valores.txt");
         PrintWriter out = new PrintWriter(file);
@@ -720,6 +726,7 @@ public class Projeto {
                 break;
         }
     }
+
     public static boolean NotCientifica(double numero) {
         boolean flag=false;
         if (numero > maximo || numero <= minimo) {
@@ -727,11 +734,13 @@ public class Projeto {
         }
         return flag;
     }
+
     public static String ConverterNotacaoCientifica(double numero) {
         NumberFormat formatter;
         formatter = new DecimalFormat("0.##E0");
         return formatter.format(numero);
     }
+
     public static boolean DoubleparaIntVer(double num) {
         boolean flag=false;
         if(num % 1 == 0) {
@@ -739,6 +748,7 @@ public class Projeto {
         }
         return flag;
     }
+
     public static String DoubleToInt(double num) {
         String s = String.valueOf(num);
         DecimalFormat decimalFormat = new DecimalFormat("0.#####");
