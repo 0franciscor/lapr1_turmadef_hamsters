@@ -29,6 +29,7 @@ public class Projeto {
         String nomeFicheiro = null;
         int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = 0; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
+        File novofich = new File("valores.txt");
 
         //RESPOSAVEL POR VERIFICAR SE O CODIGO ESTA A CORRER EM MODO NAO INTERATIVO
         erro = modoNInterativo(opcoesExecucao, args, erro);
@@ -94,6 +95,7 @@ public class Projeto {
 
             }
         }
+        EliminarFicheiroTextoGrafico(novofich);
     }
 
     public static void dadosGeracoes(int geracao,int numCiclos,int t,double [][] Nt, int[] geracoesEstimadas,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double valorProprio,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args, String nomepop) throws IOException {
@@ -793,5 +795,8 @@ public class Projeto {
         LocalDateTime tempo = fileTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
         return tempo.format(DATE_FORMATTER);
+    }
+    public static void EliminarFicheiroTextoGrafico(File file) {
+        file.delete();
     }
 }
