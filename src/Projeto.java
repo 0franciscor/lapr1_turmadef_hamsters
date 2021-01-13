@@ -413,7 +413,7 @@ public class Projeto {
         for (int i=0;i<vetor.length;i++){
             soma+=vetor[i];
         }
-        if (soma!=1){
+        if (soma!=1 || soma!=100){
             normalizar(vetor,soma);
         }
     }
