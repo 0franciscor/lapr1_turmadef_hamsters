@@ -256,14 +256,14 @@ public class Projeto {
         do {
             int [] opcoesVisualizacao = new int[6];
             System.out.println("\nQuais os dados que gostaria de visualizar? (Insira os números associados a cada parâmetro e prima Enter)");
-            System.out.println("1 - População total a cada geração.");
-            System.out.println("2 - Taxa de variação.");
-            System.out.println("3 - Distribuição da população.");
-            System.out.println("4 - Distribuição normalizada da população.");
-            System.out.println("5 - Comportamento assimtótico associado ao maior valor próprio.");
-            System.out.println("6 - Gráficos.");
-            System.out.println("0 - Quando não quiser inserir mais parâmetros.");
-            System.out.println("-1 - Para sair do programa. Parâmetro isolado");
+            System.out.println("<1> - População total a cada geração.");
+            System.out.println("<2> - Taxa de variação.");
+            System.out.println("<3> - Distribuição da população.");
+            System.out.println("<4> - Distribuição normalizada da população.");
+            System.out.println("<5> - Comportamento assimtótico associado ao maior valor próprio.");
+            System.out.println("<6> - Gráficos.");
+            System.out.println("<0> - Quando não quiser inserir mais parâmetros.");
+            System.out.println("<-1> - Para sair do programa. Parâmetro isolado.");
             do{
                 leitura = ler.nextInt();
                 if (leitura>0){
@@ -621,7 +621,7 @@ public class Projeto {
         }
         if (opcoesVisualizaco[5]==1){
             System.out.println("Que gráfico quer representar?");
-            System.out.println("1-Evolução da População Total;\n2-Evolução da taxa de variação;\n3-Distribuição da População;\n4-Distribuição normalizada da população.");
+            System.out.println("<1>-Evolução da População Total;\n<2>-Evolução da taxa de variação;\n<3>-Distribuição da População;\n<4>-Distribuição normalizada da população.");
             int num = ler.nextInt();
             Graficos(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,num);
         }
@@ -635,7 +635,7 @@ public class Projeto {
 
         out.close();
     }
-    public static void Populaçãodistribuida(int n,double[][] Nt,int geracao,int [] geracoesEstimadas) throws FileNotFoundException {
+    public static void PopulacaoDistribuida(int n,double[][] Nt,int geracao,int [] geracoesEstimadas) throws FileNotFoundException {
         File file = new File("valores.txt");
         PrintWriter out = new PrintWriter(file);
         for (int l = 0; l <= geracao; l++) {
@@ -709,12 +709,12 @@ public class Projeto {
                 PerguntaGrafico("Taxa de Variação","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3");
                 break;
             case 3:
-                Populaçãodistribuida(Nt[0].length,Nt,geracao,geracoesEstimadas);
+                PopulacaoDistribuida(Nt[0].length,Nt,geracao,geracoesEstimadas);
                 s=DistribuidaNormalizada(Nt[0].length,"População","População Distribuida");
                 PerguntaGrafico("População Distribuida",s);
                 break;
             case 4:
-                Populaçãodistribuida(Nt[0].length,distribuicaoNormalizada,geracao,geracoesEstimadas);
+                PopulacaoDistribuida(Nt[0].length,distribuicaoNormalizada,geracao,geracoesEstimadas);
                 s=DistribuidaNormalizada(Nt[0].length,"Distribuição","Distribuição Normalizada");
                 PerguntaGrafico("População Normalizada",s);
                 break;
