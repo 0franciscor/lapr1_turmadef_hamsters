@@ -123,7 +123,7 @@ public class Projeto {
 
     public static int modoNInterativo(int[] opcoesExecucao, String[] args, int erro) {
 
-        if (/*args.length != 0 &&*/ args.length>2) {
+        if (args.length>2) {
             String nomeFicheiro = args[(args.length - 2)];
             boolean existe = existeFicheiro(nomeFicheiro);
 
