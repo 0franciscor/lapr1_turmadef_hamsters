@@ -651,6 +651,7 @@ public class Projeto {
             System.out.println("<1>-Evolução da População Total;\n<2>-Evolução da taxa de variação;\n<3>-Distribuição da População;\n<4>-Distribuição normalizada da população.");
             int num = ler.nextInt();
             Graficos(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,num, nomepop);
+            System.out.println("kvkjdf");
         }
     }
 
