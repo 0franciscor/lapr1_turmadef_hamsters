@@ -22,6 +22,7 @@ public class Projeto {
     public static final double maximo = 99999;
     public static final double minimo = 0.005;
     public static final int constante = 1;
+    public static final int constante2 = 2;
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd_MM_yyyy");
     static Scanner ler = new Scanner(System.in);
 
@@ -569,38 +570,17 @@ public class Projeto {
 
     public static void escreverParaConsola (int geracao, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,int[] opcoesVisualizaco, String nomepop) throws IOException {
         int c, num,q=0;
-        boolean flag;
         if (opcoesVisualizaco[0]==1){
             for (int j = 0; j <= geracao; j++) {
                 System.out.print("\nO número total de indivíduos da geração " + j + " é ");
-                flag = NotCientifica(populacoesEstimadas[j]);
-                if (flag) {
-                    System.out.print(ConverterNotacaoCientifica(populacoesEstimadas[j]));
-                } else {
-                    flag = DoubleparaIntVer(populacoesEstimadas[j]);
-                    if (flag) {
-                        System.out.print(DoubleToInt(populacoesEstimadas[j]));
-                    } else {
-                        System.out.printf("%.2f", populacoesEstimadas[j]);
-                    }
-                }
+                Escrever(populacoesEstimadas[j], constante);
             }
         }
         System.out.print("\n");
         if (opcoesVisualizaco[1]==1){
             for (int j = 0; j < geracao; j++) {
                 System.out.print("\nA taxa de variação para a geração " + j + " é ");
-                flag = NotCientifica(taxasDeVariacao[j]);
-                if (flag) {
-                    System.out.print(ConverterNotacaoCientifica(taxasDeVariacao[j]));
-                } else {
-                    flag = DoubleparaIntVer(taxasDeVariacao[j]);
-                    if (flag) {
-                        System.out.print(DoubleToInt(taxasDeVariacao[j]));
-                    } else {
-                        System.out.printf("%.2f", taxasDeVariacao[j]);
-                    }
-                }
+                Escrever(taxasDeVariacao[j], constante);
             }
         }
         System.out.print("\n");
@@ -610,18 +590,7 @@ public class Projeto {
                 System.out.print("\nA população na geração " + j + " encontra-se distribuída da seguinte forma:\n");
                 for (c = 0; c < Nt[0].length; c++) {
                     System.out.print("Idade " + c + ": ");
-                    flag = NotCientifica(Nt[j][c]);
-                    if (flag) {
-                        System.out.print(ConverterNotacaoCientifica(Nt[j][c]) + "\n");
-                    } else {
-                        flag = DoubleparaIntVer(Nt[j][c]);
-                        if (flag) {
-                            System.out.print(DoubleToInt(Nt[j][c]) + "\n");
-                        } else {
-                            System.out.printf("%.2f", Nt[j][c]);
-                            System.out.print("\n");
-                        }
-                    }
+                    Escrever(Nt[j][c], constante2);
                 }
             }
         }
@@ -631,18 +600,7 @@ public class Projeto {
                 System.out.print("\nA distribuição normalizada da geração " + j + " está representada pelas várias faixas etárias:\n");
                 for (c = 0; c < Nt[0].length; c++) {
                     System.out.print("Idade " + c + ": ");
-                    flag = NotCientifica(distribuicaoNormalizada[j][c]);
-                    if (flag) {
-                        System.out.print(ConverterNotacaoCientifica(distribuicaoNormalizada[j][c]) + "\n");
-                    } else {
-                        flag = DoubleparaIntVer(distribuicaoNormalizada[j][c]);
-                        if (flag) {
-                            System.out.print(DoubleToInt(distribuicaoNormalizada[j][c]) + "\n");
-                        } else {
-                            System.out.printf("%.2f", distribuicaoNormalizada[j][c]);
-                            System.out.print("%\n");
-                        }
-                    }
+                    Escrever(distribuicaoNormalizada[j][c], constante2);
                 }
             }
         }
@@ -663,18 +621,7 @@ public class Projeto {
             System.out.println("\nO vetor próprio associado ao maior valor próprio indica-nos as percentagens populacionais constantes.");
             for (c = 0; c < Nt[0].length; c++) {
                 System.out.print("Idade " + c + ": ");
-                flag = NotCientifica(vetorProprio[c]);
-                if (flag) {
-                    System.out.print(ConverterNotacaoCientifica(vetorProprio[c]) + "\n");
-                } else {
-                    flag = DoubleparaIntVer(vetorProprio[c]);
-                    if (flag) {
-                        System.out.print(DoubleToInt(vetorProprio[c]) + "\n");
-                    } else {
-                        System.out.printf("%.2f", vetorProprio[c]);
-                        System.out.print("\n");
-                    }
-                }
+                Escrever(vetorProprio[c], constante2);
             }
         }
         if (opcoesVisualizaco[5]==1){
@@ -885,5 +832,32 @@ public class Projeto {
                     SalvarGrafico(s+ nomepop + "_" + tempo +".eps", d, "eps");
                     break;
             }
+    }
+    public static void Escrever(double numero, int n) {
+        boolean flag;
+        flag = NotCientifica(numero);
+        if (flag) {
+            if (n == constante) {
+                System.out.print(ConverterNotacaoCientifica(numero));
+            } else {
+                System.out.print(ConverterNotacaoCientifica(numero) + "\n");
+            }
+        } else {
+            flag = DoubleparaIntVer(numero);
+            if (flag) {
+                if (n == constante) {
+                    System.out.print(DoubleToInt(numero));
+                } else {
+                    System.out.print(DoubleToInt(numero) + "\n");
+                }
+            } else {
+                if (n == constante) {
+                    System.out.printf("%.2f", numero);
+                } else {
+                    System.out.printf("%.2f", numero);
+                    System.out.print("\n");
+                }
+            }
+        }
     }
 }
