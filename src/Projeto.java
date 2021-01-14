@@ -327,7 +327,7 @@ public class Projeto {
                 }
             } while(leitura > 0);
 
-            escreverParaConsola(existe, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
+            escreverParaConsola(geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
 
         } while(leitura != -1);
     }
@@ -566,7 +566,7 @@ public class Projeto {
         out.close();
     }
 
-    public static void escreverParaConsola (boolean existe, int geracao, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,int[] opcoesVisualizaco, String nomepop) throws IOException {
+    public static void escreverParaConsola (int geracao, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,int[] opcoesVisualizaco, String nomepop) throws IOException {
         int c;
         boolean flag;
         if (opcoesVisualizaco[0]==1){
@@ -761,7 +761,7 @@ public class Projeto {
                 PerguntaGrafico("PopulaçãoTotal_","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3", nomepop);
                 break;
             case 2:
-                PopulacaoTotal(geracao, taxasDeVariacao);
+                PopulacaoTotal((geracao-1), taxasDeVariacao);
                 Graficopopulacao("plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3; set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'");
                 PerguntaGrafico("TaxadeVariação_","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3", nomepop);
                 break;
@@ -833,18 +833,18 @@ public class Projeto {
         String s;
         PopulacaoTotal(geracao, populacoesEstimadas);
         PerguntaGraficoNaoInterativo("População Total","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3",l,nomepop);
-        TimeUnit.MILLISECONDS.sleep(500);
-        PopulacaoTotal(geracao, taxasDeVariacao);
+        TimeUnit.MILLISECONDS.sleep(250);
+        PopulacaoTotal((geracao-1), taxasDeVariacao);
         PerguntaGraficoNaoInterativo("Taxa de Variação","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3",l,nomepop);
-        TimeUnit.MILLISECONDS.sleep(500);
+        TimeUnit.MILLISECONDS.sleep(250);
         PopulacaoDistribuida(Nt[0].length,Nt,geracao);
         s=DistribuidaNormalizada(Nt[0].length,"População","População Distribuida");
         PerguntaGraficoNaoInterativo("PopulaçãoDistribuida_",s,l,nomepop);
-        TimeUnit.MILLISECONDS.sleep(500);
+        TimeUnit.MILLISECONDS.sleep(250);
         PopulacaoDistribuida(Nt[0].length,distribuicaoNormalizada,geracao);
         s=DistribuidaNormalizada(Nt[0].length,"Distribuição","Distribuição Normalizada");
         PerguntaGraficoNaoInterativo("PopulaçãoNormalizada_",s,l,nomepop);
-        TimeUnit.MILLISECONDS.sleep(500);
+        TimeUnit.MILLISECONDS.sleep(250);
     }
     public static void PerguntaGraficoNaoInterativo(String s,String d,int l,String nomepop) throws IOException {
         String tempo = determinarDataCriacao();
