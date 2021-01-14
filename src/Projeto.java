@@ -16,6 +16,7 @@ import java.nio.file.attribute.FileTime;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.TimeUnit;
 
 public class Projeto {
     public static final double maximo = 99999;
@@ -24,7 +25,7 @@ public class Projeto {
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd_MM_yyyy");
     static Scanner ler = new Scanner(System.in);
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         boolean existe = false, naoInterativo = false;
         String nomeFicheiro = null;
         int[] opcoesExecucao = new int[5];
@@ -274,7 +275,7 @@ public class Projeto {
         }
     }
 
-    public static void dadosGeracoes(boolean existe, int geracao,int numCiclos,double [][] Nt, int[] geracoesEstimadas,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double valorProprio,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args, String nomepop) throws IOException {
+    public static void dadosGeracoes(boolean existe, int geracao,int numCiclos,double [][] Nt, int[] geracoesEstimadas,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double valorProprio,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args, String nomepop) throws IOException, InterruptedException {
         while ((geracao + 1) <= numCiclos) {
             geracao++;
             procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, populacoesEstimadas, distribuicaoNormalizada);
@@ -284,13 +285,13 @@ public class Projeto {
         }
         if (naoInterativo) {
             escreverParaFicheiro(opcoesExecucao, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
-
+            Graficonaointerativo(opcoesExecucao,geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,nomepop);
         } else {
             interfaceUtilizador(existe, numCiclos, matrizLeslie,geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, nomepop, args);
         }
     }
 
-    public static void interfaceUtilizador(boolean existe, int numCiclos, double[][] matrizLeslie, int geracao, int[] geracoesEstimadas, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] Nt, double[][] distribuicaoNormalizada, double valorProprio, double[] vetorProprio, String nomepop, String[] args) throws IOException {
+    public static void interfaceUtilizador(boolean existe, int numCiclos, double[][] matrizLeslie, int geracao, int[] geracoesEstimadas, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] Nt, double[][] distribuicaoNormalizada, double valorProprio, double[] vetorProprio, String nomepop, String[] args) throws IOException, InterruptedException {
         int leitura;
         boolean naoInterativo=false;
         do {
@@ -748,16 +749,12 @@ public class Projeto {
 
     public static String DistribuidaNormalizada(int n,String ylabel,String titulo) throws IOException {
         int o=3;
-        int p=0;
-        String [] cores={"blue","red","purple","orange","green","yellow","cyan","black","grey","brown"};
-        String s = "set xlabel 'Gerações'; set ylabel '"+ylabel+"' ; set title '"+titulo+"' font 'arial,20'; plot 'valores.txt' u 1:2 w lp t 'Idade 0' lc '"+cores[p]+"' lw 3";
+        String s = "set xlabel 'Gerações'; set ylabel '"+ylabel+"' ; set title '"+titulo+"' font 'arial,20'; set palette rgb 7,5,15; plot 'valores.txt' u 1:2 w lp t 'Idade 0' lw 3";
         for(int e=1;e<n+1;e++) {
-            p++;
-            String d = " ,'valores.txt' u 1:" + o + "w lp t 'Idade "+e+"' lc '"+cores[p]+"' lw 3";
+            String d = " ,'valores.txt' u 1:" + o + "w lp t 'Idade "+e+"' lw 3";
             s = s+d;
             o++;
         }
-        Graficopopulacao(s);
         return s;
     }
 
@@ -777,11 +774,13 @@ public class Projeto {
             case 3:
                 PopulacaoDistribuida(Nt[0].length,Nt,geracao,geracoesEstimadas);
                 s=DistribuidaNormalizada(Nt[0].length,"População","População Distribuida");
+                Graficopopulacao(s);
                 PerguntaGrafico("PopulaçãoDistribuida_",s, nomepop);
                 break;
             case 4:
                 PopulacaoDistribuida(Nt[0].length,distribuicaoNormalizada,geracao,geracoesEstimadas);
                 s=DistribuidaNormalizada(Nt[0].length,"Distribuição","Distribuição Normalizada");
+                Graficopopulacao(s);
                 PerguntaGrafico("PopulaçãoNormalizada_",s, nomepop);
                 break;
         }
@@ -834,5 +833,38 @@ public class Projeto {
     public static String RetirarExtensao(String palavra) {
         palavra = palavra.replace(".txt", "");
         return palavra;
+    }
+    public static void Graficonaointerativo(int[] opcoesExecucao,int geracao,int[] geracoesEstimadas,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,String nomepop) throws IOException, InterruptedException {
+        int l=opcoesExecucao[1];
+        String s;
+        PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas);
+        PerguntaGraficoNaoInterativo("População Total","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3",l,nomepop);
+        TimeUnit.MILLISECONDS.sleep(500);
+        PopulacaoTotal(geracao, geracoesEstimadas, taxasDeVariacao);
+        PerguntaGraficoNaoInterativo("Taxa de Variação","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3",l,nomepop);
+        TimeUnit.MILLISECONDS.sleep(500);
+        PopulacaoDistribuida(Nt[0].length,Nt,geracao,geracoesEstimadas);
+        s=DistribuidaNormalizada(Nt[0].length,"População","População Distribuida");
+        PerguntaGraficoNaoInterativo("PopulaçãoDistribuida_",s,l,nomepop);
+        TimeUnit.MILLISECONDS.sleep(500);
+        PopulacaoDistribuida(Nt[0].length,distribuicaoNormalizada,geracao,geracoesEstimadas);
+        s=DistribuidaNormalizada(Nt[0].length,"Distribuição","Distribuição Normalizada");
+        PerguntaGraficoNaoInterativo("PopulaçãoNormalizada_",s,l,nomepop);
+        TimeUnit.MILLISECONDS.sleep(500);
+    }
+    public static void PerguntaGraficoNaoInterativo(String s,String d,int l,String nomepop) throws IOException {
+        String tempo = determinarDataCriacao();
+        nomepop = RetirarExtensao(nomepop);
+            switch (l) {
+                case 1:
+                    SalvarGrafico(s+ nomepop + "_" + tempo + ".png", d, "png");
+                    break;
+                case 2:
+                    SalvarGrafico(s+ nomepop + "_" + tempo +".txt", d, "dumb");
+                    break;
+                case 3:
+                    SalvarGrafico(s+ nomepop + "_" + tempo +".eps", d, "eps");
+                    break;
+            }
     }
 }
