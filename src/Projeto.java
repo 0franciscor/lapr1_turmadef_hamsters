@@ -738,21 +738,19 @@ public class Projeto {
                     SalvarGrafico(s+ nomepop + "_" + tempo +".eps", d, "eps");
                     break;
             }
-            System.out.println("Deseja visualizar mais algum gráfico? (1- Sim; 2- Não)");
-            resposta= ler.nextInt();
-            if (resposta==1){
-                int [] opcoesVisualizacao = new int[6];
-                opcoesVisualizacao[5]=1;
-                escreverParaConsola(geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
-            }
+            VisualizarMaisAlgumGrafico(geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,nomepop);
         } else if (resposta== 2){
-            System.out.println("Deseja visualizar mais algum gráfico? (1- Sim; 2- Não)");
-            resposta= ler.nextInt();
-            if (resposta==1){
-                int [] opcoesVisualizacao = new int[6];
-                opcoesVisualizacao[5]=1;
-                escreverParaConsola(geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
-            }
+            VisualizarMaisAlgumGrafico(geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,nomepop);
+        }
+    }
+
+    public static void VisualizarMaisAlgumGrafico (int geracao, double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]Nt,double[][] distribuicaoNormalizada,double valorProprio,double[]vetorProprio,String nomepop) throws IOException {
+        System.out.println("Deseja visualizar mais algum gráfico? (1- Sim; 2- Não)");
+        int resposta= ler.nextInt();
+        if (resposta==1){
+            int [] opcoesVisualizacao = new int[6];
+            opcoesVisualizacao[5]=1;
+            escreverParaConsola(geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
         }
     }
 
