@@ -453,8 +453,9 @@ public class Projeto {
         }
     }
 
-    public static void escreverParaFicheiro (int[] opcoesExecucao, int geracao, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio, String [] args) throws FileNotFoundException {
-        File file = new File(args[args.length-1]);
+    public static void escreverParaFicheiro (int[] opcoesExecucao, int geracao, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio, String [] args) throws IOException {
+        String nomesaida = determinarDataCriacao() + "_" + args[args.length-1];
+        File file = new File(nomesaida);
         PrintWriter out = new PrintWriter(file);
         boolean flag;
         int c;
@@ -855,10 +856,10 @@ public class Projeto {
         int l=opcoesExecucao[1];
         String s;
         PopulacaoTotal(geracao, populacoesEstimadas);
-        PerguntaGraficoNaoInterativo("População Total","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3",l,nomepop);
+        PerguntaGraficoNaoInterativo("PopulaçãoTotal_","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3",l,nomepop);
         TimeUnit.MILLISECONDS.sleep(250);
         PopulacaoTotal((geracao-1), taxasDeVariacao);
-        PerguntaGraficoNaoInterativo("Taxa de Variação","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3",l,nomepop);
+        PerguntaGraficoNaoInterativo("TaxadeVariação_","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3",l,nomepop);
         TimeUnit.MILLISECONDS.sleep(250);
         PopulacaoDistribuida(Nt[0].length,Nt,geracao);
         s=DistribuidaNormalizada(Nt[0].length,"População","População Distribuida");
