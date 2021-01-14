@@ -45,7 +45,12 @@ public class Projeto {
 
         else if (erro != 2 && args.length == 2) {
             existe = modoInterativo(args);
-            nomeFicheiro = args[1];
+            if(existe)
+                nomeFicheiro = args[1];
+            else {
+                erro = 2;
+                System.out.println("O ficheiro não foi encontrado.");
+            }
         }
         //TERMINA AQUI
 
