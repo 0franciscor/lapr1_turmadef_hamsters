@@ -64,7 +64,6 @@ public class Projeto {
 
             int geracao = -1;
 
-            int[] geracoesEstimadas = new int[1000];
             double[] populacoesEstimadas = new double[1000];
             double[] taxasDeVariacao = new double[1000];
             double[][] Nt = new double[1001][matrizLeslie.length];
@@ -74,11 +73,11 @@ public class Projeto {
             valorProprio = calcularVetorValorProprio(matrizLeslie, vetor);
 
             if (naoInterativo) {
-                dadosGeracoes(existe, geracao, numCiclos,Nt, geracoesEstimadas, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
+                dadosGeracoes(existe, geracao, numCiclos,Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
             } else {
                 System.out.println("Quais as geracoes que pretende que sejam estudadas?");
                 numCiclos = ler.nextInt();
-                dadosGeracoes(existe, geracao, numCiclos, Nt, geracoesEstimadas, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
+                dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
             }
         }
         EliminarFicheiroTextoGrafico(novofich);
@@ -275,23 +274,23 @@ public class Projeto {
         }
     }
 
-    public static void dadosGeracoes(boolean existe, int geracao,int numCiclos,double [][] Nt, int[] geracoesEstimadas,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double valorProprio,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args, String nomepop) throws IOException, InterruptedException {
+    public static void dadosGeracoes(boolean existe, int geracao,int numCiclos,double [][] Nt,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double valorProprio,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args, String nomepop) throws IOException, InterruptedException {
         while ((geracao + 1) <= numCiclos) {
             geracao++;
-            procedimentoCalculoGeracoes(Nt, geracao, geracoesEstimadas, matrizLeslie, populacaoInicial, populacoesEstimadas, distribuicaoNormalizada);
+            procedimentoCalculoGeracoes(Nt, geracao, matrizLeslie, populacaoInicial, populacoesEstimadas, distribuicaoNormalizada);
         }
         for (int n=0;n<=geracao;n++) {
             TaxaVariacao(populacoesEstimadas, n, taxasDeVariacao);
         }
         if (naoInterativo) {
-            escreverParaFicheiro(opcoesExecucao, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
-            Graficonaointerativo(opcoesExecucao,geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,nomepop);
+            escreverParaFicheiro(opcoesExecucao, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
+            Graficonaointerativo(opcoesExecucao,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,nomepop);
         } else {
-            interfaceUtilizador(existe, numCiclos, matrizLeslie,geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, nomepop, args);
+            interfaceUtilizador(existe, numCiclos, matrizLeslie,geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, nomepop, args);
         }
     }
 
-    public static void interfaceUtilizador(boolean existe, int numCiclos, double[][] matrizLeslie, int geracao, int[] geracoesEstimadas, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] Nt, double[][] distribuicaoNormalizada, double valorProprio, double[] vetorProprio, String nomepop, String[] args) throws IOException, InterruptedException {
+    public static void interfaceUtilizador(boolean existe, int numCiclos, double[][] matrizLeslie, int geracao, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] Nt, double[][] distribuicaoNormalizada, double valorProprio, double[] vetorProprio, String nomepop, String[] args) throws IOException, InterruptedException {
         int leitura;
         boolean naoInterativo=false;
         do {
@@ -324,17 +323,16 @@ public class Projeto {
 
                     valorProprio = calcularVetorValorProprio(matrizLeslie, vetorProprio);
                     geracao = -1;
-                    dadosGeracoes(existe, geracao,numCiclos,Nt,geracoesEstimadas,matrizLeslie, populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
+                    dadosGeracoes(existe, geracao,numCiclos,Nt,matrizLeslie, populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
                 }
             } while(leitura > 0);
 
-            escreverParaConsola(existe, geracao, geracoesEstimadas, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
+            escreverParaConsola(existe, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
 
         } while(leitura != -1);
     }
 
-    public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, int[] geracoesEstimadas, double[][] matrizLeslie, double[] populacaoInicial, double[] populacoesEstimadas, double[][] distribuicaoNormalizada){
-        geracoesEstimadas[geracao] = geracao;
+    public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, double[][] matrizLeslie, double[] populacaoInicial, double[] populacoesEstimadas, double[][] distribuicaoNormalizada){
         distribuicaoPopulacao(matrizLeslie, populacaoInicial, Nt, geracao);
         totalPopulacao(geracao,populacoesEstimadas,Nt);
         distribuicaoNormalizada(geracao, Nt, populacoesEstimadas, distribuicaoNormalizada);
@@ -449,17 +447,13 @@ public class Projeto {
             soma+=vetor[i];
         }
         if (soma!=1 || soma!=100){
-            normalizar(vetor,soma);
+            for (int i=0;i<vetor.length;i++){
+                vetor[i]=(vetor[i]/soma)*100;
+            }
         }
     }
 
-    public static void normalizar(double[] vetor, double soma){
-        for (int i=0;i<vetor.length;i++){
-            vetor[i]=(vetor[i]/soma)*100;
-        }
-    }
-
-    public static void escreverParaFicheiro (int[] opcoesExecucao, int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio, String [] args) throws FileNotFoundException {
+    public static void escreverParaFicheiro (int[] opcoesExecucao, int geracao, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio, String [] args) throws FileNotFoundException {
         File file = new File(args[args.length-1]);
         PrintWriter out = new PrintWriter(file);
         boolean flag;
@@ -467,7 +461,7 @@ public class Projeto {
         out.println("De acordo com os dados inseridos foram obtidos os seguintes resultados:");
         for (int j = 0; j <= geracao; j++) {
             if (opcoesExecucao[3] == 1) {
-                out.print("\nO número total de indivíduos da geração " + geracoesEstimadas[j] + " é ");
+                out.print("\nO número total de indivíduos da geração " + j + " é ");
                 flag = NotCientifica(populacoesEstimadas[j]);
                 if (flag) {
                     out.printf(ConverterNotacaoCientifica(populacoesEstimadas[j]));
@@ -484,7 +478,7 @@ public class Projeto {
         out.print("\n");
         for (int j = 0; j < geracao; j++) {
             if (opcoesExecucao[4] == 1) {
-                out.print("\nA taxa de variação para a geração " + geracoesEstimadas[j] + " é ");
+                out.print("\nA taxa de variação para a geração " + j + " é ");
                 flag = NotCientifica(taxasDeVariacao[j]);
                 if (flag) {
                     out.printf(ConverterNotacaoCientifica(taxasDeVariacao[j]));
@@ -501,7 +495,7 @@ public class Projeto {
         out.print("\n");
         out.println("\nDistribuição da população:");
         for (int j = 0; j <= geracao; j++) {
-            out.println("\nA população na geração " + geracoesEstimadas[j] + " encontra-se distribuída da seguinte forma:");
+            out.println("\nA população na geração " + j + " encontra-se distribuída da seguinte forma:");
             for (c = 0; c < Nt[0].length; c++) {
                 out.print("Idade " + c + ": ");
                 flag = NotCientifica(Nt[j][c]);
@@ -520,7 +514,7 @@ public class Projeto {
         }
         out.print("\nDistribuição normalizada:\n");
         for (int j = 0; j <= geracao; j++) {
-            out.print("\nA distribuição normalizada da geração " + geracoesEstimadas[j] + " está representada pelas várias faixas etárias:\n");
+            out.print("\nA distribuição normalizada da geração " + j + " está representada pelas várias faixas etárias:\n");
             for (c = 0; c < Nt[0].length; c++) {
                 out.print("Idade " + c + ": ");
                 flag = NotCientifica(distribuicaoNormalizada[j][c]);
@@ -572,12 +566,12 @@ public class Projeto {
         out.close();
     }
 
-    public static void escreverParaConsola (boolean existe, int geracao, int [] geracoesEstimadas, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,int[] opcoesVisualizaco, String nomepop) throws IOException {
+    public static void escreverParaConsola (boolean existe, int geracao, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,int[] opcoesVisualizaco, String nomepop) throws IOException {
         int c;
         boolean flag;
         if (opcoesVisualizaco[0]==1){
             for (int j = 0; j <= geracao; j++) {
-                System.out.print("\nO número total de indivíduos da geração " + geracoesEstimadas[j] + " é ");
+                System.out.print("\nO número total de indivíduos da geração " + j + " é ");
                 flag = NotCientifica(populacoesEstimadas[j]);
                 if (flag) {
                     System.out.print(ConverterNotacaoCientifica(populacoesEstimadas[j]));
@@ -594,7 +588,7 @@ public class Projeto {
         System.out.print("\n");
         if (opcoesVisualizaco[1]==1){
             for (int j = 0; j < geracao; j++) {
-                System.out.print("\nA taxa de variação para a geração " + geracoesEstimadas[j] + " é ");
+                System.out.print("\nA taxa de variação para a geração " + j + " é ");
                 flag = NotCientifica(taxasDeVariacao[j]);
                 if (flag) {
                     System.out.print(ConverterNotacaoCientifica(taxasDeVariacao[j]));
@@ -612,7 +606,7 @@ public class Projeto {
         if (opcoesVisualizaco[2]==1) {
             System.out.println("\nDistribuição da população:");
             for (int j = 0; j <= geracao; j++) {
-                System.out.print("\nA população na geração " + geracoesEstimadas[j] + " encontra-se distribuída da seguinte forma:\n");
+                System.out.print("\nA população na geração " + j + " encontra-se distribuída da seguinte forma:\n");
                 for (c = 0; c < Nt[0].length; c++) {
                     System.out.print("Idade " + c + ": ");
                     flag = NotCientifica(Nt[j][c]);
@@ -633,7 +627,7 @@ public class Projeto {
         if (opcoesVisualizaco[3]==1) {
             System.out.print("\nDistribuição normalizada:\n");
             for (int j = 0; j <= geracao; j++) {
-                System.out.print("\nA distribuição normalizada da geração " + geracoesEstimadas[j] + " está representada pelas várias faixas etárias:\n");
+                System.out.print("\nA distribuição normalizada da geração " + j + " está representada pelas várias faixas etárias:\n");
                 for (c = 0; c < Nt[0].length; c++) {
                     System.out.print("Idade " + c + ": ");
                     flag = NotCientifica(distribuicaoNormalizada[j][c]);
@@ -686,25 +680,25 @@ public class Projeto {
             System.out.println("Que gráfico quer representar?");
             System.out.println("<1>-Evolução da População Total;\n<2>-Evolução da taxa de variação;\n<3>-Distribuição da População;\n<4>-Distribuição normalizada da população.");
             int num = ler.nextInt();
-            Graficos(geracao,geracoesEstimadas,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,num, nomepop);
+            Graficos(geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,num, nomepop);
         }
     }
 
-    public static void PopulacaoTotal(int geracao,int [] geracoesEstimadas,double[] populacoesEstimadas) throws FileNotFoundException {
+    public static void PopulacaoTotal(int geracao,double[] populacoesEstimadas) throws FileNotFoundException {
         File file = new File("valores.txt");
         PrintWriter out = new PrintWriter(file);
         for (int l = 0; l <= geracao; l++) {
-            out.print(geracoesEstimadas[l] + " " + populacoesEstimadas[l]+"\n");
+            out.print(l + " " + populacoesEstimadas[l]+"\n");
         }
 
         out.close();
     }
 
-    public static void PopulacaoDistribuida(int n,double[][] Nt,int geracao,int [] geracoesEstimadas) throws FileNotFoundException {
+    public static void PopulacaoDistribuida(int n,double[][] Nt,int geracao) throws FileNotFoundException {
         File file = new File("valores.txt");
         PrintWriter out = new PrintWriter(file);
         for (int l = 0; l <= geracao; l++) {
-            out.print(geracoesEstimadas[l] + " ");
+            out.print(l + " ");
             for (int c = 0; c < n; c++) {
                 out.print(Nt[l][c]+" ");
             }
@@ -758,27 +752,27 @@ public class Projeto {
         return s;
     }
 
-    public static void Graficos(int geracao,int[] geracoesEstimadas,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,int num, String nomepop) throws IOException {
+    public static void Graficos(int geracao,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,int num, String nomepop) throws IOException {
         String s;
         switch(num){
             case 1:
-                PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas);
+                PopulacaoTotal(geracao,populacoesEstimadas);
                 Graficopopulacao("plot 'valores.txt' title 'População' with lines lc 'blue' lw 3; set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'");
                 PerguntaGrafico("PopulaçãoTotal_","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3", nomepop);
                 break;
             case 2:
-                PopulacaoTotal(geracao, geracoesEstimadas, taxasDeVariacao);
+                PopulacaoTotal(geracao, taxasDeVariacao);
                 Graficopopulacao("plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3; set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'");
                 PerguntaGrafico("TaxadeVariação_","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3", nomepop);
                 break;
             case 3:
-                PopulacaoDistribuida(Nt[0].length,Nt,geracao,geracoesEstimadas);
+                PopulacaoDistribuida(Nt[0].length,Nt,geracao);
                 s=DistribuidaNormalizada(Nt[0].length,"População","População Distribuida");
                 Graficopopulacao(s);
                 PerguntaGrafico("PopulaçãoDistribuida_",s, nomepop);
                 break;
             case 4:
-                PopulacaoDistribuida(Nt[0].length,distribuicaoNormalizada,geracao,geracoesEstimadas);
+                PopulacaoDistribuida(Nt[0].length,distribuicaoNormalizada,geracao);
                 s=DistribuidaNormalizada(Nt[0].length,"Distribuição","Distribuição Normalizada");
                 Graficopopulacao(s);
                 PerguntaGrafico("PopulaçãoNormalizada_",s, nomepop);
@@ -834,20 +828,20 @@ public class Projeto {
         palavra = palavra.replace(".txt", "");
         return palavra;
     }
-    public static void Graficonaointerativo(int[] opcoesExecucao,int geracao,int[] geracoesEstimadas,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,String nomepop) throws IOException, InterruptedException {
+    public static void Graficonaointerativo(int[] opcoesExecucao,int geracao,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,String nomepop) throws IOException, InterruptedException {
         int l=opcoesExecucao[1];
         String s;
-        PopulacaoTotal(geracao, geracoesEstimadas, populacoesEstimadas);
+        PopulacaoTotal(geracao, populacoesEstimadas);
         PerguntaGraficoNaoInterativo("População Total","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3",l,nomepop);
         TimeUnit.MILLISECONDS.sleep(500);
-        PopulacaoTotal(geracao, geracoesEstimadas, taxasDeVariacao);
+        PopulacaoTotal(geracao, taxasDeVariacao);
         PerguntaGraficoNaoInterativo("Taxa de Variação","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3",l,nomepop);
         TimeUnit.MILLISECONDS.sleep(500);
-        PopulacaoDistribuida(Nt[0].length,Nt,geracao,geracoesEstimadas);
+        PopulacaoDistribuida(Nt[0].length,Nt,geracao);
         s=DistribuidaNormalizada(Nt[0].length,"População","População Distribuida");
         PerguntaGraficoNaoInterativo("PopulaçãoDistribuida_",s,l,nomepop);
         TimeUnit.MILLISECONDS.sleep(500);
-        PopulacaoDistribuida(Nt[0].length,distribuicaoNormalizada,geracao,geracoesEstimadas);
+        PopulacaoDistribuida(Nt[0].length,distribuicaoNormalizada,geracao);
         s=DistribuidaNormalizada(Nt[0].length,"Distribuição","Distribuição Normalizada");
         PerguntaGraficoNaoInterativo("PopulaçãoNormalizada_",s,l,nomepop);
         TimeUnit.MILLISECONDS.sleep(500);
