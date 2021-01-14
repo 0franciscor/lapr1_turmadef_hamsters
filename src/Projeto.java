@@ -567,7 +567,7 @@ public class Projeto {
     }
 
     public static void escreverParaConsola (int geracao, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,int[] opcoesVisualizaco, String nomepop) throws IOException {
-        int c;
+        int c, num,q=0;
         boolean flag;
         if (opcoesVisualizaco[0]==1){
             for (int j = 0; j <= geracao; j++) {
@@ -679,7 +679,13 @@ public class Projeto {
         if (opcoesVisualizaco[5]==1){
             System.out.println("Que gráfico quer representar?");
             System.out.println("<1>-Evolução da População Total;\n<2>-Evolução da taxa de variação;\n<3>-Distribuição da População;\n<4>-Distribuição normalizada da população.");
-            int num = ler.nextInt();
+            do{
+                if (q!=0){
+                    System.out.println("O número inserido não corresponde a nenhum parãmetro.\nInsira um número consoante o gráfico que deseja visualizar.");
+                }
+                num = ler.nextInt();
+                q++;
+            }while(num<1 || num>4);
             Graficos(geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,num, nomepop,valorProprio,vetorProprio);
         }
     }
@@ -820,27 +826,31 @@ public class Projeto {
         DecimalFormat decimalFormat = new DecimalFormat("0.#####");
         return decimalFormat.format(Double.valueOf(s));
     }
+
     public static String determinarDataCriacao() throws IOException {
         String nomeFich = "./";
         Path file = Paths.get(nomeFich);
         BasicFileAttributes time = Files.readAttributes(file, BasicFileAttributes.class);
         FileTime filetime = time.lastModifiedTime();
         String data = formatDateTime(filetime);
-
         return data;
     }
+
     public static String formatDateTime (FileTime fileTime) {
         LocalDateTime tempo = fileTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
         return tempo.format(DATE_FORMATTER);
     }
+
     public static void EliminarFicheiroTextoGrafico(File file) {
         file.delete();
     }
+
     public static String RetirarExtensao(String palavra) {
         palavra = palavra.replace(".txt", "");
         return palavra;
     }
+
     public static void Graficonaointerativo(int[] opcoesExecucao,int geracao,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,String nomepop) throws IOException, InterruptedException {
         int l=opcoesExecucao[1];
         String s;
@@ -859,6 +869,7 @@ public class Projeto {
         PerguntaGraficoNaoInterativo("PopulaçãoNormalizada_",s,l,nomepop);
         TimeUnit.MILLISECONDS.sleep(250);
     }
+
     public static void PerguntaGraficoNaoInterativo(String s,String d,int l,String nomepop) throws IOException {
         String tempo = determinarDataCriacao();
         nomepop = RetirarExtensao(nomepop);
