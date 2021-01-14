@@ -817,7 +817,7 @@ public class Projeto {
         String nomeFich = "./";
         Path file = Paths.get(nomeFich);
         BasicFileAttributes time = Files.readAttributes(file, BasicFileAttributes.class);
-        FileTime filetime = time.creationTime();
+        FileTime filetime = time.lastModifiedTime();
         String data = formatDateTime(filetime);
 
         return data;
