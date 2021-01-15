@@ -452,7 +452,7 @@ public class Projeto {
         for (int i=0;i<vetor.length;i++){
             soma+=vetor[i];
         }
-        if (soma!=1 || soma!=100){
+        if (soma!=100){
             for (int i=0;i<vetor.length;i++){
                 vetor[i]=(vetor[i]/soma)*100;
             }
