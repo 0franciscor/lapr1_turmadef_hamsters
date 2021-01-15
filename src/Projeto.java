@@ -330,7 +330,7 @@ public class Projeto {
                     valorProprio = calcularVetorValorProprio(matrizLeslie, vetorProprio);
                     geracao = -1;
                     dadosGeracoes(existe, geracao,numCiclos,Nt,matrizLeslie, populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
-                }else{
+                }else if (leitura!=-1){
                     System.out.println("O número inserido não corresponde a nenhum parâmetro.\n" + "Insira os números consoante o que deseja visualizar.");
                 }
             } while(leitura > 0);
