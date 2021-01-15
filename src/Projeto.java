@@ -838,6 +838,7 @@ public class Projeto {
                     break;
             }
     }
+
     public static void Escrever(double numero, int n) {
         boolean flag;
         flag = NotCientifica(numero);
@@ -865,4 +866,5 @@ public class Projeto {
             }
         }
     }
+
 }
