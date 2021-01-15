@@ -26,6 +26,11 @@ public class Projeto {
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd_MM_yyyy");
     static Scanner ler = new Scanner(System.in);
 
+    public static void erro(){
+        System.out.println("A síntaxe do comando está incorreta ou os ficheiros requisitados não existem.");
+    }
+
+
     public static void main(String[] args) throws IOException, InterruptedException {
         boolean existe = false, naoInterativo = false;
         String nomeFicheiro = null;
@@ -33,63 +38,77 @@ public class Projeto {
         int numCiclos = 0, erro = 0; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
         File novofich = new File("valores.txt");
 
-        /*String [] args2 = {"-t", "3", "-g", "3", "hamsters.txt", "xteta.txt"};
+        /*String [] args2 = {"-t", "3", "-g", "3", "hamsters.txt", oioi.txt"};
         args = args2;*/
 
         //RESPOSAVEL POR VERIFICAR SE O CODIGO ESTA A CORRER EM MODO NAO INTERATIVO
-        erro = modoNInterativo(opcoesExecucao, args, erro);
-        if (erro == 1) {
-            naoInterativo = true;
-            existe = true;
-            numCiclos = opcoesExecucao[0];
-            nomeFicheiro = args[(args.length - 2)];
+        if (args.length>2 && !(args[0].equals("-n"))) {
+            erro = modoNInterativo(opcoesExecucao, args, erro);
         }
-        //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
 
-        else if (erro != 2 && args.length == 2) {
-            existe = modoInterativo(args);
-            if(existe)
-                nomeFicheiro = args[1];
-            else {
-                erro = 2;
-                System.out.println("O ficheiro não foi encontrado.");
+        if(erro != 2) {
+            if (erro == 1) {
+                naoInterativo = true;
+                existe = true;
+                numCiclos = opcoesExecucao[0];
+                nomeFicheiro = args[(args.length - 2)];
             }
+            //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
+
+            else if (erro != 2 && args.length == 2) {
+                existe = modoInterativo(args);
+                if (existe)
+                    nomeFicheiro = args[1];
+                else {
+                    erro = 2;
+                    erro();
+                }
+            }
+            //TERMINA AQUI
+
+            double[] populacaoInicial; //DECLARAÇÃO VETOR INICIAL
+            double[][] matrizLeslie;  //DECLARAÇÃO MATRIZ LESLIE
+
+            if (erro != 2) {
+                if (existe) {
+                    populacaoInicial = vetorAuto(nomeFicheiro);
+                    matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
+                    matrizAuto(matrizLeslie, nomeFicheiro);
+
+                } else {
+                    populacaoInicial = vetorManual();
+                    matrizLeslie = matrizManual(populacaoInicial);
+                }
+
+                int geracao = -1;
+
+                double[] populacoesEstimadas = new double[1001];
+                double[] taxasDeVariacao = new double[1001];
+                double[][] Nt = new double[1001][matrizLeslie.length];
+                double[][] distribuicaoNormalizada = new double[1001][matrizLeslie.length];
+                double[] vetor = new double[matrizLeslie.length];
+                double valorProprio;
+                valorProprio = calcularVetorValorProprio(matrizLeslie, vetor);
+
+                if (naoInterativo) {
+                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
+                } else {
+                    System.out.println("Quais as geracoes que pretende que sejam estudadas?");
+                    String nCiclos = ler.next();
+                    if (!verificaInteiro(nCiclos)) {
+                        do {
+                            erro();
+                            nCiclos = ler.next();
+
+                        } while (!verificaInteiro(nCiclos));
+                    }
+                    numCiclos = Integer.parseInt(nCiclos);
+
+                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
+                }
+            }
+            EliminarFicheiroTextoGrafico(novofich);
         }
-        //TERMINA AQUI
-
-        double[] populacaoInicial; //DECLARAÇÃO VETOR INICIAL
-        double[][] matrizLeslie;  //DECLARAÇÃO MATRIZ LESLIE
-
-        if (erro != 2) {
-            if (existe) {
-                populacaoInicial = vetorAuto(nomeFicheiro);
-                matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
-                matrizAuto(matrizLeslie, nomeFicheiro);
-
-            } else {
-                populacaoInicial = vetorManual();
-                matrizLeslie = matrizManual(populacaoInicial);
-            }
-
-            int geracao = -1;
-
-            double[] populacoesEstimadas = new double[1000];
-            double[] taxasDeVariacao = new double[1000];
-            double[][] Nt = new double[1001][matrizLeslie.length];
-            double[][] distribuicaoNormalizada = new double[1000][matrizLeslie.length];
-            double[] vetor = new double[matrizLeslie.length];
-            double valorProprio;
-            valorProprio = calcularVetorValorProprio(matrizLeslie, vetor);
-
-            if (naoInterativo) {
-                dadosGeracoes(existe, geracao, numCiclos,Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
-            } else {
-                System.out.println("Quais as geracoes que pretende que sejam estudadas?");
-                numCiclos = ler.nextInt();
-                dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
-            }
-        }
-        EliminarFicheiroTextoGrafico(novofich);
     }
 
     public static boolean modoInterativo(String[] args){
@@ -102,8 +121,8 @@ public class Projeto {
     }
 
     public static int modoNInterativo(int[] opcoesExecucao, String[] args, int erro) {
-        if (args.length>2) {
-            String nomeFicheiro = args[(args.length - 2)];
+        if (args.length>2 && !(args[0].equals("-n"))) {
+        String nomeFicheiro = args[(args.length - 2)];
             boolean existe = existeFicheiro(nomeFicheiro);
 
             if (existe) {
@@ -111,13 +130,13 @@ public class Projeto {
                 for (int i = 0; i <= (args.length - 2); i++) {
                     if(args[i].equals("-t")){
                         if(verificaInteiro(args[i+1])) {
-                            if (Integer.parseInt(args[i + 1]) <= 999 && 0 <= Integer.parseInt(args[i + 1])) {
+                            if (0 <= Integer.parseInt(args[i + 1]) && Integer.parseInt(args[i + 1]) <= 999) {
                                 opcoesExecucao[0] = Integer.parseInt(args[i + 1]);
                             }
                         }
                         else {
-                            System.out.println("A síntaxe do comando não é a correta. Verifique a mesma ou a inserção dos ficheiros.");
                             erro = 2;
+                            erro();
                         }
                     }
 
@@ -130,8 +149,8 @@ public class Projeto {
                                 }
                             }
                         } else{
-                            System.out.println("A síntaxe do comando não é a correta. Verifique a mesma ou a inserção dos ficheiros.");
                             erro = 2;
+                            erro();
                         }
                     }
                     if (args[i].equals("-e")) {
@@ -145,9 +164,13 @@ public class Projeto {
                     }
                 }
             } else {
-                System.out.println("A síntaxe do comando não é a correta. Verifique a mesma ou a inserção dos ficheiros.");
                 erro = 2;
+                erro();
             }
+        }
+        else{
+            erro = 2;
+            erro();
         }
         return erro;
     }
@@ -363,10 +386,11 @@ public class Projeto {
                     for (int i=0;i<6;i++){
                         opcoesVisualizacao[i]=1;
                     }
+
                 } else if (leitura!=-1){
                     System.out.println("O número inserido não corresponde a nenhum parâmetro.\n" + "Insira os números consoante o que deseja visualizar.");
                 }
-            } while(leitura > 0);
+            } while(leitura != 7 && leitura > 0 );
 
             escreverParaConsola(geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
 
