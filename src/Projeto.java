@@ -8,14 +8,14 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Scanner;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class Projeto {
@@ -32,6 +32,9 @@ public class Projeto {
         int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = 0; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
         File novofich = new File("valores.txt");
+
+        /*String [] args2 = {"-t", "3", "-g", "3", "hamsters.txt", "xteta.txt"};
+        args = args2;*/
 
         //RESPOSAVEL POR VERIFICAR SE O CODIGO ESTA A CORRER EM MODO NAO INTERATIVO
         erro = modoNInterativo(opcoesExecucao, args, erro);
@@ -105,19 +108,30 @@ public class Projeto {
 
             if (existe) {
                 erro = 1;
-                opcoesExecucao[0] = Integer.parseInt(args[1]);
-                for (int i = 2; i <= (args.length - 2); i++) {
+                for (int i = 0; i <= (args.length - 2); i++) {
                     if(args[i].equals("-t")){
-                        if(Integer.parseInt(args[i+1]) <= 999 && 0 <= Integer.parseInt(args[i+1])){
-                            opcoesExecucao[0] = Integer.parseInt(args[i+1]);
+                        if(verificaInteiro(args[i+1])) {
+                            if (Integer.parseInt(args[i + 1]) <= 999 && 0 <= Integer.parseInt(args[i + 1])) {
+                                opcoesExecucao[0] = Integer.parseInt(args[i + 1]);
+                            }
+                        }
+                        else {
+                            System.out.println("A síntaxe do comando não é a correta. Verifique a mesma ou a inserção dos ficheiros.");
+                            erro = 2;
                         }
                     }
-                    if (args[i].equals("-g")) {
-                        if (0 < Integer.parseInt(args[i + 1]) && Integer.parseInt(args[i+1]) <= 3){
-                            for (int j = 1; j <= 3; j++) {
-                                if (args[i + 1].equals(String.valueOf(j)))
-                                    opcoesExecucao[1] = j;
+
+                    if (args[i].equals("-g") && erro != 2) {
+                        if(verificaInteiro(args[i+1])) {
+                            if (0 < Integer.parseInt(args[i + 1]) && Integer.parseInt(args[i + 1]) <= 3) {
+                                for (int j = 1; j <= 3; j++) {
+                                    if (args[i + 1].equals(String.valueOf(j)))
+                                        opcoesExecucao[1] = j;
+                                }
                             }
+                        } else{
+                            System.out.println("A síntaxe do comando não é a correta. Verifique a mesma ou a inserção dos ficheiros.");
+                            erro = 2;
                         }
                     }
                     if (args[i].equals("-e")) {
@@ -136,6 +150,20 @@ public class Projeto {
             }
         }
         return erro;
+    }
+
+    public static boolean verificaInteiro(String input){
+        for(int j = 0; j<input.length(); j++) {
+            boolean verificaChar = false;
+            for (int i = 0; i < 10; i++) {
+                if (input.charAt(j) == String.valueOf(i).charAt(0)) {
+                    verificaChar = true;
+                }
+            }
+            if(!verificaChar)
+                return false;
+        }
+        return true;
     }
 
     public static boolean existeFicheiro(String nomeFicheiro){
@@ -867,5 +895,4 @@ public class Projeto {
             }
         }
     }
-
 }

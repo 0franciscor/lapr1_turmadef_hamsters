@@ -15,6 +15,8 @@ class ProjetoTest {
         boolean resultado = Projeto.modoInterativo(teste);
         assertTrue(resultado);
     }
+
+
     @Test
     void valorModulo_numeroNegativo() {
         double expectd=Projeto.valorModulo(-1.5);
