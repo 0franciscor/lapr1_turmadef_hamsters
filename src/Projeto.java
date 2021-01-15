@@ -336,7 +336,8 @@ public class Projeto {
             System.out.println("<4> - Distribuição normalizada da população.");
             System.out.println("<5> - Comportamento assimtótico associado ao maior valor próprio.");
             System.out.println("<6> - Gráficos.");
-            System.out.println("<0> - Quando não quiser inserir mais parâmetros.");
+            System.out.println("<7> - Toda a informação.");
+            System.out.println("<0> - Quando não quiser inserir mais parâmetros.\n");
             System.out.println(("<10> - Modificar dados de entrada. Parâmetro isolado"));
             System.out.println("<-1> - Para sair do programa. Parâmetro isolado.");
             do{
@@ -358,7 +359,11 @@ public class Projeto {
                     valorProprio = calcularVetorValorProprio(matrizLeslie, vetorProprio);
                     geracao = -1;
                     dadosGeracoes(existe, geracao,numCiclos,Nt,matrizLeslie, populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
-                }else if (leitura!=-1){
+                }else if (leitura==7){
+                    for (int i=0;i<6;i++){
+                        opcoesVisualizacao[i]=1;
+                    }
+                } else if (leitura!=-1){
                     System.out.println("O número inserido não corresponde a nenhum parâmetro.\n" + "Insira os números consoante o que deseja visualizar.");
                 }
             } while(leitura > 0);
