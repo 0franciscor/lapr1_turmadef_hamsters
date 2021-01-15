@@ -313,7 +313,7 @@ public class Projeto {
             System.out.println("<-1> - Para sair do programa. Parâmetro isolado.");
             do{
                 leitura = ler.nextInt();
-                if (leitura>0 && leitura !=10){
+                if (leitura>0 && leitura <7){
                     opcoesVisualizacao[leitura-1]=1;
                 } else if (leitura==10){
                     double[] populacaoInicial;
@@ -330,6 +330,8 @@ public class Projeto {
                     valorProprio = calcularVetorValorProprio(matrizLeslie, vetorProprio);
                     geracao = -1;
                     dadosGeracoes(existe, geracao,numCiclos,Nt,matrizLeslie, populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
+                }else{
+                    System.out.println("O número inserido não corresponde a nenhum parâmetro.\n" + "Insira os números consoante o que deseja visualizar.");
                 }
             } while(leitura > 0);
 
@@ -635,7 +637,7 @@ public class Projeto {
             System.out.println("<1>-Evolução da População Total;\n<2>-Evolução da taxa de variação;\n<3>-Distribuição da População;\n<4>-Distribuição normalizada da população.");
             do{
                 if (q!=0){
-                    System.out.println("O número inserido não corresponde a nenhum parãmetro.\nInsira um número consoante o gráfico que deseja visualizar.");
+                    System.out.println("O número inserido não corresponde a nenhum parâmetro.\nInsira um número consoante o gráfico que deseja visualizar.");
                 }
                 num = ler.nextInt();
                 q++;
@@ -723,7 +725,7 @@ public class Projeto {
                 escreverParaConsola(geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio, opcoesVisualizacao, nomepop);
             } else if (resposta == 2) {
             } else {
-                System.out.println("O número inserido não corresponde a nenhum parãmetro.\n" + "Insira um número consoante o que deseja realizar.");
+                System.out.println("O número inserido não corresponde a nenhum parâmetro.\n" + "Insira um número consoante o que deseja realizar.");
             }
         }while(resposta<1 ||resposta>2);
     }
