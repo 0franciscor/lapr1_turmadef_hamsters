@@ -640,11 +640,11 @@ public class Projeto {
                 num = ler.nextInt();
                 q++;
             }while(num<1 || num>4);
-            Graficos(geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,num, nomepop,valorProprio,vetorProprio);
+            Graficosinterativo(geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,num, nomepop,valorProprio,vetorProprio);
         }
     }
 
-    public static void PopulacaoTotal(int geracao,double[] populacoesEstimadas) throws FileNotFoundException {
+    public static void EscreverGrafico1e2(int geracao,double[] populacoesEstimadas) throws FileNotFoundException {
         File file = new File("valores.txt");
         PrintWriter out = new PrintWriter(file);
         for (int l = 0; l <= geracao; l++) {
@@ -654,7 +654,7 @@ public class Projeto {
         out.close();
     }
 
-    public static void PopulacaoDistribuida(int n,double[][] Nt,int geracao) throws FileNotFoundException {
+    public static void EscreverGrafico3e4(int n,double[][] Nt,int geracao) throws FileNotFoundException {
         File file = new File("valores.txt");
         PrintWriter out = new PrintWriter(file);
         for (int l = 0; l <= geracao; l++) {
@@ -667,7 +667,7 @@ public class Projeto {
         out.close();
     }
 
-    public static void Graficopopulacao(String d) throws IOException {
+    public static void ExecutarGrafico(String d) throws IOException {
         Runtime  rt = Runtime.getRuntime();
         rt.exec("gnuplot -p -e \""+d+"\"");
     }
@@ -682,39 +682,53 @@ public class Projeto {
         String tempo = determinarDataCriacao();
         nomepop = RetirarExtensao(nomepop);
         System.out.println("Deseja Salvar o Gráfico?(1- Sim; 2- Não)");
-        resposta = ler.nextInt();
-        if (resposta == 1) {
-            System.out.println("Qual o formato do ficheiro?");
-            System.out.println("1- Formato PNG;\n2- Formato TXT;\n3- Formato EPS.");
+        do {
             resposta = ler.nextInt();
-            switch (resposta) {
-                case 1:
-                    SalvarGrafico(s+ nomepop + "_" + tempo + ".png", d, "png");
-                    break;
-                case 2:
-                    SalvarGrafico(s+ nomepop + "_" + tempo +".txt", d, "dumb");
-                    break;
-                case 3:
-                    SalvarGrafico(s+ nomepop + "_" + tempo +".eps", d, "eps");
-                    break;
+            if (resposta == 1) {
+                System.out.println("Qual o formato do ficheiro?");
+                System.out.println("1- Formato PNG;\n2- Formato TXT;\n3- Formato EPS.");
+                do {
+                    resposta = ler.nextInt();
+                switch (resposta) {
+                    case 1:
+                        SalvarGrafico(s + nomepop + "_" + tempo + ".png", d, "png");
+                        break;
+                    case 2:
+                        SalvarGrafico(s + nomepop + "_" + tempo + ".txt", d, "dumb");
+                        break;
+                    case 3:
+                        SalvarGrafico(s + nomepop + "_" + tempo + ".eps", d, "eps");
+                        break;
+                    default:
+                        System.out.println("O número inserido não corresponde a nenhum parãmetro.\n" + "Insira um número consoante o que deseja realizar.");
+                }
+                }while(resposta<1 || resposta >3);
+                VisualizarMaisAlgumGrafico(geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio, nomepop);
+            } else if (resposta == 2) {
+                VisualizarMaisAlgumGrafico(geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio, nomepop);
+            }else{
+                System.out.println("O número inserido não corresponde a nenhum parãmetro.\n" + "Insira um número consoante o que deseja realizar.");
             }
-            VisualizarMaisAlgumGrafico(geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,nomepop);
-        } else if (resposta== 2){
-            VisualizarMaisAlgumGrafico(geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,nomepop);
-        }
+        }while(resposta<1 || resposta >2);
     }
 
     public static void VisualizarMaisAlgumGrafico (int geracao, double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]Nt,double[][] distribuicaoNormalizada,double valorProprio,double[]vetorProprio,String nomepop) throws IOException {
+        int resposta;
         System.out.println("Deseja visualizar mais algum gráfico? (1- Sim; 2- Não)");
-        int resposta= ler.nextInt();
-        if (resposta==1){
-            int [] opcoesVisualizacao = new int[6];
-            opcoesVisualizacao[5]=1;
-            escreverParaConsola(geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
-        }
+        do {
+            resposta= ler.nextInt();
+            if (resposta == 1) {
+                int[] opcoesVisualizacao = new int[6];
+                opcoesVisualizacao[5] = 1;
+                escreverParaConsola(geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio, opcoesVisualizacao, nomepop);
+            } else if (resposta == 2) {
+            } else {
+                System.out.println("O número inserido não corresponde a nenhum parãmetro.\n" + "Insira um número consoante o que deseja realizar.");
+            }
+        }while(resposta<1 ||resposta>2);
     }
 
-    public static String DistribuidaNormalizada(int n,String ylabel,String titulo) throws IOException {
+    public static String CodigoGrafico3e4(int n,String ylabel,String titulo) throws IOException {
         int o=3;
         String s = "set xlabel 'Gerações'; set ylabel '"+ylabel+"' ; set title '"+titulo+"' font 'arial,20'; set palette rgb 7,5,15; plot 'valores.txt' u 1:2 w lp t 'Idade 0' lw 3";
         for(int e=1;e<n+1;e++) {
@@ -725,29 +739,29 @@ public class Projeto {
         return s;
     }
 
-    public static void Graficos(int geracao,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,int num, String nomepop,double valorProprio,double[] vetorProprio) throws IOException {
+    public static void Graficosinterativo(int geracao,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,int num, String nomepop,double valorProprio,double[] vetorProprio) throws IOException {
         String s;
         switch(num){
             case 1:
-                PopulacaoTotal(geracao,populacoesEstimadas);
-                Graficopopulacao("plot 'valores.txt' title 'População' with lines lc 'blue' lw 3; set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'");
+                EscreverGrafico1e2(geracao,populacoesEstimadas);
+                ExecutarGrafico("plot 'valores.txt' title 'População' with lines lc 'blue' lw 3; set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'");
                 PerguntaGrafico("PopulaçãoTotal_","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3", nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio);
                 break;
             case 2:
-                PopulacaoTotal((geracao-1), taxasDeVariacao);
-                Graficopopulacao("plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3; set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'");
+                EscreverGrafico1e2((geracao-1), taxasDeVariacao);
+                ExecutarGrafico("plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3; set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'");
                 PerguntaGrafico("TaxadeVariação_","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3", nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio);
                 break;
             case 3:
-                PopulacaoDistribuida(Nt[0].length,Nt,geracao);
-                s=DistribuidaNormalizada(Nt[0].length,"População","População Distribuida");
-                Graficopopulacao(s);
+                EscreverGrafico3e4(Nt[0].length,Nt,geracao);
+                s=CodigoGrafico3e4(Nt[0].length,"População","População Distribuida");
+                ExecutarGrafico(s);
                 PerguntaGrafico("PopulaçãoDistribuida_",s, nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio);
                 break;
             case 4:
-                PopulacaoDistribuida(Nt[0].length,distribuicaoNormalizada,geracao);
-                s=DistribuidaNormalizada(Nt[0].length,"Distribuição","Distribuição Normalizada");
-                Graficopopulacao(s);
+                EscreverGrafico3e4(Nt[0].length,distribuicaoNormalizada,geracao);
+                s=CodigoGrafico3e4(Nt[0].length,"Distribuição","Distribuição Normalizada");
+                ExecutarGrafico(s);
                 PerguntaGrafico("PopulaçãoNormalizada_",s, nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio);
                 break;
         }
@@ -808,18 +822,18 @@ public class Projeto {
     public static void Graficonaointerativo(int[] opcoesExecucao,int geracao,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,String nomepop) throws IOException, InterruptedException {
         int l=opcoesExecucao[1];
         String s;
-        PopulacaoTotal(geracao, populacoesEstimadas);
+        EscreverGrafico1e2(geracao, populacoesEstimadas);
         PerguntaGraficoNaoInterativo("PopulaçãoTotal_","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3",l,nomepop);
         TimeUnit.MILLISECONDS.sleep(250);
-        PopulacaoTotal((geracao-1), taxasDeVariacao);
+        EscreverGrafico1e2((geracao-1), taxasDeVariacao);
         PerguntaGraficoNaoInterativo("TaxadeVariação_","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3",l,nomepop);
         TimeUnit.MILLISECONDS.sleep(250);
-        PopulacaoDistribuida(Nt[0].length,Nt,geracao);
-        s=DistribuidaNormalizada(Nt[0].length,"População","População Distribuida");
+        EscreverGrafico3e4(Nt[0].length,Nt,geracao);
+        s=CodigoGrafico3e4(Nt[0].length,"População","População Distribuida");
         PerguntaGraficoNaoInterativo("PopulaçãoDistribuida_",s,l,nomepop);
         TimeUnit.MILLISECONDS.sleep(250);
-        PopulacaoDistribuida(Nt[0].length,distribuicaoNormalizada,geracao);
-        s=DistribuidaNormalizada(Nt[0].length,"Distribuição","Distribuição Normalizada");
+        EscreverGrafico3e4(Nt[0].length,distribuicaoNormalizada,geracao);
+        s=CodigoGrafico3e4(Nt[0].length,"Distribuição","Distribuição Normalizada");
         PerguntaGraficoNaoInterativo("PopulaçãoNormalizada_",s,l,nomepop);
         TimeUnit.MILLISECONDS.sleep(250);
     }
