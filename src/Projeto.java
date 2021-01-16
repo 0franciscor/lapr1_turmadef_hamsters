@@ -409,7 +409,7 @@ public class Projeto {
         copiarMatriz(matrizLeslie,Lesliemultiplicada);
 
         for(int temp = geracao; temp>=2;temp--){
-            multiplicarmatrizes(matrizLeslie,Lesliemultiplicada);
+            multiplicarMatrizesQuadradas(matrizLeslie,Lesliemultiplicada);
         }
 
         if (geracao==0){
@@ -446,7 +446,7 @@ public class Projeto {
         taxasDeVariacao[geracao]=variacao;
     }
 
-    public static void multiplicarmatrizes (double [][] matriz1, double[][] matriz2){
+    public static void multiplicarMatrizesQuadradas (double [][] matriz1, double[][] matriz2){
         double [] aux = new double [matriz2.length];
 
         for (int l=0;l<matriz1.length;l++){

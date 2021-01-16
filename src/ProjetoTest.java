@@ -57,4 +57,13 @@ class ProjetoTest {
         }
         assertTrue(informacao);
     }
+
+    @Test
+    void taxaVariacao() {
+        double[]populacao=new double[2];
+        double[] resultado=new double[1];
+        populacao[0]=1000;populacao[1]=1500;
+        Projeto.TaxaVariacao(populacao,0,resultado);
+        assertEquals(1.5,resultado[0]);
+    }
 }
