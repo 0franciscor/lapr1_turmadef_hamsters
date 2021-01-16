@@ -17,10 +17,8 @@ class ProjetoTesteParteMatemática {
 
     @Test
     void totalPopulacao() {
-        double[][] populacao=new double[1][4];
-        double[] resultado=new double[1];
-        populacao[0][0]=1000;populacao[0][1]=300;populacao[0][2]=330;populacao[0][3]=100;
-        Projeto.totalPopulacao(0,resultado,populacao);
+        double[] resultado = new double[1];
+        Projeto.totalPopulacao(0,resultado,new double[][]{{1000,300,330,100}});
         assertEquals(1730,resultado[0]);
     }
 
