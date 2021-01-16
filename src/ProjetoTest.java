@@ -96,12 +96,12 @@ class ProjetoTest {
         double[][]Nt=new double[1][4];
         double[][]resultado=new double[Nt.length][Nt[0].length];
         Nt[0][0]=500;Nt[0][1]=200;Nt[0][2]=200;Nt[0][3]=100;
-        double[][]experado=new double[Nt.length][Nt[0].length];
-        experado[0][1]=50;experado[0][1]=20;experado[0][2]=20;experado[0][3]=10;
+        double[][]esperado=new double[Nt.length][Nt[0].length];
+        esperado[0][1]=50;esperado[0][1]=20;esperado[0][2]=20;esperado[0][3]=10;
         Projeto.distribuicaoNormalizada(0,Nt,populacoes,resultado);
         for (int i=0;i< Nt.length;i++){
             for (int c=0;c<Nt[0].length;c++){
-                if (experado[i][c]==resultado[i][c]){
+                if (esperado[i][c]==resultado[i][c]){
                     informacao=true;
                 }else{
                     informacao=false;
@@ -109,5 +109,13 @@ class ProjetoTest {
             }
         }
         assertTrue(informacao);
+    }
+
+    @Test
+    void calcularMaiorValorProprio() {
+        double[][] matriz=new double[3][3];
+        matriz[0][0]=4;matriz[1][1]=3;matriz[2][2]=1;
+        int coluna=Projeto.calcularMaiorValorProprio(matriz);
+        assertEquals(0,coluna);
     }
 }
