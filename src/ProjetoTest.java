@@ -87,4 +87,27 @@ class ProjetoTest {
         }
         assertTrue(informacao);
     }
+
+    @Test
+    void distribuicaoNormalizada() {
+        boolean informacao=false;
+        double[]populacoes=new double[1];
+        populacoes[0]=1000;
+        double[][]Nt=new double[1][4];
+        double[][]resultado=new double[Nt.length][Nt[0].length];
+        Nt[0][0]=500;Nt[0][1]=200;Nt[0][2]=200;Nt[0][3]=100;
+        double[][]experado=new double[Nt.length][Nt[0].length];
+        experado[0][1]=50;experado[0][1]=20;experado[0][2]=20;experado[0][3]=10;
+        Projeto.distribuicaoNormalizada(0,Nt,populacoes,resultado);
+        for (int i=0;i< Nt.length;i++){
+            for (int c=0;c<Nt[0].length;c++){
+                if (experado[i][c]==resultado[i][c]){
+                    informacao=true;
+                }else{
+                    informacao=false;
+                }
+            }
+        }
+        assertTrue(informacao);
+    }
 }
