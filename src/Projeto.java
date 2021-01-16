@@ -435,7 +435,7 @@ public class Projeto {
 
     public static void copiarMatriz (double[][] matrizLeslie, double[][] copia){
         for(int i =0 ; i<matrizLeslie.length; i++){
-            for(int j =0 ; j< matrizLeslie.length; j++){
+            for(int j =0 ; j< matrizLeslie[0].length; j++){
                 copia[i][j]=matrizLeslie[i][j];
             }
         }
