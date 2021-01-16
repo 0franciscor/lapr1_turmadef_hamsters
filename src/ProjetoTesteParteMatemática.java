@@ -114,4 +114,15 @@ class ProjetoTesteParteMatemática {
         Projeto.normalizarVetorProprio(vetor);
         assertArrayEquals(esperado,vetor);
     }
+    @Test
+    void distribuicaoPopulacao() {
+    }
+    @Test
+    void calcularVetorValorProprio() {
+        double[][] matriz=new double[3][3];
+        double[] vetor=new double[matriz.length];
+        matriz[0][0]=1;matriz[1][1]=1;matriz[1][0]=0.5;matriz[2][0]=-1;matriz[2][1]=2;matriz[2][2]=2;
+        double maior=Projeto.calcularVetorValorProprio(matriz,vetor);
+        assertEquals(2,maior);
+    }
 }
