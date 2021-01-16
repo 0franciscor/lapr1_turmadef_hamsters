@@ -26,11 +26,6 @@ public class Projeto {
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd_MM_yyyy");
     static Scanner ler = new Scanner(System.in);
 
-    public static void erro(){
-        System.out.println("A síntaxe do comando está incorreta ou os ficheiros requisitados não existem.");
-    }
-
-
     public static void main(String[] args) throws IOException, InterruptedException {
         boolean existe = false, naoInterativo = false;
         String nomeFicheiro = null;
@@ -109,6 +104,10 @@ public class Projeto {
             }
             EliminarFicheiroTextoGrafico(novofich);
         }
+    }
+
+    public static void erro(){
+        System.out.println("A síntaxe do comando está incorreta ou os ficheiros requisitados não existem.");
     }
 
     public static boolean modoInterativo(String[] args){
