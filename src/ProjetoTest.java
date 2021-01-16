@@ -118,4 +118,14 @@ class ProjetoTest {
         int coluna=Projeto.calcularMaiorValorProprio(matriz);
         assertEquals(0,coluna);
     }
+
+    @Test
+    void normalizarVetorProprio() {
+        double [] vetor=new double[3];
+        vetor[0]=0.9;vetor[1]=0.6;vetor[2]=0.5;
+        double [] esperado=new double[vetor.length];
+        esperado[0]=45;esperado[1]=30;esperado[2]=25;
+        Projeto.normalizarVetorProprio(vetor);
+        assertArrayEquals(esperado,vetor);
+    }
 }
