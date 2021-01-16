@@ -18,7 +18,6 @@ class ProjetoTest {
         assertTrue(resultado);
     }
 
-
     @Test
     void valorModulo_numeroNegativo() {
         double resultado=Projeto.valorModulo(-1.5);
@@ -41,7 +40,7 @@ class ProjetoTest {
 
     @Test
     void copiarMatriz() {
-        double [][] matriz=new double[2][3];
+        double [][] matriz=new double[2][2];
         double [][] resultado=new double[matriz.length][matriz[0].length];
         Boolean informacao=false;
         matriz[0][0]=1;matriz[0][1]=2;matriz[1][0]=3;matriz[1][1]=2;
@@ -63,7 +62,29 @@ class ProjetoTest {
         double[]populacao=new double[2];
         double[] resultado=new double[1];
         populacao[0]=1000;populacao[1]=1500;
-        Projeto.TaxaVariacao(populacao,0,resultado);
+        Projeto.taxaVariacao(populacao,0,resultado);
         assertEquals(1.5,resultado[0]);
+    }
+
+    @Test
+    void multiplicarMatrizesQuadradas() {
+        boolean informacao=false;
+        double [][] matriz=new double[2][2];
+        double [][] matriz2=new double[2][2];
+        double[][] resultado=new double[matriz.length][matriz.length];
+        matriz[0][0]=1;matriz[0][1]=2;matriz[1][0]=3;matriz[1][1]=2;
+        matriz2[0][0]=1;matriz2[0][1]=2;matriz2[1][0]=3;matriz2[1][1]=2;
+        resultado[0][0]=7;resultado[0][1]=6;resultado[1][0]=9;resultado[1][1]=10;
+        Projeto.multiplicarMatrizesQuadradas(matriz,matriz2);
+        for (int i=0;i< matriz.length;i++){
+            for (int c=0;c<matriz[0].length;c++){
+                if (matriz2[i][c]==resultado[i][c]){
+                    informacao=true;
+                }else{
+                    informacao=false;
+                }
+            }
+        }
+        assertTrue(informacao);
     }
 }

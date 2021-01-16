@@ -337,7 +337,7 @@ public class Projeto {
             procedimentoCalculoGeracoes(Nt, geracao, matrizLeslie, populacaoInicial, populacoesEstimadas, distribuicaoNormalizada);
         }
         for (int n=0;n<=geracao;n++) {
-            TaxaVariacao(populacoesEstimadas, n, taxasDeVariacao);
+            taxaVariacao(populacoesEstimadas, n, taxasDeVariacao);
         }
         if (naoInterativo) {
             escreverParaFicheiro(opcoesExecucao, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
@@ -441,7 +441,7 @@ public class Projeto {
         }
     }
 
-    public static void TaxaVariacao(double [] populacoesEstimadas, int geracao, double[] taxasDeVariacao) {
+    public static void taxaVariacao(double [] populacoesEstimadas, int geracao, double[] taxasDeVariacao) {
         double variacao=populacoesEstimadas[geracao+1]/populacoesEstimadas[geracao];
         taxasDeVariacao[geracao]=variacao;
     }
