@@ -12,9 +12,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +21,6 @@ public class Projeto {
     public static final double minimo = 0.005;
     public static final int constante = 1;
     public static final int constante2 = 2;
-    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd_MM_yyyy");
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -857,14 +854,12 @@ public class Projeto {
         Path file = Paths.get(nomeFich);
         BasicFileAttributes time = Files.readAttributes(file, BasicFileAttributes.class);
         FileTime filetime = time.lastModifiedTime();
-        String data = formatDateTime(filetime);
-        return data;
+        return formatarData(filetime);
     }
 
-    public static String formatDateTime (FileTime fileTime) {
-        LocalDateTime tempo = fileTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-
-        return tempo.format(DATE_FORMATTER);
+    public static String formatarData (FileTime fileTime) {
+        SimpleDateFormat tempo = new SimpleDateFormat("dd_MM_yyyy");
+        return tempo.format(fileTime.toMillis());
     }
 
     public static void EliminarFicheiroTextoGrafico(File file) {
@@ -872,7 +867,12 @@ public class Projeto {
     }
 
     public static String RetirarExtensao(String palavra) {
-        palavra = palavra.replace(".txt", "");
+        StringBuilder builder = new StringBuilder(palavra);
+        builder.deleteCharAt(palavra.length()-1);
+        builder.deleteCharAt(palavra.length()-2);
+        builder.deleteCharAt(palavra.length()-3);
+        builder.deleteCharAt(palavra.length()-4);
+        palavra = builder.toString();
         return palavra;
     }
 
