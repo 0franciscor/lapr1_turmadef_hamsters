@@ -26,19 +26,9 @@ class ProjetoTesteParteMatemática {
     void copiarMatriz() {
         double [][] matriz=new double[2][2];
         double [][] resultado=new double[matriz.length][matriz[0].length];
-        Boolean informacao=false;
         matriz[0][0]=1;matriz[0][1]=2;matriz[1][0]=3;matriz[1][1]=2;
         Projeto.copiarMatriz(matriz,resultado);
-        for (int i=0;i< matriz.length;i++){
-            for (int c=0;c<matriz[0].length;c++){
-                if (matriz[i][c]==resultado[i][c]){
-                    informacao=true;
-                }else{
-                    informacao=false;
-                }
-            }
-        }
-        assertTrue(informacao);
+        assertArrayEquals(matriz,resultado);
     }
 
     @Test
@@ -50,47 +40,17 @@ class ProjetoTesteParteMatemática {
 
     @Test
     void multiplicarMatrizesQuadradas() {
-        boolean informacao=false;
-        double [][] matriz=new double[2][2];
         double [][] matriz2=new double[2][2];
-        double[][] resultado=new double[matriz.length][matriz.length];
-        matriz[0][0]=1;matriz[0][1]=2;matriz[1][0]=3;matriz[1][1]=2;
         matriz2[0][0]=1;matriz2[0][1]=2;matriz2[1][0]=3;matriz2[1][1]=2;
-        resultado[0][0]=7;resultado[0][1]=6;resultado[1][0]=9;resultado[1][1]=10;
-        Projeto.multiplicarMatrizesQuadradas(matriz,matriz2);
-        for (int i=0;i< matriz.length;i++){
-            for (int c=0;c<matriz[0].length;c++){
-                if (matriz2[i][c]==resultado[i][c]){
-                    informacao=true;
-                }else{
-                    informacao=false;
-                }
-            }
-        }
-        assertTrue(informacao);
+        Projeto.multiplicarMatrizesQuadradas(new double[][]{{1,2},{3,2}},matriz2);
+        assertArrayEquals(new double[][]{{7,6},{9,10}},matriz2);
     }
 
     @Test
     void distribuicaoNormalizada() {
-        boolean informacao=false;
-        double[]populacoes=new double[1];
-        populacoes[0]=1000;
-        double[][]Nt=new double[1][4];
-        double[][]resultado=new double[Nt.length][Nt[0].length];
-        Nt[0][0]=500;Nt[0][1]=200;Nt[0][2]=200;Nt[0][3]=100;
-        double[][]esperado=new double[Nt.length][Nt[0].length];
-        esperado[0][1]=50;esperado[0][1]=20;esperado[0][2]=20;esperado[0][3]=10;
-        Projeto.distribuicaoNormalizada(0,Nt,populacoes,resultado);
-        for (int i=0;i< Nt.length;i++){
-            for (int c=0;c<Nt[0].length;c++){
-                if (esperado[i][c]==resultado[i][c]){
-                    informacao=true;
-                }else{
-                    informacao=false;
-                }
-            }
-        }
-        assertTrue(informacao);
+        double[][]resultado=new double[1][4];
+        Projeto.distribuicaoNormalizada(0,new double[][]{{500,200,200,100}},new double[]{1000},resultado);
+        assertArrayEquals(new double[][]{{50,20,20,10}},resultado);
     }
 
     @Test
@@ -109,24 +69,9 @@ class ProjetoTesteParteMatemática {
 
     @Test
     void distribuicaoPopulacao() {
-        boolean informacao=false;
         double [][] distribuicao=new double[3][3];
         Projeto.distribuicaoPopulacao(new double[][] {{0,1,1},{0.5,0,0},{0,0.5,0}},new double[]{100,100,100},distribuicao,2);
-        double [][]esperado=new double[3][3];
-        esperado[0][0]=esperado[0][1]=esperado[0][2]=100;
-        esperado[1][0]=200;esperado[1][1]=esperado[1][2]=50;
-        esperado[2][0]=esperado[2][1]=100;esperado[2][2]=25;
-        /*for (int i=0;i< distribuicao.length;i++){
-            for (int c=0;c<distribuicao[0].length;c++){
-                if (esperado[i][c]==distribuicao[i][c]){
-                    informacao=true;
-                }else{
-                    informacao=false;
-                }
-            }
-        }
-        assertTrue(informacao);*/
-        assertArrayEquals(esperado,distribuicao);
+        assertArrayEquals(new double[][]{{0,0,0},{0,0,0},{100,100,25}},distribuicao);
 
     }
 
