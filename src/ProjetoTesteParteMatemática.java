@@ -43,10 +43,8 @@ class ProjetoTesteParteMatemática {
 
     @Test
     void taxaVariacao() {
-        double[]populacao=new double[2];
         double[] resultado=new double[1];
-        populacao[0]=1000;populacao[1]=1500;
-        Projeto.taxaVariacao(populacao,0,resultado);
+        Projeto.taxaVariacao(new double[]{1000,1500},0,resultado);
         assertEquals(1.5,resultado[0]);
     }
 
@@ -97,9 +95,7 @@ class ProjetoTesteParteMatemática {
 
     @Test
     void calcularMaiorValorProprio() {
-        double[][] matriz=new double[3][3];
-        matriz[0][0]=4;matriz[1][1]=3;matriz[2][2]=1;
-        int coluna=Projeto.calcularMaiorValorProprio(matriz);
+        int coluna=Projeto.calcularMaiorValorProprio(new double[][]{{4,0,0},{0,3,0},{0,0,1}});
         assertEquals(0,coluna);
     }
 
@@ -107,27 +103,20 @@ class ProjetoTesteParteMatemática {
     void normalizarVetorProprio() {
         double [] vetor=new double[3];
         vetor[0]=0.9;vetor[1]=0.6;vetor[2]=0.5;
-        double [] esperado=new double[vetor.length];
-        esperado[0]=45;esperado[1]=30;esperado[2]=25;
         Projeto.normalizarVetorProprio(vetor);
-        assertArrayEquals(esperado,vetor);
+        assertArrayEquals(new double[]{45,30,25},vetor);
     }
 
     @Test
     void distribuicaoPopulacao() {
-        int geracao=2;
         boolean informacao=false;
-        double[][]matriz=new double[3][3];
-        matriz[0][1]=1;matriz[0][2]=1;matriz[1][0]=0.5;matriz[2][1]=0.5;
-        double[] populacaoInicial=new double[matriz.length];
-        populacaoInicial[0]=populacaoInicial[1]=populacaoInicial[2]=100;
-        double [][] distribuicao=new double[geracao+1][matriz.length];
-        Projeto.distribuicaoPopulacao(matriz,populacaoInicial,distribuicao,geracao);
-        double [][]esperado=new double[geracao+1][matriz.length];
+        double [][] distribuicao=new double[3][3];
+        Projeto.distribuicaoPopulacao(new double[][] {{0,1,1},{0.5,0,0},{0,0.5,0}},new double[]{100,100,100},distribuicao,2);
+        double [][]esperado=new double[3][3];
         esperado[0][0]=esperado[0][1]=esperado[0][2]=100;
         esperado[1][0]=200;esperado[1][1]=esperado[1][2]=50;
         esperado[2][0]=esperado[2][1]=100;esperado[2][2]=25;
-        for (int i=0;i< distribuicao.length;i++){
+        /*for (int i=0;i< distribuicao.length;i++){
             for (int c=0;c<distribuicao[0].length;c++){
                 if (esperado[i][c]==distribuicao[i][c]){
                     informacao=true;
@@ -136,16 +125,14 @@ class ProjetoTesteParteMatemática {
                 }
             }
         }
-        assertTrue(informacao);
+        assertTrue(informacao);*/
+        assertArrayEquals(esperado,distribuicao);
 
     }
 
     @Test
     void calcularVetorValorProprio() {
-        double[][] matriz=new double[3][3];
-        double[] vetor=new double[matriz.length];
-        matriz[0][0]=1;matriz[1][1]=1;matriz[1][0]=0.5;matriz[2][0]=-1;matriz[2][1]=2;matriz[2][2]=2;
-        double maior=Projeto.calcularVetorValorProprio(matriz,vetor);
+        double maior=Projeto.calcularVetorValorProprio(new double[][]{{1,0,0},{0.5,1,0},{-1,2,2}},new double[3]);
         assertEquals(2,maior);
     }
 }
