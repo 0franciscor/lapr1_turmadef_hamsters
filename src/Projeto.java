@@ -382,7 +382,8 @@ public class Projeto {
                         valorProprio = calcularVetorValorProprio(matrizLeslie, vetorProprio);
 
                     } else if (informacao==2){
-                        numCiclos=alterarGeracao();
+                        System.out.println("Quantas gerações deseja analisar?");
+                        numCiclos= ler.nextInt();
                     }
                     geracao = -1;
                     dadosGeracoes(existe, geracao,numCiclos,Nt,matrizLeslie, populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
@@ -399,11 +400,6 @@ public class Projeto {
             escreverParaConsola(geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
 
         } while(leitura != -1);
-    }
-    public static int alterarGeracao(){
-        System.out.println("Quantas gerações deseja analisar?");
-        int numCiclos= ler.nextInt();
-        return numCiclos;
     }
 
     public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, double[][] matrizLeslie, double[] populacaoInicial, double[] populacoesEstimadas, double[][] distribuicaoNormalizada){
