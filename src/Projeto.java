@@ -624,7 +624,7 @@ public class Projeto {
         out.close();
     }
 
-    public static void escreverParaConsola (boolean existe, int geracao, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,int[] opcoesVisualizaco, String nomepop) throws IOException {
+    public static void escreverParaConsola (boolean existe, int geracao, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,int[] opcoesVisualizaco, String nomepop) throws IOException, InterruptedException {
         int c, num;
         if (opcoesVisualizaco[0]==1){
             for (int j = 0; j <= geracao; j++) {
@@ -706,19 +706,15 @@ public class Projeto {
         out.close();
     }
 
-    public static void ExecutarGrafico(String d) throws IOException {
-        Runtime  rt = Runtime.getRuntime();
-        rt.exec("gnuplot -p -e \""+d+"\"");
-    }
-
     public static void SalvarGrafico(String s,String d,String terminal) throws IOException {
         Runtime  rt = Runtime.getRuntime();
         rt.exec("gnuplot -e \"set terminal "+terminal+"; set output '"+s+"'; "+d+"\"");
     }
 
-    public static void PerguntaGrafico(String s,String d, String nomepop,int geracao,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][] Nt,double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,boolean existe) throws IOException {
+    public static void PerguntaGrafico(String s,String d, String nomepop,int geracao,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][] Nt,double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,boolean existe) throws IOException, InterruptedException {
         int resposta;
         String tempo = determinarDataCriacao();
+        File graficopng = new File("Grafico.png");
         if(existe)
             nomepop = RetirarExtensao(nomepop);
 
@@ -751,9 +747,10 @@ public class Projeto {
                 System.out.println("O número inserido não corresponde a nenhum parãmetro.\n" + "Insira um número consoante o que deseja realizar.");
             }
         }while(resposta<1 || resposta >2);
+        EliminarFicheiroTextoGrafico(graficopng);
     }
 
-    public static void VisualizarMaisAlgumGrafico (boolean existe, int geracao, double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]Nt,double[][] distribuicaoNormalizada,double valorProprio,double[]vetorProprio,String nomepop) throws IOException {
+    public static void VisualizarMaisAlgumGrafico (boolean existe, int geracao, double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]Nt,double[][] distribuicaoNormalizada,double valorProprio,double[]vetorProprio,String nomepop) throws IOException, InterruptedException {
         int resposta;
         System.out.println("Deseja visualizar mais algum gráfico? (1- Sim; 2- Não)");
         do {
@@ -780,29 +777,36 @@ public class Projeto {
         return s;
     }
 
-    public static void Graficosinterativo(boolean existe, int geracao,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,int num, String nomepop,double valorProprio,double[] vetorProprio) throws IOException {
+    public static void Criarpng(String d) throws IOException, InterruptedException {
+        SalvarGrafico("Grafico.png", d, "png");
+        TimeUnit.MILLISECONDS.sleep(250);
+        Runtime  rt = Runtime.getRuntime();
+        rt.exec("explorer \"Grafico.png\"");
+    }
+
+    public static void Graficosinterativo(boolean existe, int geracao,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,int num, String nomepop,double valorProprio,double[] vetorProprio) throws IOException, InterruptedException {
         String s;
         switch(num){
             case 1:
                 EscreverGrafico1e2(geracao,populacoesEstimadas);
-                ExecutarGrafico("plot 'valores.txt' title 'População' with lines lc 'blue' lw 3; set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'");
+                Criarpng("set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3");
                 PerguntaGrafico("PopulaçãoTotal_","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3", nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,existe);
                 break;
             case 2:
                 EscreverGrafico1e2((geracao-1), taxasDeVariacao);
-                ExecutarGrafico("plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3; set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'");
+                Criarpng("set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3");
                 PerguntaGrafico("TaxadeVariação_","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3", nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,existe);
                 break;
             case 3:
                 EscreverGrafico3e4(Nt[0].length,Nt,geracao);
                 s=CodigoGrafico3e4(Nt[0].length,"População","População Distribuida");
-                ExecutarGrafico(s);
+                Criarpng(s);
                 PerguntaGrafico("PopulaçãoDistribuida_",s, nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio, existe);
                 break;
             case 4:
                 EscreverGrafico3e4(Nt[0].length,distribuicaoNormalizada,geracao);
                 s=CodigoGrafico3e4(Nt[0].length,"Distribuição","Distribuição Normalizada");
-                ExecutarGrafico(s);
+                Criarpng(s);
                 PerguntaGrafico("PopulaçãoNormalizada_",s, nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio, existe);
                 break;
         }
