@@ -687,13 +687,13 @@ public class Projeto {
         if (opcoesVisualizaco[5]==1){
             System.out.println("Que gráfico quer representar?");
             System.out.println("<1>-Evolução da População Total;\n<2>-Evolução da taxa de variação;\n<3>-Distribuição da População;\n<4>-Distribuição normalizada da população.");
-            do{
-                if (q!=0){
+            num = ler.nextInt();
+            if(num<1 || num>4) {
+                do {
                     System.out.println("O número inserido não corresponde a nenhum parâmetro.\nInsira um número consoante o gráfico que deseja visualizar.");
-                }
-                num = ler.nextInt();
-                q++;
-            }while(num<1 || num>4);
+                    num = ler.nextInt();
+                } while (num < 1 || num > 4);
+            }
             Graficosinterativo(geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,num, nomepop,valorProprio,vetorProprio);
         }
     }
