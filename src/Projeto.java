@@ -335,7 +335,9 @@ public class Projeto {
     public static void dadosGeracoes(boolean existe, int geracao,int numCiclos,double [][] Nt,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args, String nomepop) throws IOException, InterruptedException {
         while ((geracao + 1) <= numCiclos) {
             geracao++;
-            procedimentoCalculoGeracoes(Nt, geracao, matrizLeslie, populacaoInicial, populacoesEstimadas, distribuicaoNormalizada);
+            distribuicaoPopulacao(matrizLeslie, populacaoInicial, Nt, geracao);
+            totalPopulacao(geracao,populacoesEstimadas,Nt);
+            distribuicaoNormalizada(geracao, Nt, populacoesEstimadas, distribuicaoNormalizada);
         }
         for (int n=0;n<=geracao;n++) {
             taxaVariacao(populacoesEstimadas, n, taxasDeVariacao);
@@ -404,13 +406,6 @@ public class Projeto {
             escreverParaConsola(existe, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
 
         } while(leitura != -1);
-    }
-
-    public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, double[][] matrizLeslie, double[] populacaoInicial, double[] populacoesEstimadas, double[][] distribuicaoNormalizada){
-        distribuicaoPopulacao(matrizLeslie, populacaoInicial, Nt, geracao);
-        totalPopulacao(geracao,populacoesEstimadas,Nt);
-        distribuicaoNormalizada(geracao, Nt, populacoesEstimadas, distribuicaoNormalizada);
-
     }
 
     public static void distribuicaoPopulacao (double [][] matrizLeslie, double[] populacaoInicial, double[][] Nt,int geracao) { //CALCULO DIMENSAO POPULACAO
