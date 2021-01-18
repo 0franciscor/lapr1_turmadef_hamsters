@@ -340,11 +340,11 @@ public class Projeto {
             escreverParaFicheiro(opcoesExecucao, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
             Graficonaointerativo(opcoesExecucao,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,nomepop);
         } else {
-            interfaceUtilizador(existe, numCiclos, matrizLeslie,geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, nomepop, args);
+            interfaceUtilizador(existe, numCiclos, matrizLeslie,geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, nomepop, args,populacaoInicial);
         }
     }
 
-    public static void interfaceUtilizador(boolean existe, int numCiclos, double[][] matrizLeslie, int geracao, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] Nt, double[][] distribuicaoNormalizada, double valorProprio, double[] vetorProprio, String nomepop, String[] args) throws IOException, InterruptedException {
+    public static void interfaceUtilizador(boolean existe, int numCiclos, double[][] matrizLeslie, int geracao, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] Nt, double[][] distribuicaoNormalizada, double valorProprio, double[] vetorProprio, String nomepop, String[] args,double[] populacaoInicial) throws IOException, InterruptedException {
         int leitura;
         boolean naoInterativo=false;
         do {
@@ -365,28 +365,25 @@ public class Projeto {
                 if (leitura>0 && leitura <7){
                     opcoesVisualizacao[leitura-1]=1;
                 } else if (leitura==10){
-                    double[] populacaoInicial;
-                    if (existe) {
-                        System.out.print("Qual o nome do novo ficheiro? ");
-                        String nomeFicheiro = ler.next();
-                        populacaoInicial = vetorAuto(nomeFicheiro);
-                        matrizAuto(matrizLeslie, nomeFicheiro);
-                        System.out.println("Deseja modificar o numero de gerações a estudar?(1- Sim; 2- Não)");
-                        int resposta= ler.nextInt();
-                        do {
-                            if (resposta == 1) {
-                                System.out.println("Quantas gerações deseja analisar?");
-                                numCiclos= ler.nextInt();
-                            } else if (resposta != 2) {
-                                System.out.println("O número inserido não corresponde a nenhum parâmetro.\n" + "Insira um número consoante o que deseja realizar.");
-                            }
-                        }while(resposta<1 ||resposta>2);
-                    } else {
-                        populacaoInicial = vetorManual();
-                        matrizLeslie = matrizManual(populacaoInicial);
-                    }
+                    System.out.println("O que deseja alterar?");
+                    System.out.println("<1> - A população em estudo.");
+                    System.out.println("<2> - O número de gerações em análise.");
+                    int informacao= ler.nextInt();
+                    if (informacao==1){
+                        if (existe) {
+                            System.out.print("Qual o nome do novo ficheiro? ");
+                            String nomeFicheiro = ler.next();
+                            populacaoInicial = vetorAuto(nomeFicheiro);
+                            matrizAuto(matrizLeslie, nomeFicheiro);
+                        } else {
+                            populacaoInicial = vetorManual();
+                            matrizLeslie = matrizManual(populacaoInicial);
+                        }
+                        valorProprio = calcularVetorValorProprio(matrizLeslie, vetorProprio);
 
-                    valorProprio = calcularVetorValorProprio(matrizLeslie, vetorProprio);
+                    } else if (informacao==2){
+                        numCiclos=alterarGeracao();
+                    }
                     geracao = -1;
                     dadosGeracoes(existe, geracao,numCiclos,Nt,matrizLeslie, populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
                 }else if (leitura==7){
@@ -397,11 +394,16 @@ public class Projeto {
                 } else if (leitura!=-1){
                     System.out.println("O número inserido não corresponde a nenhum parâmetro.\n" + "Insira os números consoante o que deseja visualizar.");
                 }
-            } while(leitura != 7 && leitura > 0 );
+            } while(leitura != 7 && leitura > 0 && leitura!=10);
 
             escreverParaConsola(geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
 
         } while(leitura != -1);
+    }
+    public static int alterarGeracao(){
+        System.out.println("Quantas gerações deseja analisar?");
+        int numCiclos= ler.nextInt();
+        return numCiclos;
     }
 
     public static void procedimentoCalculoGeracoes(double[][] Nt, int geracao, double[][] matrizLeslie, double[] populacaoInicial, double[] populacoesEstimadas, double[][] distribuicaoNormalizada){
@@ -525,7 +527,7 @@ public class Projeto {
     }
 
     public static void escreverParaFicheiro (int[] opcoesExecucao, int geracao, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio, String [] args) throws IOException {
-        String nomesaida = determinarDataCriacao() + "_" + args[args.length-1];
+        String nomesaida = args[args.length-1];
         File file = new File(nomesaida);
         PrintWriter out = new PrintWriter(file);
         boolean flag;
