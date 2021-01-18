@@ -30,9 +30,6 @@ public class Projeto {
         int numCiclos = 0, erro = 0; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
         File novofich = new File("valores.txt");
 
-        String [] args2 = {"-n", "hamsters.txt"};
-        args = args2;
-
         //RESPOSAVEL POR VERIFICAR SE O CODIGO ESTA A CORRER EM MODO NAO INTERATIVO
         if (args.length>2 && !(args[0].equals("-n"))) {
             erro = modoNInterativo(opcoesExecucao, args, erro);
@@ -374,6 +371,16 @@ public class Projeto {
                         String nomeFicheiro = ler.next();
                         populacaoInicial = vetorAuto(nomeFicheiro);
                         matrizAuto(matrizLeslie, nomeFicheiro);
+                        System.out.println("Deseja modificar o numero de gerações a estudar?(1- Sim; 2- Não)");
+                        int resposta= ler.nextInt();
+                        do {
+                            if (resposta == 1) {
+                                System.out.println("Quantas gerações deseja analisar?");
+                                numCiclos= ler.nextInt();
+                            } else if (resposta != 2) {
+                                System.out.println("O número inserido não corresponde a nenhum parâmetro.\n" + "Insira um número consoante o que deseja realizar.");
+                            }
+                        }while(resposta<1 ||resposta>2);
                     } else {
                         populacaoInicial = vetorManual();
                         matrizLeslie = matrizManual(populacaoInicial);
@@ -599,18 +606,7 @@ public class Projeto {
         if (opcoesExecucao[2] == 1) {
             out.println("\nComportamento Assintótico da população associado ao maior valor próprio.");
             out.printf("\nO valor próprio de módulo máximo é aproximadamente: %.4f\n", valorProprio);
-            out.println("Este valor indica-nos a taxa de crescimento da população.");
-            String comportamento = "igual", analise = "o que significa que a população vai-se manter constante ao longo dos anos.";
-            if (valorProprio > constante) {
-                comportamento = "maior";
-                analise = " isto significa que a população irá aumentar ao longo dos anos.";
-            }
-            if (valorProprio < constante) {
-                comportamento = "menor";
-                analise = " isto significa que a população irá diminuir ao longo dos anos.";
-            }
-            out.println("Como o valor próprio é " + comportamento + " que 1," + analise);
-            out.println("\nO vetor próprio associado ao maior valor próprio indica-nos as proporções populacionais constantes.");
+            out.println("\nO vetor próprio associado ao maior valor próprio é:");
             for (c = 0; c < Nt[0].length; c++) {
                 out.print("Idade " + c + ": ");
                 flag = NotCientifica(vetorProprio[c]);
@@ -670,18 +666,7 @@ public class Projeto {
         if (opcoesVisualizaco[4]==1){
             System.out.println("\nComportamento Assintótico da população associado ao maior valor próprio.");
             System.out.printf("\nO valor próprio de módulo máximo é aproximadamente: %.4f\n", valorProprio);
-            System.out.println("Este valor indica-nos a taxa de crescimento da população.");
-            String comportamento="igual", analise="o que significa que a população vai-se manter constante ao longo dos anos.";
-            if (valorProprio>constante){
-                comportamento="maior";
-                analise="isto significa que a população irá aumentar ao longo dos anos.";
-            }
-            if (valorProprio<constante){
-                comportamento="menor";
-                analise="isto significa que a população irá diminuir ao longo dos anos.";
-            }
-            System.out.println("Como o valor próprio é " + comportamento + " que 1, " + analise);
-            System.out.println("\nO vetor próprio associado ao maior valor próprio indica-nos as percentagens populacionais constantes.");
+            System.out.println("\nO vetor próprio associado ao maior valor próprio é:");
             for (c = 0; c < Nt[0].length; c++) {
                 System.out.print("Idade " + c + ": ");
                 Escrever(vetorProprio[c], constante2);
