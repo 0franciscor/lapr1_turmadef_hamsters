@@ -38,6 +38,11 @@ public class Projeto {
             erro = modoNInterativo(opcoesExecucao, args, erro);
         }
 
+        if(args.length > 2 && args[0].equals("-n")){
+            erro = 2;
+            erro();
+        }
+
         if(erro != 2) {
             if (erro == 1) {
                 naoInterativo = true;
