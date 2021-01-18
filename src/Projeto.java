@@ -873,10 +873,9 @@ public class Projeto {
 
     public static String RetirarExtensao(String palavra) {
         StringBuilder builder = new StringBuilder(palavra);
-        builder.deleteCharAt(palavra.length()-1);
-        builder.deleteCharAt(palavra.length()-2);
-        builder.deleteCharAt(palavra.length()-3);
-        builder.deleteCharAt(palavra.length()-4);
+        for (int i = 1; i <= 4; i++) {
+            builder.deleteCharAt(palavra.length()-i);
+        }
         palavra = builder.toString();
         return palavra;
     }
