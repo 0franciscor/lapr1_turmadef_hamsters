@@ -82,11 +82,9 @@ public class Projeto {
                 double[][] Nt = new double[1001][matrizLeslie.length];
                 double[][] distribuicaoNormalizada = new double[1001][matrizLeslie.length];
                 double[] vetor = new double[matrizLeslie.length];
-                double valorProprio;
-                valorProprio = calcularVetorValorProprio(matrizLeslie, vetor);
 
                 if (naoInterativo) {
-                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
+                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
                 } else {
                     System.out.println("Quais as geracoes que pretende que sejam estudadas?");
                     String nCiclos = ler.next();
@@ -99,7 +97,7 @@ public class Projeto {
                     }
                     numCiclos = Integer.parseInt(nCiclos);
 
-                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, valorProprio, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
+                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
                 }
             }
             EliminarFicheiroTextoGrafico(novofich);
@@ -334,7 +332,7 @@ public class Projeto {
         }
     }
 
-    public static void dadosGeracoes(boolean existe, int geracao,int numCiclos,double [][] Nt,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double valorProprio,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args, String nomepop) throws IOException, InterruptedException {
+    public static void dadosGeracoes(boolean existe, int geracao,int numCiclos,double [][] Nt,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args, String nomepop) throws IOException, InterruptedException {
         while ((geracao + 1) <= numCiclos) {
             geracao++;
             procedimentoCalculoGeracoes(Nt, geracao, matrizLeslie, populacaoInicial, populacoesEstimadas, distribuicaoNormalizada);
@@ -342,6 +340,7 @@ public class Projeto {
         for (int n=0;n<=geracao;n++) {
             taxaVariacao(populacoesEstimadas, n, taxasDeVariacao);
         }
+        double valorProprio = calcularVetorValorProprio(matrizLeslie, vetor);
         if (naoInterativo) {
             escreverParaFicheiro(opcoesExecucao, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
             Graficonaointerativo(opcoesExecucao,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,nomepop);
@@ -386,14 +385,12 @@ public class Projeto {
                             matrizLeslie = matrizManual(populacaoInicial);
                             nomepop = nomeManual();
                         }
-                        valorProprio = calcularVetorValorProprio(matrizLeslie, vetorProprio);
-
                     } else if (informacao==2){
                         System.out.println("Quantas gerações deseja analisar?");
                         numCiclos= ler.nextInt();
                     }
                     geracao = -1;
-                    dadosGeracoes(existe, geracao,numCiclos,Nt,matrizLeslie, populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,valorProprio,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
+                    dadosGeracoes(existe, geracao,numCiclos,Nt,matrizLeslie, populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
                 }else if (leitura==7){
                     for (int i=0;i<6;i++){
                         opcoesVisualizacao[i]=1;
