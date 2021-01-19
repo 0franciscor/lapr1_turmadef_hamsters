@@ -84,7 +84,7 @@ public class Projeto {
                 double[] vetor = new double[matrizLeslie.length];
 
                 if (naoInterativo) {
-                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
+                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro,0);
                 } else {
                     System.out.println("Quais as geracoes que pretende que sejam estudadas?");
                     String nCiclos = ler.next();
@@ -97,7 +97,7 @@ public class Projeto {
                     }
                     numCiclos = Integer.parseInt(nCiclos);
 
-                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
+                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro,0);
                 }
             }
             EliminarFicheiroTextoGrafico(novofich);
@@ -332,7 +332,7 @@ public class Projeto {
         }
     }
 
-    public static void dadosGeracoes(boolean existe, int geracao,int numCiclos,double [][] Nt,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args, String nomepop) throws IOException, InterruptedException {
+    public static void dadosGeracoes(boolean existe, int geracao,int numCiclos,double [][] Nt,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args, String nomepop,int aux) throws IOException, InterruptedException {
         while ((geracao + 1) <= numCiclos) {
             geracao++;
             distribuicaoPopulacao(matrizLeslie, populacaoInicial, Nt, geracao);
@@ -346,7 +346,7 @@ public class Projeto {
         if (naoInterativo) {
             escreverParaFicheiro(opcoesExecucao, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
             Graficonaointerativo(opcoesExecucao,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,nomepop);
-        } else {
+        } else if(aux==0) {
             interfaceUtilizador(existe, numCiclos, matrizLeslie,geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, nomepop, args,populacaoInicial);
         }
     }
@@ -392,7 +392,7 @@ public class Projeto {
                         numCiclos= ler.nextInt();
                     }
                     geracao = -1;
-                    dadosGeracoes(existe, geracao,numCiclos,Nt,matrizLeslie, populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
+                    dadosGeracoes(existe, geracao,numCiclos,Nt,matrizLeslie, populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop,1);
                 }else if (leitura==7){
                     for (int i=0;i<6;i++){
                         opcoesVisualizacao[i]=1;
