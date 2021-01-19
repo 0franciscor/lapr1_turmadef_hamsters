@@ -84,7 +84,7 @@ public class Projeto {
                 double[] vetor = new double[matrizLeslie.length];
 
                 if (naoInterativo) {
-                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro,0);
+                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
                 } else {
                     System.out.println("Quais as geracoes que pretende que sejam estudadas?");
                     String nCiclos = ler.next();
@@ -97,7 +97,7 @@ public class Projeto {
                     }
                     numCiclos = Integer.parseInt(nCiclos);
 
-                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro,0);
+                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
                 }
             }
             EliminarFicheiroTextoGrafico(novofich);
@@ -332,7 +332,7 @@ public class Projeto {
         }
     }
 
-    public static void dadosGeracoes(boolean existe, int geracao,int numCiclos,double [][] Nt,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args, String nomepop,int aux) throws IOException, InterruptedException {
+    public static void dadosGeracoes(boolean existe, int geracao,int numCiclos,double [][] Nt,double[][]matrizLeslie,double[] populacaoInicial,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][]distribuicaoNormalizada,double[]vetor,boolean naoInterativo, int[]opcoesExecucao,String[]args, String nomepop) throws IOException, InterruptedException {
         while ((geracao + 1) <= numCiclos) {
             geracao++;
             distribuicaoPopulacao(matrizLeslie, populacaoInicial, Nt, geracao);
@@ -346,32 +346,25 @@ public class Projeto {
         if (naoInterativo) {
             escreverParaFicheiro(opcoesExecucao, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
             Graficonaointerativo(opcoesExecucao,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,nomepop);
-        } else if(aux==0) {
+        } else {
             interfaceUtilizador(existe, numCiclos, matrizLeslie,geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, nomepop, args,populacaoInicial);
         }
     }
 
     public static void interfaceUtilizador(boolean existe, int numCiclos, double[][] matrizLeslie, int geracao, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] Nt, double[][] distribuicaoNormalizada, double valorProprio, double[] vetorProprio, String nomepop, String[] args,double[] populacaoInicial) throws IOException, InterruptedException {
-        int leitura;
+        int aux=0,leitura;
         boolean naoInterativo=false;
         do {
             int [] opcoesVisualizacao = new int[6];
-            System.out.println("\nQuais os dados que gostaria de visualizar? (Insira os números associados a cada parâmetro e prima Enter. Em parâmetros isolados, apenas insira o número que pretende.)");
-            System.out.println("<1> - População total a cada geração.");
-            System.out.println("<2> - Taxa de variação.");
-            System.out.println("<3> - Distribuição da população.");
-            System.out.println("<4> - Distribuição normalizada da população.");
-            System.out.println("<5> - Comportamento assimtótico associado ao maior valor próprio.");
-            System.out.println("<6> - Gráficos.");
-            System.out.println("<7> - Toda a informação.");
-            System.out.println("<0> - Quando não quiser inserir mais parâmetros.\n");
-            System.out.println(("<10> - Modificar dados de entrada. Parâmetro isolado"));
-            System.out.println("<-1> - Para sair do programa. Parâmetro isolado.");
+            if(aux == 0){
+                infomacao();
+            }
             do{
                 leitura = ler.nextInt();
                 if (leitura>0 && leitura <7){
                     opcoesVisualizacao[leitura-1]=1;
                 } else if (leitura==10){
+                    aux=1;
                     System.out.println("O que deseja alterar?");
                     System.out.println("<1> - A população em estudo.");
                     System.out.println("<2> - O número de gerações em análise.");
@@ -392,7 +385,7 @@ public class Projeto {
                         numCiclos= ler.nextInt();
                     }
                     geracao = -1;
-                    dadosGeracoes(existe, geracao,numCiclos,Nt,matrizLeslie, populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop,1);
+                    dadosGeracoes(existe, geracao,numCiclos,Nt,matrizLeslie, populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
                 }else if (leitura==7){
                     for (int i=0;i<6;i++){
                         opcoesVisualizacao[i]=1;
@@ -405,7 +398,20 @@ public class Projeto {
 
             escreverParaConsola(existe, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
 
-        } while(leitura != -1);
+        } while(leitura != -1 && aux==0);
+    }
+    public static void infomacao(){
+        System.out.println("\nQuais os dados que gostaria de visualizar? (Insira os números associados a cada parâmetro e prima Enter. Em parâmetros isolados, apenas insira o número que pretende.)");
+        System.out.println("<1> - População total a cada geração.");
+        System.out.println("<2> - Taxa de variação.");
+        System.out.println("<3> - Distribuição da população.");
+        System.out.println("<4> - Distribuição normalizada da população.");
+        System.out.println("<5> - Comportamento assimtótico associado ao maior valor próprio.");
+        System.out.println("<6> - Gráficos.");
+        System.out.println("<7> - Toda a informação.");
+        System.out.println("<0> - Quando não quiser inserir mais parâmetros.\n");
+        System.out.println(("<10> - Modificar dados de entrada. Parâmetro isolado"));
+        System.out.println("<-1> - Para sair do programa. Parâmetro isolado.");
     }
 
     public static void distribuicaoPopulacao (double [][] matrizLeslie, double[] populacaoInicial, double[][] Nt,int geracao) { //CALCULO DIMENSAO POPULACAO
@@ -779,7 +785,7 @@ public class Projeto {
 
     public static void Criarpng(String d) throws IOException, InterruptedException {
         SalvarGrafico("Grafico.png", d, "png");
-        TimeUnit.MILLISECONDS.sleep(250);
+        TimeUnit.MILLISECONDS.sleep(500);
         Runtime  rt = Runtime.getRuntime();
         rt.exec("explorer \"Grafico.png\"");
     }
