@@ -492,7 +492,6 @@ public class Projeto {
 
         int coluna = calcularMaiorValorProprio(valor);
         double maior = valor[coluna][coluna];
-        maior=valorModulo(maior);
 
         for (int i = 0; i < matrizLeslie.length; i++) {
             vetor[i] = vetoraux[i][coluna];
