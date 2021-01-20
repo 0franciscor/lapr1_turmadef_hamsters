@@ -87,7 +87,7 @@ public class Projeto {
                 if (naoInterativo) {
                     dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
                 } else {
-                    System.out.println("Quantas geracoes pretende que sejam estudadas?");
+                    System.out.print("Quantas geracoes pretende que sejam estudadas?");
                     String nCiclos = ler.next();
                     if (!verificaInteiro(nCiclos)) {
                         do {
@@ -272,7 +272,7 @@ public class Projeto {
     public static double[] insercaoDados1(double[] array){
         int i = 0;
         double valorPop;
-        System.out.println("A aplicação está a ser executada em modo interativo com inserção manual de ficheiros. Assim, para interromper a inserção de dados, deve digitar <-1> aquando da inserção.");
+        System.out.println("\nA aplicação está a ser executada em modo interativo com inserção manual de informações. \nPara interromper a inserção de dados da população inicial deve digitar <-1>.\nO elemento diferenciador da parte inteira da decimal tem de ser a vírgula <,>.");
         System.out.println();
         do{
             System.out.print("Insira o valor nº" + (i + 1) + " da População: ");
@@ -371,7 +371,7 @@ public class Projeto {
                     opcoesVisualizacao[leitura-1]=1;
                 } else if (leitura==10){
                     aux=1;
-                    System.out.println("O que deseja alterar?");
+                    System.out.println("O que deseja alterar?(População em estudo ou Gerações)");
                     System.out.println("<1> - A população em estudo.");
                     System.out.println("<2> - O número de gerações em análise.");
                     int informacao= ler.nextInt();
