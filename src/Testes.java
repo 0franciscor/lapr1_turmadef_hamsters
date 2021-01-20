@@ -4,31 +4,53 @@ import java.io.IOException;
 public class Testes {
     public static void main(String[] args) throws IOException {
         double[][] populacaoInicial= new double [][]{{1000, 300, 330, 100}};
+        double[][] populacaoInicial2= new double [][]{{100, 100, 100}};
+        double[] popInicial= new double []{100, 100, 100};
+        double [][] popgeracao=new double[][]{{0,0,0},{200,50,50},{0,0,0}};
+        double [][] popgeracao2=new double[][]{{0,0,0},{0,0,0},{100,100,25}};
         double[][] matriz=new double[][]{{1,2},{3,2}};
         double[][] matriz2=new double[][]{{1,2},{3,2}};
+        double[][] matrizaux=new double[][]{{2,2},{3,2}};
+        double[][] matrizaux2=new double[][]{{2,2},{1,2}};
+        double[] taxas1 = new double[]{1000,1500};
+        double[] taxas2 = new double[]{2000,1250};
         double[][] multiplicacao=new double[][]{{7,6},{9,10}};
+        double[][] multiplicacao2=new double[][]{{10,8},{8,6}};
+        double[][]distribuicoNormalizadaesperada=new double[][]{{50,20,20,10}};
+        double[][] valorProprio=new double[][]{{4,0,0},{0,3,0},{0,0,1}};
+        double[][] valorProprio2=new double[][]{{1,7,0},{0,3,0},{0,0,1}};
+        double [][] matrizLeslie=new double[][] {{0,1,1},{0.5,0,0},{0,0.5,0}};
 
         System.out.println("Testes introdução de dados\n\n" + modoInterativo());
-        System.out.println("modoNInterativo:"+modoNInterativo());
-        System.out.println("verificaInteiro:"+verificaInteiro());
-        System.out.println("existeFicheiro:"+existeFicheiro());
-        System.out.println("vetorAuto:"+vetorAuto());
-        System.out.println("matrizAuto:"+matrizAuto());
-        System.out.println("leituraDados:"+leituraDados());
-        System.out.println("leituraDadosAuxiliar:"+leituraDadosAuxiliar());
-        System.out.println("tratamentoDados:"+tratamentoDados() + "\n\nTestes de matemática\n");
+        System.out.println("modoNInterativo: "+modoNInterativo());
+        System.out.println("verificaInteiro: "+verificaInteiro());
+        System.out.println("existeFicheiro: "+existeFicheiro());
+        System.out.println("vetorAuto: "+vetorAuto());
+        System.out.println("matrizAuto: "+matrizAuto());
+        System.out.println("leituraDados: "+leituraDados());
+        System.out.println("leituraDadosAuxiliar: "+leituraDadosAuxiliar());
+        System.out.println("tratamentoDados: "+tratamentoDados() + "\n\nTestes de matemática\n");
 
-        System.out.println("valorModulo_numeroNegativo:"+valorModulo_numeroNegativo(1.5));
-        System.out.println("valorModulo_numeroPositivo:"+valorModulo_numeroPositivo(1.5));
-        System.out.println("totalPopulacao:"+totalPopulacao(1730,populacaoInicial));
-        System.out.println("copiarMatriz:"+copiarMatriz(matriz));
-        System.out.println("taxaVariacao:"+taxaVariacao(1.5));
-        System.out.println("multiplicarMatrizesQuadradas:"+multiplicarMatrizesQuadradas(matriz,matriz2,multiplicacao));
-        System.out.println("distribuicaoNormalizada:"+distribuicaoNormalizada());
-        System.out.println("calcularMaiorValorProprio:"+calcularMaiorValorProprio(0));
-        System.out.println("normalizarVetorProprio:"+normalizarVetorProprio());
-        System.out.println("distribuicaoPopulacao:"+distribuicaoPopulacao());
-        System.out.println("calcularVetorValorProprio:"+calcularVetorValorProprio(2));
+        System.out.println("valorModulo_numeroNegativo: "+valorModulo_numeroNegativo(1.5,-1.5));
+        System.out.println("valorModulo_numeroNegativo: "+valorModulo_numeroNegativo(7,-7));
+        System.out.println("valorModulo_numeroPositivo: "+valorModulo_numeroPositivo(1.5,1.5));
+        System.out.println("valorModulo_numeroPositivo: "+valorModulo_numeroPositivo(7,7));
+        System.out.println("totalPopulacao: "+totalPopulacao(1730,populacaoInicial));
+        System.out.println("totalPopulacao: "+totalPopulacao(300,populacaoInicial2));
+        System.out.println("copiarMatriz: "+copiarMatriz(matriz));
+        System.out.println("copiarMatriz: "+copiarMatriz(matrizaux));
+        System.out.println("taxaVariacao: "+taxaVariacao(1.5,taxas1));
+        System.out.println("taxaVariacao: "+taxaVariacao(0.625,taxas2));
+        System.out.println("multiplicarMatrizesQuadradas: "+multiplicarMatrizesQuadradas(matriz,matriz2,multiplicacao));
+        System.out.println("multiplicarMatrizesQuadradas: "+multiplicarMatrizesQuadradas(matrizaux,matrizaux2,multiplicacao2));
+        System.out.println("distribuicaoNormalizada: "+distribuicaoNormalizada(distribuicoNormalizadaesperada));
+        System.out.println("calcularMaiorValorProprio: "+calcularMaiorValorProprio(0,valorProprio));
+        System.out.println("calcularMaiorValorProprio: "+calcularMaiorValorProprio(1,valorProprio2));
+        System.out.println("normalizarVetorProprio: "+normalizarVetorProprio());
+        System.out.println("distribuicaoPopulacao: "+distribuicaoPopulacao(1,matrizLeslie,popInicial,popgeracao));
+        System.out.println("distribuicaoPopulacao: "+distribuicaoPopulacao(2,matrizLeslie,popInicial,popgeracao2));
+        System.out.println("calcularVetorValorProprio: "+calcularVetorValorProprio(4,valorProprio));
+        System.out.println("calcularVetorValorProprio: "+calcularVetorValorProprio(3,valorProprio2));
     }
 
     //COMPARAÇÃO
@@ -129,8 +151,8 @@ public class Testes {
 
     //TESTES DE MATEMATICA
 
-    public static boolean valorModulo_numeroNegativo(double esperado) {
-        double resultado=Projeto.valorModulo(-1.5);
+    public static boolean valorModulo_numeroNegativo(double esperado,double num) {
+        double resultado=Projeto.valorModulo(num);
         if (esperado==resultado){
             return true;
         }else{
@@ -138,8 +160,8 @@ public class Testes {
         }
     }
 
-    public static boolean valorModulo_numeroPositivo(double esperado) {
-        double resultado=Projeto.valorModulo(1.5);
+    public static boolean valorModulo_numeroPositivo(double esperado, double num) {
+        double resultado=Projeto.valorModulo(num);
         if (esperado==resultado){
             return true;
         }else{
@@ -163,9 +185,9 @@ public class Testes {
         return comparaMatrizes(matriz,resultado);
     }
 
-    public static boolean taxaVariacao(double esperado) {
+    public static boolean taxaVariacao(double esperado,double[]taxas) {
         double[] resultado=new double[1];
-        Projeto.taxaVariacao(new double[]{1000,1500},0,resultado);
+        Projeto.taxaVariacao(taxas,0,resultado);
         if (esperado==resultado[0]){
             return true;
         }else{
@@ -178,15 +200,14 @@ public class Testes {
         return comparaMatrizes(matriz2,resultado);
     }
 
-    public static boolean distribuicaoNormalizada() {
+    public static boolean distribuicaoNormalizada(double[][]esperado) {
         double[][]resultado=new double[1][4];
-        double[][]esperado=new double[][]{{50,20,20,10}};
         Projeto.distribuicaoNormalizada(0,new double[][]{{500,200,200,100}},new double[]{1000},resultado);
         return comparaMatrizes(esperado,resultado);
     }
 
-    public static boolean calcularMaiorValorProprio(int esperado) {
-        int coluna=Projeto.calcularMaiorValorProprio(new double[][]{{4,0,0},{0,3,0},{0,0,1}});
+    public static boolean calcularMaiorValorProprio(int esperado,double[][]matriz) {
+        int coluna=Projeto.calcularMaiorValorProprio(matriz);
         if (esperado==coluna){
             return true;
         }else{
@@ -211,16 +232,14 @@ public class Testes {
         }
     }
 
-    public static boolean distribuicaoPopulacao() {
+    public static boolean distribuicaoPopulacao(int geracao, double[][]matriz,double[]popInicial,double[][]esperado) {
         double [][] distribuicao=new double[3][3];
-        double [][] matriz=new double[][] {{0,1,1},{0.5,0,0},{0,0.5,0}};
-        double [][] esperado=new double[][]{{0,0,0},{0,0,0},{100,100,25}};
-        Projeto.distribuicaoPopulacao(matriz,new double[]{100,100,100},distribuicao,2);
+        Projeto.distribuicaoPopulacao(matriz,popInicial,distribuicao,geracao);
         return comparaMatrizes(esperado,distribuicao);
     }
 
-    public static boolean calcularVetorValorProprio(double esperado) {
-        double maior=Projeto.calcularVetorValorProprio(new double[][]{{1,0,0},{0.5,1,0},{-1,2,2}},new double[3]);
+    public static boolean calcularVetorValorProprio(double esperado,double[][] matriz) {
+        double maior=Projeto.calcularVetorValorProprio(matriz,new double[3]);
         if (esperado==maior){
             return true;
         }else{
