@@ -9,26 +9,26 @@ public class Testes {
         double[][] multiplicacao=new double[][]{{7,6},{9,10}};
 
         System.out.println("Testes introdução de dados\n\n" + modoInterativo());
-        System.out.println(modoNInterativo());
-        System.out.println(verificaInteiro());
-        System.out.println(existeFicheiro());
-        System.out.println(vetorAuto());
-        System.out.println(matrizAuto());
-        System.out.println(leituraDados());
-        System.out.println(leituraDadosAuxiliar());
-        System.out.println(tratamentoDados() + "\n\nTestes de matemática\n");
+        System.out.println("modoNInterativo:"+modoNInterativo());
+        System.out.println("verificaInteiro:"+verificaInteiro());
+        System.out.println("existeFicheiro:"+existeFicheiro());
+        System.out.println("vetorAuto:"+vetorAuto());
+        System.out.println("matrizAuto:"+matrizAuto());
+        System.out.println("leituraDados:"+leituraDados());
+        System.out.println("leituraDadosAuxiliar:"+leituraDadosAuxiliar());
+        System.out.println("tratamentoDados:"+tratamentoDados() + "\n\nTestes de matemática\n");
 
-        System.out.println(valorModulo_numeroNegativo(1.5));
-        System.out.println(valorModulo_numeroPositivo(1.5));
-        System.out.println(totalPopulacao(1730,populacaoInicial));
-        System.out.println(copiarMatriz(matriz));
-        System.out.println(taxaVariacao(1.5));
-        System.out.println(multiplicarMatrizesQuadradas(matriz,matriz2,multiplicacao));
-        System.out.println(distribuicaoNormalizada());
-        System.out.println(calcularMaiorValorProprio(0));
-        System.out.println(normalizarVetorProprio());
-        System.out.println(distribuicaoPopulacao());
-        System.out.println(calcularVetorValorProprio(2));
+        System.out.println("valorModulo_numeroNegativo:"+valorModulo_numeroNegativo(1.5));
+        System.out.println("valorModulo_numeroPositivo:"+valorModulo_numeroPositivo(1.5));
+        System.out.println("totalPopulacao:"+totalPopulacao(1730,populacaoInicial));
+        System.out.println("copiarMatriz:"+copiarMatriz(matriz));
+        System.out.println("taxaVariacao:"+taxaVariacao(1.5));
+        System.out.println("multiplicarMatrizesQuadradas:"+multiplicarMatrizesQuadradas(matriz,matriz2,multiplicacao));
+        System.out.println("distribuicaoNormalizada:"+distribuicaoNormalizada());
+        System.out.println("calcularMaiorValorProprio:"+calcularMaiorValorProprio(0));
+        System.out.println("normalizarVetorProprio:"+normalizarVetorProprio());
+        System.out.println("distribuicaoPopulacao:"+distribuicaoPopulacao());
+        System.out.println("calcularVetorValorProprio:"+calcularVetorValorProprio(2));
     }
 
     //COMPARAÇÃO
