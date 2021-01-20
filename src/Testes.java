@@ -6,7 +6,7 @@ public class Testes {
         double[][] populacaoInicial= new double [][]{{1000, 300, 330, 100}};
         double[][] populacaoInicial2= new double [][]{{100, 100, 100}};
         double[] popInicial= new double []{100, 100, 100};
-        double [][] popgeracao=new double[][]{{0,0,0},{200,50,50},{0,0,0}};
+        double [][] popgeracao=new double[][]{{0,0,0},{200,50,50}};
         double [][] popgeracao2=new double[][]{{0,0,0},{0,0,0},{100,100,25}};
         double[][] matriz=new double[][]{{1,2},{3,2}};
         double[][] matriz2=new double[][]{{1,2},{3,2}};
@@ -233,7 +233,7 @@ public class Testes {
     }
 
     public static boolean distribuicaoPopulacao(int geracao, double[][]matriz,double[]popInicial,double[][]esperado) {
-        double [][] distribuicao=new double[3][3];
+        double [][] distribuicao=new double[(geracao+2)][(geracao+2)];
         Projeto.distribuicaoPopulacao(matriz,popInicial,distribuicao,geracao);
         return comparaMatrizes(esperado,distribuicao);
     }
