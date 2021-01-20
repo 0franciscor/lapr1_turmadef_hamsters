@@ -73,6 +73,7 @@ public class Projeto {
                     populacaoInicial = vetorManual();
                     matrizLeslie = matrizManual(populacaoInicial);
                     nomeFicheiro = nomeManual();
+                    System.out.println();
                 }
 
                 int geracao = -1;
@@ -86,7 +87,7 @@ public class Projeto {
                 if (naoInterativo) {
                     dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
                 } else {
-                    System.out.println("Quais as geracoes que pretende que sejam estudadas?");
+                    System.out.println("Quantas geracoes pretende que sejam estudadas?");
                     String nCiclos = ler.next();
                     if (!verificaInteiro(nCiclos)) {
                         do {
@@ -723,6 +724,7 @@ public class Projeto {
         int resposta;
         String tempo = determinarDataCriacao();
         File graficopng = new File("Grafico.png");
+        TimeUnit.MILLISECONDS.sleep(800);
         System.out.println("Deseja Salvar o Gráfico?(1- Sim; 2- Não)");
             resposta = ler.nextInt();
             if (resposta == 1) {
