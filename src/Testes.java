@@ -5,6 +5,11 @@ public class Testes {
     public static void main(String[] args) throws IOException {
         double[][] populacaoInicial= new double [][]{{1000, 300, 330, 100}};
         double[][] populacaoInicial2= new double [][]{{100, 100, 100}};
+        double[][] populacao=new double[][]{{500,200,200,100}};
+        double[] total=new double[]{1000};
+        double[][]distribuicoNormalizadaesperada=new double[][]{{50,20,20,10}};
+        double[][] populacao2=new double[][]{{600,100,200,100}};
+        double[][]distribuicoNormalizadaesperada2=new double[][]{{60,10,20,10}};
         double[] popInicial= new double []{100, 100, 100};
         double [][] popgeracao=new double[][]{{0,0,0},{200,50,50}};
         double [][] popgeracao2=new double[][]{{0,0,0},{0,0,0},{100,100,25}};
@@ -16,10 +21,13 @@ public class Testes {
         double[] taxas2 = new double[]{2000,1250};
         double[][] multiplicacao=new double[][]{{7,6},{9,10}};
         double[][] multiplicacao2=new double[][]{{10,8},{8,6}};
-        double[][]distribuicoNormalizadaesperada=new double[][]{{50,20,20,10}};
         double[][] valorProprio=new double[][]{{4,0,0},{0,3,0},{0,0,1}};
         double[][] valorProprio2=new double[][]{{1,7,0},{0,3,0},{0,0,1}};
         double [][] matrizLeslie=new double[][] {{0,1,1},{0.5,0,0},{0,0.5,0}};
+        double [] vetor=new double[]{0.9,0.6,0.5};
+        double[]vetornormalizado=new double[]{45,30,25};
+        double [] vetor2=new double[]{0.7,0.5,0.8};
+        double[]vetor2normalizado=new double[]{35,25,40};
 
         System.out.println("Testes introdução de dados\n\n" + modoInterativo());
         System.out.println("modoNInterativo: "+modoNInterativo());
@@ -43,10 +51,12 @@ public class Testes {
         System.out.println("taxaVariacao: "+taxaVariacao(0.625,taxas2));
         System.out.println("multiplicarMatrizesQuadradas: "+multiplicarMatrizesQuadradas(matriz,matriz2,multiplicacao));
         System.out.println("multiplicarMatrizesQuadradas: "+multiplicarMatrizesQuadradas(matrizaux,matrizaux2,multiplicacao2));
-        System.out.println("distribuicaoNormalizada: "+distribuicaoNormalizada(distribuicoNormalizadaesperada));
+        System.out.println("distribuicaoNormalizada: "+distribuicaoNormalizada(0,distribuicoNormalizadaesperada,populacao,total));
+        System.out.println("distribuicaoNormalizada: "+distribuicaoNormalizada(0,distribuicoNormalizadaesperada2,populacao2,total));
         System.out.println("calcularMaiorValorProprio: "+calcularMaiorValorProprio(0,valorProprio));
         System.out.println("calcularMaiorValorProprio: "+calcularMaiorValorProprio(1,valorProprio2));
-        System.out.println("normalizarVetorProprio: "+normalizarVetorProprio());
+        System.out.println("normalizarVetorProprio: "+normalizarVetorProprio(vetor,vetornormalizado));
+        System.out.println("normalizarVetorProprio: "+normalizarVetorProprio(vetor2,vetor2normalizado));
         System.out.println("distribuicaoPopulacao: "+distribuicaoPopulacao(1,matrizLeslie,popInicial,popgeracao));
         System.out.println("distribuicaoPopulacao: "+distribuicaoPopulacao(2,matrizLeslie,popInicial,popgeracao2));
         System.out.println("calcularVetorValorProprio: "+calcularVetorValorProprio(4,valorProprio));
@@ -200,9 +210,9 @@ public class Testes {
         return comparaMatrizes(matriz2,resultado);
     }
 
-    public static boolean distribuicaoNormalizada(double[][]esperado) {
+    public static boolean distribuicaoNormalizada(int geracao,double[][]esperado,double[][]população,double[]total) {
         double[][]resultado=new double[1][4];
-        Projeto.distribuicaoNormalizada(0,new double[][]{{500,200,200,100}},new double[]{1000},resultado);
+        Projeto.distribuicaoNormalizada(geracao,população,total,resultado);
         return comparaMatrizes(esperado,resultado);
     }
 
@@ -215,21 +225,9 @@ public class Testes {
         }
     }
 
-    public static boolean normalizarVetorProprio() {
-        double [] vetor=new double[]{0.9,0.6,0.5};
+    public static boolean normalizarVetorProprio(double []vetor,double[]esperado) {
         Projeto.normalizarVetorProprio(vetor);
-        double[]esperado=new double[]{45,30,25};
-        int aux=0;
-        for (int l=0;l< vetor.length;l++){
-            if (esperado[l]!=vetor[l]){
-                aux++;
-            }
-        }
-        if (aux==0){
-            return true;
-        }else{
-            return false;
-        }
+        return comparaVetores(vetor,esperado);
     }
 
     public static boolean distribuicaoPopulacao(int geracao, double[][]matriz,double[]popInicial,double[][]esperado) {
