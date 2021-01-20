@@ -387,7 +387,7 @@ public class Projeto {
                             nomepop = nomeManual();
                         }
                     } else if (informacao==2){
-                        System.out.println("Quantas gerações deseja analisar?");
+                        System.out.print("Quantas gerações deseja analisar?");
                         numCiclos= ler.nextInt();
                     }
                     geracao = -1;
