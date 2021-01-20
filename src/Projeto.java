@@ -484,11 +484,11 @@ public class Projeto {
     }
 
     public static double calcularVetorValorProprio (double[][] matrizLeslie,double[] vetor) {
-        Matrix a = new Basic2DMatrix(matrizLeslie);
-        EigenDecompositor eigenD = new EigenDecompositor(a);
-        Matrix[] mattD = eigenD.decompose();
-        double[][] vetoraux = mattD[0].toDenseMatrix().toArray();
-        double[][] valor = mattD[1].toDenseMatrix().toArray();
+        Matrix matriz = new Basic2DMatrix(matrizLeslie);
+        EigenDecompositor eigenD = new EigenDecompositor(matriz);
+        Matrix[] decomposicaoMatriz = eigenD.decompose();
+        double[][] vetoraux = decomposicaoMatriz[0].toDenseMatrix().toArray();
+        double[][] valor = decomposicaoMatriz[1].toDenseMatrix().toArray();
 
         int coluna = calcularMaiorValorProprio(valor);
         double maior = valor[coluna][coluna];
