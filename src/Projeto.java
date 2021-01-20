@@ -725,7 +725,6 @@ public class Projeto {
             nomepop = RetirarExtensao(nomepop);
 
         System.out.println("Deseja Salvar o Gráfico?(1- Sim; 2- Não)");
-        do {
             resposta = ler.nextInt();
             if (resposta == 1) {
                 System.out.println("Qual o formato do ficheiro?");
@@ -740,19 +739,17 @@ public class Projeto {
                         SalvarGrafico(s + nomepop + "_" + tempo + ".txt", d, "dumb");
                         break;
                     case 3:
-                        SalvarGrafico(s + nomepop + "_" + tempo + ".eps", d, "eps");
+                        SalvarGrafico("lol.eps", d, "eps");
                         break;
                     default:
                         System.out.println("O número inserido não corresponde a nenhum parãmetro.\n" + "Insira um número consoante o que deseja realizar.");
                 }
-                }while(resposta<1 || resposta >3);
-                VisualizarMaisAlgumGrafico(existe, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio, nomepop);
+                }while(resposta<1 || resposta>3);
             } else if (resposta == 2) {
-                VisualizarMaisAlgumGrafico(existe, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio, nomepop);
             }else{
                 System.out.println("O número inserido não corresponde a nenhum parãmetro.\n" + "Insira um número consoante o que deseja realizar.");
             }
-        }while(resposta<1 || resposta >2);
+        VisualizarMaisAlgumGrafico(existe, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio, nomepop);
         EliminarFicheiroTextoGrafico(graficopng);
     }
 
