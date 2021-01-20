@@ -395,10 +395,10 @@ public class Projeto {
                         opcoesVisualizacao[i]=1;
                     }
 
-                } else if (leitura!=-1){
+                } else if (leitura!=-1 && leitura!=0){
                     System.out.println("O número inserido não corresponde a nenhum parâmetro.\n" + "Insira os números consoante o que deseja visualizar.");
                 }
-            } while(leitura != 7 && leitura!=10 &&leitura > 0);
+            } while(leitura != 7 && leitura!=10 && leitura > 0);
 
             escreverParaConsola(existe, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
 
