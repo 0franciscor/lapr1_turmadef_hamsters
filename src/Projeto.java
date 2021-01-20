@@ -29,14 +29,14 @@ public class Projeto {
         int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = 0; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
         File novofich = new File("valores.txt");
-
+        
         //RESPOSAVEL POR VERIFICAR SE O CODIGO ESTA A CORRER EM MODO NAO INTERATIVO
-        if (args.length>2 && !(args[0].equals("-n"))) {
+        if (args.length>constante2 && !(args[0].equals("-n"))) {
             erro = modoNInterativo(opcoesExecucao, args, erro);
         }
 
-        if(args.length > 2 && args[0].equals("-n")){
-            erro = 2;
+        if(args.length > constante2 && args[0].equals("-n")){
+            erro = constante2;
             erro();
         }
 
@@ -49,12 +49,12 @@ public class Projeto {
             }
             //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
 
-            else if (erro != 2 && args.length == 2) {
+            else if (erro != constante2 && args.length == constante2) {
                 existe = modoInterativo(args);
                 if (existe)
                     nomeFicheiro = args[1];
                 else {
-                    erro = 2;
+                    erro = constante2;
                     erro();
                 }
             }
@@ -118,56 +118,60 @@ public class Projeto {
     }
 
     public static int modoNInterativo(int[] opcoesExecucao, String[] args, int erro) {
-        if (args.length>2 && !(args[0].equals("-n"))) {
+        if (args.length>constante2 && !(args[0].equals("-n"))) {
             String nomeFicheiro = args[(args.length - 2)];
             boolean existe = existeFicheiro(nomeFicheiro);
 
             if (existe) {
-                erro = 1;
+                erro = constante;
                 for (int i = 0; i <= (args.length - 2); i++) {
-                    if(args[i].equals("-t")){
-                        if(verificaInteiro(args[i+1])) {
+                    if (args[i].equals("-t")) {
+                        if (verificaInteiro(args[i + 1])) {
                             if (0 <= Integer.parseInt(args[i + 1]) && Integer.parseInt(args[i + 1]) <= 999) {
                                 opcoesExecucao[0] = Integer.parseInt(args[i + 1]);
                             }
-                        }
-                        else {
-                            erro = 2;
-                            erro();
+                        } else {
+                            erro = constante2;
                         }
                     }
 
                     if (args[i].equals("-g") && erro != 2) {
-                        if(verificaInteiro(args[i+1])) {
+                        if (verificaInteiro(args[i + 1])) {
                             if (0 < Integer.parseInt(args[i + 1]) && Integer.parseInt(args[i + 1]) <= 3) {
                                 for (int j = 1; j <= 3; j++) {
                                     if (args[i + 1].equals(String.valueOf(j)))
                                         opcoesExecucao[1] = j;
                                 }
                             }
-                        } else{
-                            erro = 2;
-                            erro();
+                        } else {
+                            erro = constante2;
                         }
                     }
-                    if (args[i].equals("-e")) {
-                        opcoesExecucao[2] = 1;
-                    }
-                    if (args[i].equals("-v")) {
-                        opcoesExecucao[3] = 1;
-                    }
-                    if (args[i].equals("-r")) {
-                        opcoesExecucao[4] = 1;
+
+                    if (erro != constante2) {
+                        if (args[i].equals("-e")) {
+                            opcoesExecucao[2] = 1;
+                        }
+                        if (args[i].equals("-v")) {
+                            opcoesExecucao[3] = 1;
+                        }
+                        if (args[i].equals("-r")) {
+                            opcoesExecucao[4] = 1;
+                        }
                     }
                 }
-            } else {
-                erro = 2;
-                erro();
             }
         } else{
             erro = 2;
-            erro();
         }
+
+        if(opcoesExecucao[constante] == 0){
+            erro = constante2;
+        }
+
+        if(erro == constante2)
+            erro();
+
         return erro;
     }
 
@@ -932,3 +936,4 @@ public class Projeto {
         }
     }
 }
+
