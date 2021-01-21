@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -49,6 +50,16 @@ public class Testes {
         System.out.println("distribuicaoPopulacao: " + distribuicaoPopulacao(2, new double[][]{{0, 1, 1}, {0.5, 0, 0}, {0, 0.5, 0}}, new double[]{100, 100, 100}, new double[][]{{0, 0, 0}, {0, 0, 0}, {100, 100, 25}}));
         System.out.println("calcularVetorValorProprio: " + calcularVetorValorProprio(4, new double[][]{{4, 0, 0}, {0, 3, 0}, {0, 0, 1}}));
         System.out.println("calcularVetorValorProprio: " + calcularVetorValorProprio(3, new double[][]{{1, 7, 0}, {0, 3, 0}, {0, 0, 1}}));
+
+        System.out.println("\nTestes Catarina\n");
+
+        System.out.println("VerificarNotaçãoCientifica: " + NotCientifica(2));
+        System.out.println("ConversãoemNotaçãoCientifica: " + ConverterNotacaoCientifica(1250, "1,25E3"));
+        System.out.println("VerificarDouble: " + DoubleparaIntVer(2));
+        System.out.println("ConverterEmInteiro: " + DoubleToInt(100.00, "100"));
+        System.out.println("DataCriaçãoFicheiros: " + determinarDataCriacao("21_01_2021"));
+        System.out.println("EliminarFicheiro: " + EliminarFicheiroTextoGrafico("valores.txt"));
+        System.out.println("RetirarExtensão: " + RetirarExtensao("Hamsters.txt", "Hamsters"));
     }
 
     //COMPARAÇÃO
@@ -196,6 +207,68 @@ public class Testes {
         if (esperado==maior){
             return true;
         }else{
+            return false;
+        }
+    }
+
+    //-------------------------------------Testes Catarina--------------------------------------------------------------
+
+    public static boolean NotCientifica(double teste) {
+        boolean resultado = Projeto.NotCientifica(teste);
+        boolean expected = false;
+        if (resultado == expected) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public static boolean ConverterNotacaoCientifica(double teste, String esperado) {
+        String resultado = Projeto.ConverterNotacaoCientifica(teste);
+        if (resultado.equals(esperado)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public static boolean DoubleparaIntVer(double teste) {
+        boolean resultado = Projeto.DoubleparaIntVer(teste);
+        boolean expected = true;
+        if (resultado == expected) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+    public static boolean DoubleToInt(double teste, String expected) {
+        String resultado = Projeto.DoubleToInt(teste);
+        if (resultado.equals(expected)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public static boolean determinarDataCriacao(String expected) throws IOException {
+        String resultado = Projeto.determinarDataCriacao();
+        if(resultado.equals(expected)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public static boolean EliminarFicheiroTextoGrafico(String nome) {
+        File file = new File(nome);
+        Projeto.EliminarFicheiroTextoGrafico(file);
+        if (file.exists()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    public static boolean RetirarExtensao(String teste, String expected) {
+        String resultado = Projeto.RetirarExtensao(teste);
+        if (resultado.equals(expected)) {
+            return true;
+        }else {
             return false;
         }
     }
