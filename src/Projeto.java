@@ -21,6 +21,7 @@ public class Projeto {
     public static final double minimo = 0.005;
     public static final int constante = 1;
     public static final int constante2 = 2;
+    public static final int tempoespera1=800;
 
     public static final int pararIntroducao = 0;
     public static final int totalPopulacao = 1;
@@ -762,7 +763,7 @@ public class Projeto {
         int resposta;
         String tempo = determinarDataCriacao();
         File graficopng = new File("Grafico.png");
-        TimeUnit.MILLISECONDS.sleep(800);
+        TimeUnit.MILLISECONDS.sleep(tempoespera1);
         System.out.println("Deseja Salvar o Gráfico?(1- Sim; 2- Não)");
             resposta = ler.nextInt();
             if (resposta == 1) {
