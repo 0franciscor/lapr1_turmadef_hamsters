@@ -996,7 +996,5 @@ public class Projeto {
             nomepop = RetirarExtensao(nomepop);
         }
         return nomepop;
-
     }
 }
-
