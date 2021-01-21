@@ -584,8 +584,7 @@ public class Projeto {
                     if (flag) {
                         out.printf(DoubleToInt(Nt[j][c]) + "\n");
                     } else {
-                        out.printf("%.2f", Nt[j][c]);
-                        out.print("\n");
+                        out.printf("%.2f\n", Nt[j][c]);
                     }
                 }
             }
@@ -935,8 +934,7 @@ public class Projeto {
                 if (n == constante) {
                     System.out.printf("%.2f", numero);
                 } else {
-                    System.out.printf("%.2f", numero);
-                    System.out.print("\n");
+                    System.out.printf("%.2f\n", numero);
                 }
             }
         }
