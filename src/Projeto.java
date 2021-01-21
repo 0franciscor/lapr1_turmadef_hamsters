@@ -349,7 +349,7 @@ public class Projeto {
         }
         double valorProprio = calcularVetorValorProprio(matrizLeslie, vetor);
         if (naoInterativo) {
-            escreverParaFicheiro(opcoesExecucao, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
+            escreverParaFicheiro(matrizLeslie,opcoesExecucao, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, args);
             Graficonaointerativo(opcoesExecucao,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,nomepop);
         } else {
             nomepop=identificar(nomepop,existe);
@@ -532,13 +532,25 @@ public class Projeto {
         }
     }
 
-    public static void escreverParaFicheiro (int[] opcoesExecucao, int geracao, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio, String [] args) throws IOException {
+    public static void escreverParaFicheiro (double[][] matrizLeslie, int[] opcoesExecucao, int geracao, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio, String [] args) throws IOException {
         String nomesaida = args[args.length-1];
         File file = new File(nomesaida);
         PrintWriter out = new PrintWriter(file);
         boolean flag;
         int c;
         out.println("De acordo com os dados inseridos foram obtidos os seguintes resultados:");
+        out.println("Matriz Leslie");
+        for (int l=0;l<matrizLeslie.length;l++){
+            for (c=0;c<matrizLeslie[0].length;c++){
+                flag = DoubleparaIntVer(matrizLeslie[l][c]);
+                if (flag) {
+                    out.printf(DoubleToInt(matrizLeslie[l][c])+" ");
+                } else {
+                    out.printf("%.2f ", matrizLeslie[l][c]);
+                }
+            }
+            out.println();
+        }
         for (int j = 0; j <= geracao; j++) {
             if (opcoesExecucao[3] == 1) {
                 out.print("\nO número total de indivíduos da geração " + j + " é ");
