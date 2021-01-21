@@ -29,8 +29,9 @@ public class Projeto {
     public static final int distribuicaoNormalizadaPop = 4;
     public static final int comportamenteAssintotico = 5;
     public static final int graficos = 7;
-    public static final int Leslie = 6;
-    public static final int todainformacao = 8;
+    public static final int leslie = 6;
+    public static final int todaInformacaoSGrafico = 8;
+    public static final int todaInformacaoCGrafico = 9;
     public static final int alterar = 10;
     public static final int sair = -1;
 
@@ -374,13 +375,13 @@ public class Projeto {
         int aux=0,leitura;
         boolean naoInterativo=false;
         do {
-            int [] opcoesVisualizacao = new int[todainformacao-1];
+            int [] opcoesVisualizacao = new int[todaInformacaoSGrafico-1];
             if(aux == 0){
                 infomacao();
             }
             do{
                 leitura = ler.nextInt();
-                if (leitura>pararIntroducao && leitura <todainformacao){
+                if (leitura>pararIntroducao && leitura <todaInformacaoSGrafico){
                     opcoesVisualizacao[leitura-1]=1;
                 } else if (leitura==alterar){
                     aux=1;
@@ -405,15 +406,19 @@ public class Projeto {
                     }
                     geracao = -1;
                     dadosGeracoes(existe, geracao,numCiclos,Nt,matrizLeslie, populacaoInicial,populacoesEstimadas,taxasDeVariacao,distribuicaoNormalizada,vetorProprio,naoInterativo,opcoesVisualizacao,args,nomepop);
-                }else if (leitura==todainformacao){
-                    for (int i=0;i<(todainformacao-1);i++){
+                }else if (leitura==todaInformacaoSGrafico){
+                    for (int i=0;i<(todaInformacaoSGrafico-2);i++){
                         opcoesVisualizacao[i]=1;
                     }
 
+                } else if (leitura==todaInformacaoCGrafico){
+                    for (int i=0;i<(todaInformacaoCGrafico-2);i++){
+                        opcoesVisualizacao[i]=1;
+                    }
                 } else if (leitura!=sair && leitura!=pararIntroducao){
                     System.out.println("O número inserido não corresponde a nenhum parâmetro.\n" + "Insira os números consoante o que deseja visualizar.");
                 }
-            } while(leitura != todainformacao && leitura!=alterar && leitura > pararIntroducao);
+            } while(leitura != todaInformacaoSGrafico && leitura!=alterar && leitura > pararIntroducao && leitura!=todaInformacaoCGrafico);
             escreverParaConsola(matrizLeslie,geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
         } while(leitura != sair && aux==0);
     }
@@ -426,9 +431,10 @@ public class Projeto {
         System.out.println("<"+distribuicaoPop+"> - Distribuição da população.");
         System.out.println("<"+distribuicaoNormalizadaPop+"> - Distribuição normalizada da população.");
         System.out.println("<"+comportamenteAssintotico+"> - Comportamento assimtótico associado ao maior valor próprio.");
-        System.out.println("<"+Leslie+"> - Visualizar dados inseridos (Matriz Leslie).");
+        System.out.println("<"+leslie+"> - Visualizar dados inseridos (Matriz Leslie).");
         System.out.println("<"+graficos+"> - Gráficos.");
-        System.out.println("<"+todainformacao+"> - Toda a informação. Parâmetro isolado");
+        System.out.println("<"+todaInformacaoSGrafico+"> - Toda a informação excluindo Gráficos. Parâmetro isolado");
+        System.out.println("<"+todaInformacaoCGrafico+"> - Toda a informação incluindo Gráficos. Parâmetro isolado");
         System.out.println("<"+pararIntroducao+"> - Quando não quiser inserir mais parâmetros.\n");
         System.out.println(("<"+alterar+"> - Modificar dados de entrada (População em estudo ou Gerações). Parâmetro isolado"));
         System.out.println("<"+sair+"> - Para sair do programa. Parâmetro isolado.");
@@ -700,7 +706,7 @@ public class Projeto {
                 Escrever(vetorProprio[c], constante2);
             }
         }
-        if (opcoesVisualizaco[Leslie-1]==1){
+        if (opcoesVisualizaco[leslie-1]==1){
             System.out.println("\nMatriz Leslie");
             for (int l=0;l<matrizLeslie.length;l++){
                 for (c=0;c<matrizLeslie[0].length;c++){
@@ -709,6 +715,7 @@ public class Projeto {
                 System.out.println();
             }
         }
+        System.out.println();
         if (opcoesVisualizaco[graficos-1]==1){
             System.out.println("Que gráfico quer representar?");
             System.out.println("<1>-Evolução da População Total;\n<2>-Evolução da taxa de variação;\n<3>-Distribuição da População;\n<4>-Distribuição normalizada da população.");
@@ -821,24 +828,24 @@ public class Projeto {
 
     public static void Graficosinterativo(double[][] matrizLeslie,int geracao,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,int num, String nomepop,double valorProprio,double[] vetorProprio) throws IOException, InterruptedException {
         String s;
-        int [] opcoesVisualizacao = new int[6];
+        int [] opcoesVisualizacao = new int[todaInformacaoSGrafico-1];
         switch(num){
             case 1:
-                opcoesVisualizacao[0]=1;
+                opcoesVisualizacao[totalPopulacao-1]=1;
                 EscreverGrafico1e2(geracao,populacoesEstimadas);
                 Criarpng("set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3");
                 escreverParaConsola(matrizLeslie,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,opcoesVisualizacao,nomepop);
                 PerguntaGrafico("PopulaçãoTotal_","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3", nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,matrizLeslie);
                 break;
             case 2:
-                opcoesVisualizacao[1]=1;
+                opcoesVisualizacao[taxaVariacao-1]=1;
                 EscreverGrafico1e2((geracao-1), taxasDeVariacao);
                 Criarpng("set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3");
                 escreverParaConsola(matrizLeslie,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,opcoesVisualizacao,nomepop);
                 PerguntaGrafico("TaxadeVariação_","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3", nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,matrizLeslie);
                 break;
             case 3:
-                opcoesVisualizacao[2]=1;
+                opcoesVisualizacao[distribuicaoPop-1]=1;
                 EscreverGrafico3e4(Nt[0].length,Nt,geracao);
                 s=CodigoGrafico3e4(Nt[0].length,"População","População Distribuida");
                 Criarpng(s);
@@ -846,7 +853,7 @@ public class Projeto {
                 PerguntaGrafico("PopulaçãoDistribuida_",s, nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,matrizLeslie);
                 break;
             case 4:
-                opcoesVisualizacao[3]=1;
+                opcoesVisualizacao[distribuicaoNormalizadaPop-1]=1;
                 EscreverGrafico3e4(Nt[0].length,distribuicaoNormalizada,geracao);
                 s=CodigoGrafico3e4(Nt[0].length,"Distribuição","Distribuição Normalizada");
                 Criarpng(s);
