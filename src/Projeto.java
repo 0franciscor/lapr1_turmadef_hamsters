@@ -1,10 +1,16 @@
 import org.la4j.Matrix;
 import org.la4j.decomposition.EigenDecompositor;
 import org.la4j.matrix.dense.Basic2DMatrix;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,7 +49,7 @@ public class Projeto {
         String nomeFicheiro = null;
         int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = 0; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
-        File novofich = new File("valores.txt");
+        File novofich = new File("output\\valores.txt");
         
         //RESPOSAVEL POR VERIFICAR SE O CODIGO ESTA A CORRER EM MODO NAO INTERATIVO
         if (args.length>constante2 && !(args[0].equals("-n"))) {
@@ -732,7 +738,7 @@ public class Projeto {
     }
 
     public static void EscreverGrafico1e2(int geracao,double[] populacoesEstimadas) throws FileNotFoundException {
-        File file = new File("valores.txt");
+        File file = new File("output\\valores.txt");
         PrintWriter out = new PrintWriter(file);
         for (int l = 0; l <= geracao; l++) {
             out.print(l + " " + populacoesEstimadas[l]+"\n");
@@ -742,7 +748,7 @@ public class Projeto {
     }
 
     public static void EscreverGrafico3e4(int n,double[][] Nt,int geracao) throws FileNotFoundException {
-        File file = new File("valores.txt");
+        File file = new File("output\\valores.txt");
         PrintWriter out = new PrintWriter(file);
         for (int l = 0; l <= geracao; l++) {
             out.print(l + " ");
@@ -756,13 +762,13 @@ public class Projeto {
 
     public static void SalvarGrafico(String s,String d,String terminal) throws IOException {
         Runtime  rt = Runtime.getRuntime();
-        rt.exec("gnuplot -e \"set terminal "+terminal+"; set output '"+s+"'; "+d+"\"");
+        rt.exec("gnuplot -e \"cd 'output'; set terminal "+terminal+"; set output '"+s+"'; "+d+"\"");
     }
 
     public static void PerguntaGrafico(String s,String d, String nomepop,int geracao,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][] Nt,double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,double[][]matrizLeslie) throws IOException, InterruptedException {
         int resposta;
         String tempo = determinarDataCriacao();
-        File graficopng = new File("Grafico.png");
+        File graficopng = new File("output\\Grafico.png");
         TimeUnit.MILLISECONDS.sleep(tempoespera1);
         System.out.println("Deseja Salvar o Gráfico?(1- Sim; 2- Não)");
             resposta = ler.nextInt();
@@ -799,8 +805,8 @@ public class Projeto {
         do {
             resposta= ler.nextInt();
             if (resposta == 1) {
-                int[] opcoesVisualizacao = new int[6];
-                opcoesVisualizacao[5] = 1;
+                int[] opcoesVisualizacao = new int[7];
+                opcoesVisualizacao[6] = 1;
                 escreverParaConsola(matrizLeslie,geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio, opcoesVisualizacao, nomepop);
             } else if (resposta == 2) {
             } else {
@@ -822,13 +828,19 @@ public class Projeto {
 
     public static void Criarpng(String d) throws IOException, InterruptedException {
         SalvarGrafico("Grafico.png", d, "png");
-        TimeUnit.MILLISECONDS.sleep(500);
-        Runtime  rt = Runtime.getRuntime();
-        rt.exec("explorer \"Grafico.png\"");
+        File file = new File("output/Grafico.png");
+        Desktop desktop = Desktop.getDesktop();
+        if(file.exists()) desktop.open(file);
+    }
+
+    public static void Criarpasta() {
+        File file = new File("output");
+        file.mkdir();
     }
 
     public static void Graficosinterativo(double[][] matrizLeslie,int geracao,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,int num, String nomepop,double valorProprio,double[] vetorProprio) throws IOException, InterruptedException {
         String s;
+        Criarpasta();
         int [] opcoesVisualizacao = new int[todaInformacaoSGrafico-1];
         switch(num){
             case 1:
@@ -836,14 +848,14 @@ public class Projeto {
                 EscreverGrafico1e2(geracao,populacoesEstimadas);
                 Criarpng("set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3");
                 escreverParaConsola(matrizLeslie,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,opcoesVisualizacao,nomepop);
-                PerguntaGrafico("PopulaçãoTotal_","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3", nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,matrizLeslie);
+                PerguntaGrafico("Populacaototal_","set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3", nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,matrizLeslie);
                 break;
             case 2:
                 opcoesVisualizacao[taxaVariacao-1]=1;
                 EscreverGrafico1e2((geracao-1), taxasDeVariacao);
                 Criarpng("set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3");
                 escreverParaConsola(matrizLeslie,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,opcoesVisualizacao,nomepop);
-                PerguntaGrafico("TaxadeVariação_","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3", nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,matrizLeslie);
+                PerguntaGrafico("TaxadeVariacao_","set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3", nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,matrizLeslie);
                 break;
             case 3:
                 opcoesVisualizacao[distribuicaoPop-1]=1;
@@ -851,7 +863,7 @@ public class Projeto {
                 s=CodigoGrafico3e4(Nt[0].length,"População","População Distribuida");
                 Criarpng(s);
                 escreverParaConsola(matrizLeslie,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,opcoesVisualizacao,nomepop);
-                PerguntaGrafico("PopulaçãoDistribuida_",s, nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,matrizLeslie);
+                PerguntaGrafico("PopulacaoDistribuida_",s, nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,matrizLeslie);
                 break;
             case 4:
                 opcoesVisualizacao[distribuicaoNormalizadaPop-1]=1;
@@ -859,7 +871,7 @@ public class Projeto {
                 s=CodigoGrafico3e4(Nt[0].length,"Distribuição","Distribuição Normalizada");
                 Criarpng(s);
                 escreverParaConsola(matrizLeslie,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,opcoesVisualizacao,nomepop);
-                PerguntaGrafico("PopulaçãoNormalizada_",s, nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,matrizLeslie);
+                PerguntaGrafico("PopulacaoNormalizada_",s, nomepop,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,matrizLeslie);
                 break;
         }
     }
