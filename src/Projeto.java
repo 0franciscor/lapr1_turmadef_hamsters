@@ -87,7 +87,7 @@ public class Projeto {
                 if (naoInterativo) {
                     dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
                 } else {
-                    System.out.print("Quantas geracoes pretende que sejam estudadas?");
+                    System.out.print("Quantas geracoes pretende que sejam estudadas? ");
                     String nCiclos = ler.next();
                     if (!verificaInteiro(nCiclos)) {
                         do {
@@ -371,7 +371,7 @@ public class Projeto {
                     opcoesVisualizacao[leitura-1]=1;
                 } else if (leitura==10){
                     aux=1;
-                    System.out.println("O que deseja alterar?(População em estudo ou Gerações)");
+                    System.out.println("O que deseja alterar?");
                     System.out.println("<1> - A população em estudo.");
                     System.out.println("<2> - O número de gerações em análise.");
                     int informacao= ler.nextInt();
@@ -387,7 +387,7 @@ public class Projeto {
                             nomepop = nomeManual();
                         }
                     } else if (informacao==2){
-                        System.out.print("Quantas gerações deseja analisar?");
+                        System.out.print("Quantas gerações deseja analisar? ");
                         numCiclos= ler.nextInt();
                     }
                     geracao = -1;
@@ -405,16 +405,18 @@ public class Projeto {
         } while(leitura != -1 && aux==0);
     }
     public static void infomacao(){
-        System.out.println("\nQuais os dados que gostaria de visualizar? (Insira os números associados a cada parâmetro e prima Enter. Em parâmetros isolados, apenas insira o número que pretende.)");
+        System.out.println("\nQuais os dados que gostaria de visualizar?\n\nInsira os números associados a cada parâmetro e prima Enter.\nEm parâmetros isolados, apenas insira o número que pretende e prima Enter.\n");
+        System.out.println("Exemplo de introdução:\n2\n5\n0\n");
+        System.out.println("Exemplo de introdução de parâmetros isolados:\n10\n");
         System.out.println("<1> - População total a cada geração.");
         System.out.println("<2> - Taxa de variação.");
         System.out.println("<3> - Distribuição da população.");
         System.out.println("<4> - Distribuição normalizada da população.");
         System.out.println("<5> - Comportamento assimtótico associado ao maior valor próprio.");
         System.out.println("<6> - Gráficos.");
-        System.out.println("<7> - Toda a informação.");
+        System.out.println("<7> - Toda a informação. Parâmetro isolado");
         System.out.println("<0> - Quando não quiser inserir mais parâmetros.\n");
-        System.out.println(("<10> - Modificar dados de entrada. Parâmetro isolado"));
+        System.out.println(("<10> - Modificar dados de entrada (População em estudo ou Gerações). Parâmetro isolado"));
         System.out.println("<-1> - Para sair do programa. Parâmetro isolado.");
     }
 
