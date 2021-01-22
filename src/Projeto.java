@@ -1023,16 +1023,20 @@ public class Projeto {
 
     public static void Graficonaointerativo(int[] opcoesExecucao,int geracao,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,String output) throws IOException, InterruptedException {
         int l=opcoesExecucao[1];
-        String s;
+        String s,codigognuplot;
         File novofich = new File(output+"\\valores.txt");
-        EscreverGrafico1e2(geracao, populacoesEstimadas,output);
-        String codigognuplot="set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3";
-        PerguntaGraficoNaoInterativo(codigognuplot,l,output,"PopulacaoTotal_");
-        TimeUnit.MILLISECONDS.sleep(250);
-        EscreverGrafico1e2((geracao-1), taxasDeVariacao,output);
-        codigognuplot="set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3";
-        PerguntaGraficoNaoInterativo(codigognuplot,l,output,"TaxadeVariacao_");
-        TimeUnit.MILLISECONDS.sleep(250);
+        if (opcoesExecucao[3]==1) {
+            EscreverGrafico1e2(geracao, populacoesEstimadas, output);
+            codigognuplot = "set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3";
+            PerguntaGraficoNaoInterativo(codigognuplot, l, output, "PopulacaoTotal_");
+            TimeUnit.MILLISECONDS.sleep(250);
+        }
+        if (opcoesExecucao[4]==1) {
+            EscreverGrafico1e2((geracao - 1), taxasDeVariacao, output);
+            codigognuplot = "set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3";
+            PerguntaGraficoNaoInterativo(codigognuplot, l, output, "TaxadeVariacao_");
+            TimeUnit.MILLISECONDS.sleep(250);
+        }
         EscreverGrafico3e4(Nt[0].length,Nt,geracao,output);
         s=CodigoGrafico3e4(Nt[0].length,"População","População Distribuida");
         PerguntaGraficoNaoInterativo(s,l,output,"PopulacaoDistribuida_");
