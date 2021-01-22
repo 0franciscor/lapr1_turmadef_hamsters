@@ -41,12 +41,16 @@ public class Projeto {
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        boolean existe = false, naoInterativo = false;
+        boolean existe = false, naoInterativo = false, ordem;
         String nomeFicheiro = null;
         int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = 0; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
         File novofich = new File("output\\valores.txt");
-        
+
+        String[] args2 = new String[]{"-n", "Hamsters.txt"};
+        args = args2;
+
+
         //RESPOSAVEL POR VERIFICAR SE O CODIGO ESTA A CORRER EM MODO NAO INTERATIVO
         if (args.length>constante2 && !(args[0].equals("-n"))) {
             erro = modoNInterativo(opcoesExecucao, args, erro);
@@ -83,8 +87,16 @@ public class Projeto {
             if (erro != 2) {
                 if (existe) {
                     populacaoInicial = vetorAuto(nomeFicheiro);
+
+                    ordem = tratamentoDadosOrdem((leituraDados(nomeFicheiro, 0)));
+                    if (!ordem)
+                        erro = 2;
+
                     matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
-                    matrizAuto(matrizLeslie, nomeFicheiro);
+                    ordem = matrizAuto(matrizLeslie, nomeFicheiro);
+
+                    if (!ordem)
+                        erro = 2;
 
                 } else {
                     populacaoInicial = vetorManual();
@@ -92,30 +104,37 @@ public class Projeto {
                     nomeFicheiro = nomeManual();
                     System.out.println();
                 }
+                if (erro != 2) {
+                    int geracao = -1;
 
-                int geracao = -1;
+                    double[] populacoesEstimadas = new double[1001];
+                    double[] taxasDeVariacao = new double[1001];
+                    double[][] Nt = new double[1001][matrizLeslie.length];
+                    double[][] distribuicaoNormalizada = new double[1001][matrizLeslie.length];
+                    double[] vetor = new double[matrizLeslie.length];
 
-                double[] populacoesEstimadas = new double[1001];
-                double[] taxasDeVariacao = new double[1001];
-                double[][] Nt = new double[1001][matrizLeslie.length];
-                double[][] distribuicaoNormalizada = new double[1001][matrizLeslie.length];
-                double[] vetor = new double[matrizLeslie.length];
+                    if (naoInterativo) {
+                        dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
+                    } else {
+                        System.out.print("Quantas geracoes pretende que sejam estudadas? ");
+                        String nCiclos = ler.next();
+                        if (!verificaInteiro(nCiclos)) {
+                            do {
+                                erro();
+                                nCiclos = ler.next();
 
-                if (naoInterativo) {
-                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
-                } else {
-                    System.out.print("Quantas geracoes pretende que sejam estudadas? ");
-                    String nCiclos = ler.next();
-                    if (!verificaInteiro(nCiclos)) {
-                        do {
-                            erro();
-                            nCiclos = ler.next();
+                            } while (!verificaInteiro(nCiclos));
+                        }
+                        numCiclos = Integer.parseInt(nCiclos);
 
-                        } while (!verificaInteiro(nCiclos));
+                        dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
                     }
-                    numCiclos = Integer.parseInt(nCiclos);
-
-                    dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
+                }
+                else{
+                    if(erro==2) {
+                        erro();
+                        System.out.println("A ordem dos dados de inserção tem de ser crescente.");
+                    }
                 }
             }
             EliminarFicheiroTextoGrafico(novofich);
@@ -216,15 +235,21 @@ public class Projeto {
         return tratamentoDados((leituraDados(nomeFicheiro, 0)));
     }
 
-    public static void matrizAuto(double[][] matrizLeslie, String nomeFicheiro) throws IOException {
+    public static boolean matrizAuto(double[][] matrizLeslie, String nomeFicheiro) throws IOException {
+        boolean ordem = true;
         for (int i = 1; i <= 2; i++) {
             double[] array = tratamentoDados(leituraDados(nomeFicheiro, i));
+            ordem = tratamentoDadosOrdem((leituraDados(nomeFicheiro, i)));
+            if(!ordem)
+                return false;
 
             if (array.length == (matrizLeslie.length - 1))
                 insercaoMatriz(matrizLeslie, array, 1, true);
+
             else
                 insercaoMatriz(matrizLeslie, array, 2, true);
         }
+        return ordem;
     }
 
     public static double[] vetorManual() {
@@ -336,6 +361,30 @@ public class Projeto {
         return valoresTratados;
     }
 
+    public static boolean tratamentoDadosOrdem(String input){
+        String[] dadosInseridos = input.split(", ");
+        double [] valoresTratados = new double[dadosInseridos.length];
+        int [] ordemInseridos = new int[valoresTratados.length];
+
+        for(int i = 0; i< dadosInseridos.length; i++) {
+            String[] dadosInseridosTratados = dadosInseridos[i].split("=");
+            String construida = "", aux = dadosInseridosTratados[0];
+
+            for(int j = 1; j<aux.length(); j++){
+                construida += String.valueOf(dadosInseridosTratados[0].charAt(j));
+            }
+            ordemInseridos[i] = Integer.parseInt(construida);
+        }
+        int aux = 0;
+        for(int i = 1; i<=ordemInseridos.length; i++){
+            if(ordemInseridos[i-1] == aux)
+                aux++;
+            else
+                return false;
+        }
+        return true;
+    }
+
     public static void insercaoMatriz (double[][] matrizLeslie, double[] valoresTratados, int tipologia, boolean automatico) {
         if (tipologia == 1) {
             int limite;
@@ -376,7 +425,7 @@ public class Projeto {
 
     public static void interfaceUtilizador(boolean existe, int numCiclos, double[][] matrizLeslie, int geracao, double[] populacoesEstimadas, double[] taxasDeVariacao, double[][] Nt, double[][] distribuicaoNormalizada, double valorProprio, double[] vetorProprio, String nomepop, String[] args,double[] populacaoInicial) throws IOException, InterruptedException {
         int aux=0,leitura;
-        boolean naoInterativo=false;
+        boolean naoInterativo=false, ordem;
         do {
             int [] opcoesVisualizacao = new int[todaInformacaoSGrafico-1];
             if(aux == 0){
@@ -392,6 +441,7 @@ public class Projeto {
                     System.out.println("<1> - A população em estudo.");
                     System.out.println("<2> - O número de gerações em análise.");
                     int informacao= ler.nextInt();
+
                     if (informacao==1){
                         if (existe) {
                             System.out.print("Qual o nome do novo ficheiro? ");
@@ -405,8 +455,23 @@ public class Projeto {
 
                                 } while(!existeFicheiro(nomeFicheiro));
                             }
+
+                            boolean naoCrescente = false;
+                            ordem = tratamentoDadosOrdem((leituraDados(nomeFicheiro, 0)));
+                            if(!ordem)
+                                naoCrescente = true;
                             populacaoInicial = vetorAuto(nomeFicheiro);
-                            matrizAuto(matrizLeslie, nomeFicheiro);
+                            ordem = matrizAuto(matrizLeslie, nomeFicheiro);
+                            if(!ordem)
+                                naoCrescente = true;
+                            if (naoCrescente) {
+                                System.out.print("O ficheiro indicado não tem os seus parâmetros por ordem crescente. Por favor insira outro: ");
+                                do {
+                                    nomeFicheiro = ler.next();
+                                    System.out.println();
+                                } while (!tratamentoDadosOrdem((leituraDados(nomeFicheiro, 0))) && !matrizAuto(matrizLeslie, nomeFicheiro));
+                            }
+
                         } else {
                             populacaoInicial = vetorManual();
                             matrizLeslie = matrizManual(populacaoInicial);
