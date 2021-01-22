@@ -46,7 +46,6 @@ public class Projeto {
         String nomeFicheiro = null;
         int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = 0; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
-        File novofich = new File("output\\valores.txt");
 
         //String[] args2 = new String[]{"-n", "Hamsters.txt"};
         //args = args2;
@@ -138,7 +137,6 @@ public class Projeto {
                     }
                 }
             }
-            EliminarFicheiroTextoGrafico(novofich);
         }
     }
 
@@ -417,6 +415,7 @@ public class Projeto {
         double valorProprio = calcularVetorValorProprio(matrizLeslie, vetor);
         if (naoInterativo) {
             String output=Criaroutput(nomepop);
+            Criarpasta(output);
             escreverParaFicheiro(matrizLeslie,opcoesExecucao, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor,output,args);
             Graficonaointerativo(opcoesExecucao,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,output);
         } else {
@@ -633,7 +632,7 @@ public class Projeto {
 
     public static void escreverParaFicheiro (double[][] matrizLeslie, int[] opcoesExecucao, int geracao, double [] populacoesEstimadas, double [] taxasDeVariacao, double [][] Nt, double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,String output,String [] args) throws IOException {
         String nomesaida = args[args.length-1];
-        File file = new File(output+"\\"+nomesaida);
+        File file = new File(output+"/"+nomesaida);
         PrintWriter out = new PrintWriter(file);
         boolean flag;
         int c;
@@ -1089,6 +1088,7 @@ public class Projeto {
 
     public static String Criaroutput(String nomepop) throws IOException {
         String tempo = determinarDataCriacao();
+        nomepop=RetirarExtensao(nomepop);
         String output=nomepop + "_" + tempo;
         return output;
     }
