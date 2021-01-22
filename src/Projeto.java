@@ -15,7 +15,6 @@ import java.nio.file.attribute.FileTime;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -44,6 +43,8 @@ public class Projeto {
     public static final int detetadoErro=2;
     public static final int tamanhoComando=2;
 
+    public static final int maximoGeracoes=1000;
+
     static Scanner ler = new Scanner(System.in);
 
     public static boolean analisaMatriz(double[][] matrizLeslie){
@@ -65,7 +66,7 @@ public class Projeto {
         //args = args2;
 
 
-        //RESPOSAVEL POR VERIFICAR SE O CODIGO ESTA A CORRER EM MODO NAO INTERATIVO
+        //RESPOSAVEL POR VERIFICAR EVITAR ERRO COM MODO INTERATIVO COM MAIS DE DOIS PARAMETROS
         if (args.length>tamanhoComando && !(args[0].equals("-n"))) {
             erro = modoNInterativo(opcoesExecucao, args, erro);
         }
@@ -124,10 +125,10 @@ public class Projeto {
                 if (erro != detetadoErro) {
                     int geracao = -1;
 
-                    double[] populacoesEstimadas = new double[1001];
-                    double[] taxasDeVariacao = new double[1001];
-                    double[][] Nt = new double[1001][matrizLeslie.length];
-                    double[][] distribuicaoNormalizada = new double[1001][matrizLeslie.length];
+                    double[] populacoesEstimadas = new double[maximoGeracoes+1];
+                    double[] taxasDeVariacao = new double[maximoGeracoes+1];
+                    double[][] Nt = new double[maximoGeracoes+1][matrizLeslie.length];
+                    double[][] distribuicaoNormalizada = new double[maximoGeracoes+1][matrizLeslie.length];
                     double[] vetor = new double[matrizLeslie.length];
 
                     if (naoInterativo) {
