@@ -419,6 +419,7 @@ public class Projeto {
         }
         double valorProprio = calcularVetorValorProprio(matrizLeslie, vetor);
         if (naoInterativo) {
+            nomepop=RetirarExtensao(nomepop);
             String output=Criaroutput(nomepop);
             Criarpasta(output);
             escreverParaFicheiro(matrizLeslie,opcoesExecucao, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor,output,args);
@@ -1093,7 +1094,6 @@ public class Projeto {
 
     public static String Criaroutput(String nomepop) throws IOException {
         String tempo = determinarDataCriacao();
-        nomepop=RetirarExtensao(nomepop);
         String output=nomepop + "_" + tempo;
         return output;
     }
