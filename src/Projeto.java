@@ -46,6 +46,15 @@ public class Projeto {
 
     static Scanner ler = new Scanner(System.in);
 
+    public static boolean analisaMatriz(double[][] matrizLeslie){
+        int j = 0;
+        for(int i = 1; i<matrizLeslie.length; i++){
+            if(matrizLeslie[i][j]<0 || matrizLeslie[i][j]>1)
+                return false;
+        }
+        return true;
+    }
+
     public static void main(String[] args) throws IOException, InterruptedException {
         boolean existe = false, naoInterativo = false, ordem;
         String nomeFicheiro = null;
@@ -100,8 +109,11 @@ public class Projeto {
                     matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
                     ordem = matrizAuto(matrizLeslie, nomeFicheiro);
 
-                    if (!ordem)
+                    if (!ordem || !analisaMatriz(matrizLeslie))
                         erro = detetadoErro;
+
+
+                    analisaMatriz(matrizLeslie);
 
                 } else {
                     populacaoInicial = vetorManual();
@@ -138,7 +150,7 @@ public class Projeto {
                 else{
                     if(erro==detetadoErro) {
                         erro();
-                        System.out.println("A ordem dos dados de inserção tem de ser crescente.");
+                        System.out.println("A ordem dos dados de inserção tem de ser crescente ou possui valores fora dos intervalos permitidos.");
                     }
                 }
             }
@@ -347,6 +359,15 @@ public class Projeto {
         for(int i = 0; i<limite; i++) {
             System.out.print("Insira o valor nº" + (i + 1) + " da " + elemento + ": ");
             array[i] = ler.nextDouble();
+
+            if(elemento.equalsIgnoreCase("Taxa de Sobrevivência") && (array[i]<0 || array[i]>1)) {
+                do {
+                    System.out.println("Parâmetro não compatível. Insira um núemro entre 0 e 1");
+                    System.out.print("Insira o valor nº" + (i + 1) + " da " + elemento + ": ");
+                    array[i] = ler.nextDouble();
+                } while(array[i]<0 || array[i]>1);
+            }
+
             System.out.println();
         }
         return array;
@@ -468,10 +489,10 @@ public class Projeto {
                                 naoCrescente = true;
                             populacaoInicial = vetorAuto(nomeFicheiro);
                             ordem = matrizAuto(matrizLeslie, nomeFicheiro);
-                            if(!ordem)
+                            if(!ordem || !analisaMatriz(matrizLeslie))
                                 naoCrescente = true;
                             if (naoCrescente) {
-                                System.out.print("O ficheiro indicado não tem os seus parâmetros por ordem crescente. Por favor insira outro: ");
+                                System.out.print("A síntaxe do comando está incorreta ou os ficheiros requisitados não existem. Por favor insira outro: ");
                                 do {
                                     nomeFicheiro = ler.next();
                                     System.out.println();
