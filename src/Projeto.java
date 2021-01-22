@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit;
 public class Projeto {
     public static final double maximo = 99999;
     public static final double minimo = 0.005;
-    public static final int constante = 1;
-    public static final int constante2 = 2;
+    public static final int formatarVetores = 1;
+    public static final int formatarMatrizes = 2;
     public static final int tempoespera1=800;
 
     public static final int pararIntroducao = 0;
@@ -39,6 +39,11 @@ public class Projeto {
     public static final int alterar = 10;
     public static final int sair = -1;
 
+    public static final int modointerativo=0;
+    public static final int modonaoInterativo=1;
+    public static final int detetadoErro=2;
+    public static final int tamanhoComando=2;
+
     static Scanner ler = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -52,17 +57,17 @@ public class Projeto {
 
 
         //RESPOSAVEL POR VERIFICAR SE O CODIGO ESTA A CORRER EM MODO NAO INTERATIVO
-        if (args.length>constante2 && !(args[0].equals("-n"))) {
+        if (args.length>tamanhoComando && !(args[0].equals("-n"))) {
             erro = modoNInterativo(opcoesExecucao, args, erro);
         }
 
-        if(args.length > constante2 && args[0].equals("-n")){
-            erro = constante2;
+        if(args.length > tamanhoComando && args[0].equals("-n")){
+            erro = detetadoErro;
             erro();
         }
 
-        if(erro != 2) {
-            if (erro == 1) {
+        if(erro != detetadoErro) {
+            if (erro == modonaoInterativo) {
                 naoInterativo = true;
                 existe = true;
                 numCiclos = opcoesExecucao[0];
@@ -70,12 +75,12 @@ public class Projeto {
             }
             //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
 
-            else if (erro != constante2 && args.length == constante2) {
+            else if (erro != detetadoErro && args.length == tamanhoComando) {
                 existe = modoInterativo(args);
                 if (existe)
                     nomeFicheiro = args[1];
                 else {
-                    erro = constante2;
+                    erro = detetadoErro;
                     erro();
                 }
             }
@@ -84,19 +89,19 @@ public class Projeto {
             double[] populacaoInicial; //DECLARAÇÃO VETOR INICIAL
             double[][] matrizLeslie;  //DECLARAÇÃO MATRIZ LESLIE
 
-            if (erro != 2) {
+            if (erro != detetadoErro) {
                 if (existe) {
                     populacaoInicial = vetorAuto(nomeFicheiro);
 
                     ordem = tratamentoDadosOrdem((leituraDados(nomeFicheiro, 0)));
                     if (!ordem)
-                        erro = 2;
+                        erro = detetadoErro;
 
                     matrizLeslie = new double[populacaoInicial.length][populacaoInicial.length];
                     ordem = matrizAuto(matrizLeslie, nomeFicheiro);
 
                     if (!ordem)
-                        erro = 2;
+                        erro = detetadoErro;
 
                 } else {
                     populacaoInicial = vetorManual();
@@ -104,7 +109,7 @@ public class Projeto {
                     nomeFicheiro = nomeManual();
                     System.out.println();
                 }
-                if (erro != 2) {
+                if (erro != detetadoErro) {
                     int geracao = -1;
 
                     double[] populacoesEstimadas = new double[1001];
@@ -131,7 +136,7 @@ public class Projeto {
                     }
                 }
                 else{
-                    if(erro==2) {
+                    if(erro==detetadoErro) {
                         erro();
                         System.out.println("A ordem dos dados de inserção tem de ser crescente.");
                     }
@@ -154,12 +159,12 @@ public class Projeto {
     }
 
     public static int modoNInterativo(int[] opcoesExecucao, String[] args, int erro) {
-        if (args.length>constante2 && !(args[0].equals("-n"))) {
+        if (args.length>tamanhoComando && !(args[0].equals("-n"))) {
             String nomeFicheiro = args[(args.length - 2)];
             boolean existe = existeFicheiro(nomeFicheiro);
 
             if (existe) {
-                erro = constante;
+                erro = modonaoInterativo;
                 for (int i = 0; i <= (args.length - 2); i++) {
                     if (args[i].equals("-t")) {
                         if (verificaInteiro(args[i + 1])) {
@@ -167,11 +172,11 @@ public class Projeto {
                                 opcoesExecucao[0] = Integer.parseInt(args[i + 1]);
                             }
                         } else {
-                            erro = constante2;
+                            erro = detetadoErro;
                         }
                     }
 
-                    if (args[i].equals("-g") && erro != 2) {
+                    if (args[i].equals("-g") && erro != detetadoErro) {
                         if (verificaInteiro(args[i + 1])) {
                             if (0 < Integer.parseInt(args[i + 1]) && Integer.parseInt(args[i + 1]) <= 3) {
                                 for (int j = 1; j <= 3; j++) {
@@ -180,11 +185,11 @@ public class Projeto {
                                 }
                             }
                         } else {
-                            erro = constante2;
+                            erro = detetadoErro;
                         }
                     }
 
-                    if (erro != constante2) {
+                    if (erro != detetadoErro) {
                         if (args[i].equals("-e")) {
                             opcoesExecucao[2] = 1;
                         }
@@ -198,14 +203,14 @@ public class Projeto {
                 }
             }
         } else{
-            erro = 2;
+            erro = detetadoErro;
         }
 
-        if(opcoesExecucao[constante] == 0){
-            erro = constante2;
+        if(opcoesExecucao[1] == 0){
+            erro = detetadoErro;
         }
 
-        if(erro == constante2)
+        if(erro == detetadoErro)
             erro();
 
         return erro;
@@ -744,14 +749,14 @@ public class Projeto {
         if (opcoesVisualizaco[totalPopulacao-1]==1){
             for (int j = 0; j <= geracao; j++) {
                 System.out.print("\nO número total de indivíduos da geração " + j + " é ");
-                Escrever(populacoesEstimadas[j], constante);
+                Escrever(populacoesEstimadas[j], formatarVetores);
             }
         }
         System.out.print("\n");
         if (opcoesVisualizaco[taxaVariacao-1]==1){
                 for (int j = 0; j < geracao; j++) {
                     System.out.print("\nA taxa de variação para a geração " + j + " é ");
-                    Escrever(taxasDeVariacao[j], constante);
+                    Escrever(taxasDeVariacao[j], formatarVetores);
                 }
         }
         System.out.print("\n");
@@ -761,7 +766,7 @@ public class Projeto {
                 System.out.print("\nA população na geração " + j + " encontra-se distribuída da seguinte forma:\n");
                 for (c = 0; c < Nt[0].length; c++) {
                     System.out.print("Idade " + c + ": ");
-                    Escrever(Nt[j][c], constante2);
+                    Escrever(Nt[j][c], formatarMatrizes);
                 }
             }
         }
@@ -771,7 +776,7 @@ public class Projeto {
                 System.out.print("\nA distribuição normalizada da geração " + j + " está representada pelas várias faixas etárias:\n");
                 for (c = 0; c < Nt[0].length; c++) {
                     System.out.print("Idade " + c + ": ");
-                    Escrever(distribuicaoNormalizada[j][c], constante2);
+                    Escrever(distribuicaoNormalizada[j][c], formatarMatrizes);
                 }
             }
         }
@@ -781,7 +786,7 @@ public class Projeto {
             System.out.println("\nO vetor próprio associado ao maior valor próprio é:");
             for (c = 0; c < Nt[0].length; c++) {
                 System.out.print("Idade " + c + ": ");
-                Escrever(vetorProprio[c], constante2);
+                Escrever(vetorProprio[c], formatarMatrizes);
             }
         }
         if (opcoesVisualizaco[leslie-1]==1){
@@ -1057,7 +1062,7 @@ public class Projeto {
         boolean flag;
         flag = NotCientifica(numero);
         if (flag) {
-            if (n == constante) {
+            if (n == formatarVetores) {
                 System.out.print(ConverterNotacaoCientifica(numero));
             } else {
                 System.out.print(ConverterNotacaoCientifica(numero) + "\n");
@@ -1065,13 +1070,13 @@ public class Projeto {
         } else {
             flag = DoubleparaIntVer(numero);
             if (flag) {
-                if (n == constante) {
+                if (n == formatarVetores) {
                     System.out.print(DoubleToInt(numero));
                 } else {
                     System.out.print(DoubleToInt(numero) + "\n");
                 }
             } else {
-                if (n == constante) {
+                if (n == formatarVetores) {
                     System.out.printf("%.2f", numero);
                 } else {
                     System.out.printf("%.2f\n", numero);
