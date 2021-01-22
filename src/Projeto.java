@@ -2,15 +2,11 @@ import org.la4j.Matrix;
 import org.la4j.decomposition.EigenDecompositor;
 import org.la4j.matrix.dense.Basic2DMatrix;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -400,6 +396,15 @@ public class Projeto {
                         if (existe) {
                             System.out.print("Qual o nome do novo ficheiro? ");
                             String nomeFicheiro = ler.next();
+                            if(!existeFicheiro(nomeFicheiro)){
+                                do{
+                                    erro();
+                                    System.out.print("Insira outro ficheiro: ");
+                                    nomeFicheiro = ler.next();
+                                    System.out.println();
+
+                                } while(!existeFicheiro(nomeFicheiro));
+                            }
                             populacaoInicial = vetorAuto(nomeFicheiro);
                             matrizAuto(matrizLeslie, nomeFicheiro);
                         } else {
