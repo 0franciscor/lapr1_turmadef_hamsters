@@ -50,7 +50,7 @@ public class Projeto {
         boolean existe = false, naoInterativo = false, ordem;
         String nomeFicheiro = null;
         int[] opcoesExecucao = new int[5];
-        int numCiclos = 0, erro = 0; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
+        int numCiclos = 0, erro = modointerativo; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
 
         //String[] args2 = new String[]{"-n", "Hamsters.txt"};
         //args = args2;
