@@ -60,6 +60,12 @@ public class Testes {
         System.out.println("DataCriaçãoFicheiros: " + determinarDataCriacao("21_01_2021"));
         System.out.println("EliminarFicheiro: " + EliminarFicheiroTextoGrafico("valores.txt"));
         System.out.println("RetirarExtensão: " + RetirarExtensao("Hamsters.txt", "Hamsters"));
+
+        System.out.println("\nTestes Gráficos\n");
+
+        System.out.println("codigoGrafico3e4: " + codigoGrafico3e4("População","População Distribuida",1,"set xlabel 'Gerações'; set ylabel 'População' ; set title 'População Distribuida' font 'arial,20'; set palette rgb 7,5,15; plot 'valores.txt' u 1:2 w lp t 'Idade 0' lw 3 ,'valores.txt' u 1:3w lp t 'Idade 1' lw 3"));
+        System.out.println("codigoGrafico3e4: " + codigoGrafico3e4("População","População Distribuida",2,"set xlabel 'Gerações'; set ylabel 'População' ; set title 'População Distribuida' font 'arial,20'; set palette rgb 7,5,15; plot 'valores.txt' u 1:2 w lp t 'Idade 0' lw 3 ,'valores.txt' u 1:3w lp t 'Idade 1' lw 3 ,'valores.txt' u 1:4w lp t 'Idade 2' lw 3"));
+        System.out.println("Criarpasta: "+Criarpasta("output"));
     }
 
     //COMPARAÇÃO
@@ -269,6 +275,24 @@ public class Testes {
         if (resultado.equals(expected)) {
             return true;
         }else {
+            return false;
+        }
+    }
+    //-------------------------------------Testes Gráficos--------------------------------------------
+    public static boolean codigoGrafico3e4(String ylabel,String titulo,int n,String expected) throws IOException {
+        String resultado = Projeto.CodigoGrafico3e4(n, ylabel, titulo);
+        if (expected.equals(resultado)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public static boolean Criarpasta(String nome) {
+        File file = new File(nome);
+        Projeto.Criarpasta(nome);
+        if (file.exists()) {
+            return true;
+        } else {
             return false;
         }
     }
