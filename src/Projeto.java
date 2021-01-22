@@ -48,8 +48,8 @@ public class Projeto {
         int numCiclos = 0, erro = 0; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
         File novofich = new File("output\\valores.txt");
 
-        String[] args2 = new String[]{"-n", "Hamsters.txt"};
-        args = args2;
+        //String[] args2 = new String[]{"-n", "Hamsters.txt"};
+        //args = args2;
 
 
         //RESPOSAVEL POR VERIFICAR SE O CODIGO ESTA A CORRER EM MODO NAO INTERATIVO
