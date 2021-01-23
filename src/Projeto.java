@@ -47,31 +47,21 @@ public class Projeto {
 
     static Scanner ler = new Scanner(System.in);
 
-    public static boolean analisaMatriz(double[][] matrizLeslie){
-        int j = 0;
-        for(int i = 1; i<matrizLeslie.length; i++){
-            if(matrizLeslie[i][j]<0 || matrizLeslie[i][j]>1)
-                return false;
-        }
-        return true;
-    }
-
     public static void main(String[] args) throws IOException, InterruptedException {
         boolean existe = false, naoInterativo = false, ordem;
         String nomeFicheiro = null;
         int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = modointerativo; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
 
-        //String[] args2 = new String[]{"-n", "Hamsters.txt"};
+        //String[] args2 = new String[]{"-o", "Hamsters.txt"};
         //args = args2;
-
 
         //RESPOSAVEL POR VERIFICAR EVITAR ERRO COM MODO INTERATIVO COM MAIS DE DOIS PARAMETROS
         if (args.length>tamanhoComando && !(args[0].equals("-n"))) {
             erro = modoNInterativo(opcoesExecucao, args, erro);
         }
 
-        if(args.length > tamanhoComando && args[0].equals("-n")){
+        if(args.length == tamanhoComando && !(args[0].equals("-n"))){
             erro = detetadoErro;
             erro();
         }
@@ -85,7 +75,7 @@ public class Projeto {
             }
             //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
 
-            else if (erro != detetadoErro && args.length == tamanhoComando) {
+            else if (erro != detetadoErro && args.length == tamanhoComando && args[0].equals("-n")) {
                 existe = modoInterativo(args);
                 if (existe)
                     nomeFicheiro = args[1];
@@ -96,8 +86,8 @@ public class Projeto {
             }
             //TERMINA AQUI
 
-            double[] populacaoInicial; //DECLARAÇÃO VETOR INICIAL
-            double[][] matrizLeslie;  //DECLARAÇÃO MATRIZ LESLIE
+            double[] populacaoInicial = null; //DECLARAÇÃO VETOR INICIAL
+            double[][] matrizLeslie = null;  //DECLARAÇÃO MATRIZ LESLIE
 
             if (erro != detetadoErro) {
                 if (existe) {
@@ -117,10 +107,12 @@ public class Projeto {
                     analisaMatriz(matrizLeslie);
 
                 } else {
-                    populacaoInicial = vetorManual();
-                    matrizLeslie = matrizManual(populacaoInicial);
-                    nomeFicheiro = nomeManual();
-                    System.out.println();
+                    if(args.length==0) {
+                        populacaoInicial = vetorManual();
+                        matrizLeslie = matrizManual(populacaoInicial);
+                        nomeFicheiro = nomeManual();
+                        System.out.println();
+                    }
                 }
                 if (erro != detetadoErro) {
                     int geracao = -1;
@@ -163,12 +155,7 @@ public class Projeto {
     }
 
     public static boolean modoInterativo(String[] args){
-        boolean existe = false;
-        if (args.length != 0 && args[0].equals("-n")) {
-            String nomeFicheiro = args[1];
-            existe = existeFicheiro(nomeFicheiro);
-        }
-        return existe;
+        return existeFicheiro(args[1]);
     }
 
     public static int modoNInterativo(int[] opcoesExecucao, String[] args, int erro) {
@@ -266,6 +253,15 @@ public class Projeto {
                 insercaoMatriz(matrizLeslie, array, 2, true);
         }
         return ordem;
+    }
+
+    public static boolean analisaMatriz(double[][] matrizLeslie){
+        int j = 0;
+        for(int i = 1; i<matrizLeslie.length; i++){
+            if(matrizLeslie[i][j]<0 || matrizLeslie[i][j]>1)
+                return false;
+        }
+        return true;
     }
 
     public static double[] vetorManual() {
