@@ -875,9 +875,9 @@ public class Projeto {
         rt.exec("gnuplot -e \"set terminal "+terminal+"; set output '"+nomegrafico+"'; "+codigognuplot+"\"");
     }
 
-    public static void PerguntaGrafico(String codigognuplot,int geracao,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][] Nt,double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,double[][]matrizLeslie,String nomepop,String output,String nome) throws IOException, InterruptedException {
+    public static void PerguntaGrafico(String codigognuplot,int geracao,int geracao1,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][] Nt,double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,double[][]matrizLeslie,String nomepop,String output,String nome) throws IOException, InterruptedException {
         int resposta;
-        String nomegrafico=nome+output;
+        String nomegrafico=nome+geracao1+"_"+output;
         File graficopng = new File("Grafico.png");
         TimeUnit.MILLISECONDS.sleep(tempoespera1);
         System.out.println("Deseja Salvar o Gráfico?(1- Sim; 2- Não)");
@@ -951,7 +951,6 @@ public class Projeto {
     }
 
     public static void Graficosinterativo(double[][] matrizLeslie,int geracao,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,int num, String nomepop,double valorProprio,double[] vetorProprio) throws IOException, InterruptedException {
-        String s;
         String output = Criaroutput(nomepop);
         File novofich = new File("valores.txt");
         int [] opcoesVisualizacao = new int[todaInformacaoSGrafico-1];
@@ -966,10 +965,10 @@ public class Projeto {
                 Grafico1e2interativo(matrizLeslie,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,nomepop,valorProprio,vetorProprio,opcoesVisualizacao,output,novofich,codigognuplot,taxasDeVariacao,taxaVariacao,"TaxadeVariacao_",geracao1);
                 break;
             case 3:
-                Grafico3e4interativo(matrizLeslie,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,nomepop,valorProprio,vetorProprio,opcoesVisualizacao,output,novofich,distribuicaoPop,"População","População Distribuida","PopulacaoDistribuida_",Nt);
+                Grafico3e4interativo(matrizLeslie,geracao,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,nomepop,valorProprio,vetorProprio,opcoesVisualizacao,output,novofich,distribuicaoPop,"População","População Distribuida","PopulacaoDistribuida_",Nt);
                 break;
             case 4:
-                Grafico3e4interativo(matrizLeslie,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,nomepop,valorProprio,vetorProprio,opcoesVisualizacao,output,novofich,distribuicaoNormalizadaPop,"Distribuição","Distribuição Normalizada","PopulacaoNormalizada_",distribuicaoNormalizada);
+                Grafico3e4interativo(matrizLeslie,geracao,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,nomepop,valorProprio,vetorProprio,opcoesVisualizacao,output,novofich,distribuicaoNormalizadaPop,"Distribuição","Distribuição Normalizada","PopulacaoNormalizada_",distribuicaoNormalizada);
                 break;
         }
     }
@@ -1098,17 +1097,17 @@ public class Projeto {
         EscreverGrafico1e2(geracao1,variavel);
         Criarpng(codigognuplot);
         escreverParaConsola(matrizLeslie,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,opcoesVisualizacao,nomepop);
-        PerguntaGrafico(codigognuplot,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,matrizLeslie,nomepop,output,nome);
+        PerguntaGrafico(codigognuplot,geracao,geracao1,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,matrizLeslie,nomepop,output,nome);
         EliminarFicheiroTextoGrafico(novofich);
     }
 
-    public static void Grafico3e4interativo(double[][] matrizLeslie,int geracao,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,String nomepop,double valorProprio,double[] vetorProprio,int [] opcoesVisualizacao,String output,File novofich,int variavel,String ylabel,String titulo,String nome,double[][] Escrever1) throws IOException, InterruptedException {
+    public static void Grafico3e4interativo(double[][] matrizLeslie,int geracao,int geracao1,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,String nomepop,double valorProprio,double[] vetorProprio,int [] opcoesVisualizacao,String output,File novofich,int variavel,String ylabel,String titulo,String nome,double[][] Escrever1) throws IOException, InterruptedException {
         opcoesVisualizacao[variavel-1]=1;
         EscreverGrafico3e4(Nt[0].length,Escrever1,geracao);
         String s=CodigoGrafico3e4(Nt[0].length,ylabel,titulo);
         Criarpng(s);
         escreverParaConsola(matrizLeslie,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,opcoesVisualizacao,nomepop);
-        PerguntaGrafico(s,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,matrizLeslie,nomepop,output,nome);
+        PerguntaGrafico(s,geracao,geracao1,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,valorProprio,vetorProprio,matrizLeslie,nomepop,output,nome);
         EliminarFicheiroTextoGrafico(novofich);
     }
 

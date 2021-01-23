@@ -51,7 +51,7 @@ public class Testes {
         System.out.println("calcularVetorValorProprio: " + calcularVetorValorProprio(4, new double[][]{{4, 0, 0}, {0, 3, 0}, {0, 0, 1}}));
         System.out.println("calcularVetorValorProprio: " + calcularVetorValorProprio(3, new double[][]{{1, 7, 0}, {0, 3, 0}, {0, 0, 1}}));
 
-        System.out.println("\nTestes Catarina\n");
+        System.out.println("\nTestes Ficheiro de Saída\n");
 
         System.out.println("VerificarNotaçãoCientifica: " + NotCientifica(2));
         System.out.println("VerificarNotaçãoCientifica: " + NotCientifica(50));
@@ -222,7 +222,7 @@ public class Testes {
         }
     }
 
-    //-------------------------------------Testes Catarina--------------------------------------------------------------
+    //-------------------------------------Testes Ficheiro de Saída--------------------------------------------------------------
 
     public static boolean NotCientifica(double teste) {
         boolean resultado = Projeto.NotCientifica(teste);
