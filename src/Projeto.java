@@ -55,7 +55,7 @@ public class Projeto {
         int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = modointerativo; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
 
-        //String[] args2 = new String[]{"-a", "3", "-g", "2", "Hamsters.txt", "conita.txt"};
+        //String[] args2 = new String[]{"-n", "Hamsters.txt"};
         //args = args2;
 
         if(args.length != tamanhoComando && args[0].equals("-n")){
@@ -78,7 +78,8 @@ public class Projeto {
             //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
 
             else if (erro != detetadoErro && args.length == tamanhoComando && args[0].equals("-n")) {
-                if (modoInterativo(args))
+                existe = modoInterativo(args);
+                if (existe)
                     nomeFicheiro = args[1];
                 else {
                     erro = detetadoErro;
