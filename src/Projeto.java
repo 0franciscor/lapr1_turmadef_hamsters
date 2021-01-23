@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.text.DecimalFormat;
@@ -24,6 +25,8 @@ public class Projeto {
     public static final int formatarVetores = 1;
     public static final int formatarMatrizes = 2;
     public static final int tempoespera1=800;
+    public static final int tempoespera2=250;
+    public static final int tempoespera3=500;
 
     public static final int pararIntroducao = 0;
     public static final int totalPopulacao = 1;
@@ -880,19 +883,19 @@ public class Projeto {
                     case 1:
                         String nomegrafico2=nomegrafico+".png";
                         SalvarGrafico(d, "png",nomegrafico2);
-                        TimeUnit.MILLISECONDS.sleep(tempoespera1);
+                        TimeUnit.MILLISECONDS.sleep(tempoespera3);
                         mifichero(nomegrafico2,output);
                         break;
                     case 2:
                         nomegrafico2= nomegrafico+".txt";
                         SalvarGrafico(d,"dumb",nomegrafico2);
-                        TimeUnit.MILLISECONDS.sleep(tempoespera1);
+                        TimeUnit.MILLISECONDS.sleep(tempoespera3);
                         mifichero(nomegrafico2,output);
                         break;
                     case 3:
                         nomegrafico2= nomegrafico+".eps";
                         SalvarGrafico(d,"eps",nomegrafico2);
-                        TimeUnit.MILLISECONDS.sleep(tempoespera1);
+                        TimeUnit.MILLISECONDS.sleep(tempoespera3);
                         mifichero(nomegrafico2,output);
                         break;
                     default:
@@ -937,7 +940,7 @@ public class Projeto {
     public static void Criarpng(String d) throws IOException, InterruptedException {
         SalvarGrafico(d,"png","Grafico.png");
         File file = new File("Grafico.png");
-        TimeUnit.MILLISECONDS.sleep(250);
+        TimeUnit.MILLISECONDS.sleep(tempoespera3);
         Desktop desktop = Desktop.getDesktop();
         if(file.exists()) desktop.open(file);
     }
@@ -1049,41 +1052,51 @@ public class Projeto {
     public static void Graficonaointerativo(int[] opcoesExecucao,int geracao,double[] populacoesEstimadas,double[] taxasDeVariacao,double[][] Nt,double[][] distribuicaoNormalizada,String output) throws IOException, InterruptedException {
         int l=opcoesExecucao[1];
         String s,codigognuplot;
-        File novofich = new File(output+"\\valores.txt");
+        File novofich = new File("valores.txt");
+        Criarpasta(output);
         if (opcoesExecucao[3]==1) {
             EscreverGrafico1e2(geracao, populacoesEstimadas);
             codigognuplot = "set xlabel 'Gerações'; set ylabel 'População' ; set title 'População total' font 'arial,20'; plot 'valores.txt' title 'População Total' with lines lc 'blue' lw 3";
             PerguntaGraficoNaoInterativo(codigognuplot, l, output, "PopulacaoTotal_");
-            TimeUnit.MILLISECONDS.sleep(250);
+            TimeUnit.MILLISECONDS.sleep(tempoespera2);
         }
         if (opcoesExecucao[4]==1) {
             EscreverGrafico1e2((geracao - 1), taxasDeVariacao);
             codigognuplot = "set xlabel 'Gerações'; set ylabel 'Taxa de Variação' ; set title 'Taxa de Variação' font 'arial,20'; plot 'valores.txt' title 'Taxa de Variação' with lines lc 'red' lw 3";
             PerguntaGraficoNaoInterativo(codigognuplot, l, output, "TaxadeVariacao_");
-            TimeUnit.MILLISECONDS.sleep(250);
+            TimeUnit.MILLISECONDS.sleep(tempoespera2);
         }
         EscreverGrafico3e4(Nt[0].length,Nt,geracao);
         s=CodigoGrafico3e4(Nt[0].length,"População","População Distribuida");
         PerguntaGraficoNaoInterativo(s,l,output,"PopulacaoDistribuida_");
-        TimeUnit.MILLISECONDS.sleep(250);
+        TimeUnit.MILLISECONDS.sleep(tempoespera2);
         EscreverGrafico3e4(Nt[0].length,distribuicaoNormalizada,geracao);
         s=CodigoGrafico3e4(Nt[0].length,"Distribuição","Distribuição Normalizada");
         PerguntaGraficoNaoInterativo(s,l,output,"DistribuicaoNormalizada_");
-        TimeUnit.MILLISECONDS.sleep(250);
+        TimeUnit.MILLISECONDS.sleep(tempoespera2);
         EliminarFicheiroTextoGrafico(novofich);
     }
 
-    public static void PerguntaGraficoNaoInterativo(String d,int l,String output,String nome) throws IOException {
+    public static void PerguntaGraficoNaoInterativo(String d,int l,String output,String nome) throws IOException, InterruptedException {
         String nomegrafico=nome+output;
         switch (l) {
             case 1:
-                SalvarGrafico(d, "png",nomegrafico+".png");
+                String nomegrafico2=nomegrafico+".png";
+                SalvarGrafico(d, "png",nomegrafico2);
+                TimeUnit.MILLISECONDS.sleep(tempoespera3);
+                mifichero(nomegrafico2,output);
                 break;
             case 2:
-                SalvarGrafico(d,"dumb",nomegrafico+ ".txt");
+                nomegrafico2=nomegrafico+".txt";
+                SalvarGrafico(d, "dumb",nomegrafico2);
+                TimeUnit.MILLISECONDS.sleep(tempoespera3);
+                mifichero(nomegrafico2,output);
                 break;
             case 3:
-                SalvarGrafico(d,"eps", nomegrafico+ ".eps");
+                nomegrafico2=nomegrafico+".eps";
+                SalvarGrafico(d, "eps",nomegrafico2);
+                TimeUnit.MILLISECONDS.sleep(tempoespera3);
+                mifichero(nomegrafico2,output);
                 break;
         }
     }
@@ -1127,7 +1140,10 @@ public class Projeto {
         return output;
     }
     public static void mifichero(String nomegrafico,String output) throws IOException {
-        Files.move
-                (Paths.get(nomegrafico), Paths.get(output+"\\"+nomegrafico));
+        String deficheiro = nomegrafico;
+        String paraficheiro = output+"\\"+nomegrafico;
+        Path original = Paths.get(deficheiro);
+        Path pasta = Paths.get(paraficheiro);
+            Files.move(original,pasta,StandardCopyOption.REPLACE_EXISTING);
     }
 }
