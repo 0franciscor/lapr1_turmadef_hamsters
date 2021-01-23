@@ -55,17 +55,19 @@ public class Projeto {
         int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = modointerativo; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
 
-        //String[] args2 = new String[]{"-n", "Hamsters.txt"};
+        //String[] args2 = new String[]{"-t", "3", "Hamsters.txt", "rato.txt"};
         //args = args2;
 
-        if(args.length != tamanhoComando && args[0].equals("-n")){
-            erro = detetadoErro;
-            erro();
-        }
+        if(args.length != 0) {
+            if ((args.length == tamanhoComando && !(args[0].equals("-n"))) || (args.length != tamanhoComando && (args[0].equals("-n")))) {
+                erro = detetadoErro;
+                erro();
+            }
 
-        //RESPOSAVEL POR VERIFICAR EVITAR ERRO COM MODO INTERATIVO COM MAIS DE DOIS PARAMETROS
-        if (args.length>= (3*tamanhoComando) && args.length <= (todaInformacaoCGrafico)  && !(args[0].equals("-n")) && erro != tamanhoComando) {
-            erro = modoNInterativo(opcoesExecucao, args, erro);
+            //RESPOSAVEL POR VERIFICAR EVITAR ERRO COM MODO INTERATIVO COM MAIS DE DOIS PARAMETROS
+            if (args.length>tamanhoComando && !(args[0].equals("-n")))  {
+                erro = modoNInterativo(opcoesExecucao, args, erro);
+            }
         }
 
         if(erro != detetadoErro) {
@@ -104,7 +106,6 @@ public class Projeto {
 
                     if (!ordem || !analisaMatriz(matrizLeslie))
                         erro = detetadoErro;
-
 
                     analisaMatriz(matrizLeslie);
 
@@ -207,7 +208,7 @@ public class Projeto {
         } else{
             erro = detetadoErro;
         }
-        if(opcoesExecucao[1] == 0 || opcoesExecucao[0] == 0)  {
+        if(opcoesExecucao[0] == 0 || opcoesExecucao[1] == 0)  {
             erro = detetadoErro;
         }
 
@@ -233,7 +234,14 @@ public class Projeto {
 
     public static boolean existeFicheiro(String nomeFicheiro){
         File ficheiroVerificacao = new File(nomeFicheiro);
-        return ficheiroVerificacao.exists();
+        boolean existe = ficheiroVerificacao.exists();
+
+        if(existe) {
+            if (nomeFicheiro.contains("ç") || nomeFicheiro.contains("ã") || nomeFicheiro.contains("õ"))
+                return false;
+        }
+
+        return existe;
     }
 
     public static double[] vetorAuto(String nomeFicheiro) throws FileNotFoundException {
@@ -288,7 +296,14 @@ public class Projeto {
 
     public static String nomeManual(){
         System.out.print("Qual é o nome da população que pretende estudar? ");
-        return ler.next();
+        String nomePop = ler.next();
+        if (nomePop.contains("ç") || nomePop.contains("ã") || nomePop.contains("õ"))
+            do{
+                System.out.print("\nNome com caracteres inválidos. Insira outro, por favor: ");
+                nomePop = ler.next();
+            } while(nomePop.contains("ç") || nomePop.contains("ã") || nomePop.contains("õ"));
+
+        return nomePop;
     }
 
     public static String leituraDados(String nomeFicheiro, int numLinha) throws FileNotFoundException { //LEITURA EXCLUSIVA DO VETOR
