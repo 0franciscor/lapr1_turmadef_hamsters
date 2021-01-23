@@ -54,12 +54,17 @@ public class Testes {
         System.out.println("\nTestes Catarina\n");
 
         System.out.println("VerificarNotaçãoCientifica: " + NotCientifica(2));
+        System.out.println("VerificarNotaçãoCientifica: " + NotCientifica(50));
         System.out.println("ConversãoemNotaçãoCientifica: " + ConverterNotacaoCientifica(1250, "1,25E3"));
+        System.out.println("ConversãoemNotaçãoCientifica: " + ConverterNotacaoCientifica(13500, "1,35E4"));
         System.out.println("VerificarDouble: " + DoubleparaIntVer(2));
+        System.out.println("VerificarDouble: " + DoubleparaIntVer(10));
         System.out.println("ConverterEmInteiro: " + DoubleToInt(100.00, "100"));
-        System.out.println("DataCriaçãoFicheiros: " + determinarDataCriacao("21_01_2021"));
+        System.out.println("ConverterEmInteiro: " + DoubleToInt(250.00, "250"));
         System.out.println("EliminarFicheiro: " + EliminarFicheiroTextoGrafico("valores.txt"));
+        System.out.println("EliminarFicheiro: " + EliminarFicheiroTextoGrafico("ratinho.txt"));
         System.out.println("RetirarExtensão: " + RetirarExtensao("Hamsters.txt", "Hamsters"));
+        System.out.println("RetirarExtensão: " + RetirarExtensao("ratinho.txt", "ratinho"));
 
         System.out.println("\nTestes Gráficos\n");
 
@@ -248,14 +253,6 @@ public class Testes {
     public static boolean DoubleToInt(double teste, String expected) {
         String resultado = Projeto.DoubleToInt(teste);
         if (resultado.equals(expected)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    public static boolean determinarDataCriacao(String expected) throws IOException {
-        String resultado = Projeto.determinarDataCriacao();
-        if(resultado.equals(expected)) {
             return true;
         } else {
             return false;

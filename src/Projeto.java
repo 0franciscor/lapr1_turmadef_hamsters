@@ -1004,17 +1004,11 @@ public class Projeto {
 
     public static String determinarDataCriacao() throws IOException {
         String nomeFich = "./";
-        Path file = Paths.get(nomeFich);
-        BasicFileAttributes time = Files.readAttributes(file, BasicFileAttributes.class);
-        FileTime filetime = time.lastModifiedTime();
-        return formatarData(filetime);
+        File file = new File(nomeFich);
+        SimpleDateFormat formato = new SimpleDateFormat("dd_MM_yyyy");
+        String date = formato.format(file.lastModified());
+        return date;
     }
-
-    public static String formatarData (FileTime fileTime) {
-        SimpleDateFormat tempo = new SimpleDateFormat("dd_MM_yyyy");
-        return tempo.format(fileTime.toMillis());
-    }
-
     public static void EliminarFicheiroTextoGrafico(File file) {
         file.delete();
     }
@@ -1086,13 +1080,6 @@ public class Projeto {
             }
         }
     }
-    public static String identificar(String nomepop, boolean existe) {
-        if(existe) {
-            nomepop = RetirarExtensao(nomepop);
-        }
-        return nomepop;
-    }
-
     public static String Criaroutput(String nomepop) throws IOException {
         String tempo = determinarDataCriacao();
         String output=nomepop + "_" + tempo;
