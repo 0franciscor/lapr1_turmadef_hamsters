@@ -51,7 +51,7 @@ public class Projeto {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         boolean existe = false, naoInterativo = false, ordem;
-        String nomeFicheiro = null;
+        String nomeFicheiro = null,nomepop=null;
         int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = modointerativo; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
 
@@ -72,14 +72,16 @@ public class Projeto {
                 existe = true;
                 numCiclos = opcoesExecucao[0];
                 nomeFicheiro = args[(args.length - 2)];
+                nomepop=RetirarExtensao(nomeFicheiro);
             }
             //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
 
             else if (erro != detetadoErro && args.length == tamanhoComando && args[0].equals("-n")) {
                 existe = modoInterativo(args);
-                if (existe)
+                if (existe) {
                     nomeFicheiro = args[1];
-                else {
+                    nomepop=RetirarExtensao(nomeFicheiro);
+                }else {
                     erro = detetadoErro;
                     erro();
                 }
@@ -109,11 +111,11 @@ public class Projeto {
                     if(args.length==0) {
                         populacaoInicial = vetorManual();
                         matrizLeslie = matrizManual(populacaoInicial);
-                        nomeFicheiro = nomeManual();
+                        nomepop = nomeManual();
                         System.out.println();
                     }
                 }
-                if(nomeFicheiro == null)
+                if(nomeFicheiro == null && nomepop == null)
                     erro = detetadoErro;
                 if (erro != detetadoErro) {
                     int geracao = -1;
@@ -125,7 +127,7 @@ public class Projeto {
                     double[] vetor = new double[matrizLeslie.length];
 
                     if (naoInterativo) {
-                        String nomepop=RetirarExtensao(nomeFicheiro);
+                        nomepop=RetirarExtensao(nomeFicheiro);
                         dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomepop);
                     } else {
                         System.out.print("Quantas geracoes pretende que sejam estudadas? ");
@@ -138,7 +140,6 @@ public class Projeto {
                             } while (!verificaInteiro(nCiclos));
                         }
                         numCiclos = Integer.parseInt(nCiclos);
-                        String nomepop=RetirarExtensao(nomeFicheiro);
                         dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomepop);
                     }
                 }
@@ -877,7 +878,7 @@ public class Projeto {
 
     public static void PerguntaGrafico(String codigognuplot,int geracao,int geracao1,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][] Nt,double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,double[][]matrizLeslie,String nomepop,String output,String nome) throws IOException, InterruptedException {
         int resposta;
-        String nomegrafico=nome+geracao1+"_"+output;
+        String nomegrafico=nome+geracao1+"geracoes_"+output;
         File graficopng = new File("Grafico.png");
         TimeUnit.MILLISECONDS.sleep(tempoespera1);
         System.out.println("Deseja Salvar o Gráfico?(1- Sim; 2- Não)");
