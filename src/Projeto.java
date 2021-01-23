@@ -125,7 +125,8 @@ public class Projeto {
                     double[] vetor = new double[matrizLeslie.length];
 
                     if (naoInterativo) {
-                        dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
+                        String nomepop=RetirarExtensao(nomeFicheiro);
+                        dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomepop);
                     } else {
                         System.out.print("Quantas geracoes pretende que sejam estudadas? ");
                         String nCiclos = ler.next();
@@ -137,8 +138,8 @@ public class Projeto {
                             } while (!verificaInteiro(nCiclos));
                         }
                         numCiclos = Integer.parseInt(nCiclos);
-
-                        dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomeFicheiro);
+                        String nomepop=RetirarExtensao(nomeFicheiro);
+                        dadosGeracoes(existe, geracao, numCiclos, Nt, matrizLeslie, populacaoInicial, populacoesEstimadas, taxasDeVariacao, distribuicaoNormalizada, vetor, naoInterativo, opcoesExecucao, args, nomepop);
                     }
                 }
                 else{
@@ -450,13 +451,11 @@ public class Projeto {
         }
         double valorProprio = calcularVetorValorProprio(matrizLeslie, vetor);
         if (naoInterativo) {
-            nomepop=RetirarExtensao(nomepop);
             String output=Criaroutput(nomepop);
             Criarpasta(output);
             escreverParaFicheiro(matrizLeslie,opcoesExecucao, geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor,output,args);
             Graficonaointerativo(opcoesExecucao,geracao,populacoesEstimadas,taxasDeVariacao,Nt,distribuicaoNormalizada,output);
         } else {
-            nomepop=identificar(nomepop,existe);
             interfaceUtilizador(existe, numCiclos, matrizLeslie,geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetor, nomepop, args,populacaoInicial);
         }
     }
@@ -484,11 +483,13 @@ public class Projeto {
                         if (existe) {
                             System.out.print("Qual o nome do novo ficheiro? ");
                             String nomeFicheiro = ler.next();
+                            nomepop=RetirarExtensao(nomeFicheiro);
                             if(!existeFicheiro(nomeFicheiro)){
                                 do{
                                     erro();
                                     System.out.print("Insira outro ficheiro: ");
                                     nomeFicheiro = ler.next();
+                                    nomepop=RetirarExtensao(nomeFicheiro);
                                     System.out.println();
 
                                 } while(!existeFicheiro(nomeFicheiro));
@@ -506,6 +507,7 @@ public class Projeto {
                                 System.out.print("A síntaxe do comando está incorreta ou os ficheiros requisitados não existem. Por favor insira outro: ");
                                 do {
                                     nomeFicheiro = ler.next();
+                                    nomepop=RetirarExtensao(nomeFicheiro);
                                     System.out.println();
                                 } while (!tratamentoDadosOrdem((leituraDados(nomeFicheiro, 0))) && !matrizAuto(matrizLeslie, nomeFicheiro));
                             }
