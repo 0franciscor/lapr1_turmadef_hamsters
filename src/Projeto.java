@@ -55,9 +55,6 @@ public class Projeto {
         int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = modointerativo; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
 
-        String[] args2 = new String[]{"-n", "Hamsters.txt"};
-        args = args2;
-
         if(args.length != 0) {
             if ((args.length == tamanhoComando && !(args[0].equals("-n"))) || (args.length != tamanhoComando && (args[0].equals("-n")))) {
                 erro = detetadoErro;
@@ -116,6 +113,8 @@ public class Projeto {
                         System.out.println();
                     }
                 }
+                if(nomeFicheiro == null)
+                    erro = detetadoErro;
                 if (erro != detetadoErro) {
                     int geracao = -1;
 
@@ -145,7 +144,6 @@ public class Projeto {
                 else{
                     if(erro==detetadoErro) {
                         erro();
-                        System.out.println("A ordem dos dados de inserção tem de ser crescente ou possui valores fora dos intervalos permitidos.");
                     }
                 }
             }
@@ -153,7 +151,7 @@ public class Projeto {
     }
 
     public static void erro(){
-        System.out.println("A síntaxe do comando está incorreta ou os ficheiros requisitados não existem.");
+        System.out.println("A síntaxe do comando/parâmetros está incorreta ou os ficheiros requisitados não existem.");
     }
 
     public static boolean modoInterativo(String[] args){
