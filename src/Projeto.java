@@ -55,8 +55,8 @@ public class Projeto {
         int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = modointerativo; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
 
-        //String[] args2 = new String[]{"-t", "3", "Hamsters.txt", "rato.txt"};
-        //args = args2;
+        String[] args2 = new String[]{"-n", "Hamsters.txt"};
+        args = args2;
 
         if(args.length != 0) {
             if ((args.length == tamanhoComando && !(args[0].equals("-n"))) || (args.length != tamanhoComando && (args[0].equals("-n")))) {
@@ -64,8 +64,7 @@ public class Projeto {
                 erro();
             }
 
-            //RESPOSAVEL POR VERIFICAR EVITAR ERRO COM MODO INTERATIVO COM MAIS DE DOIS PARAMETROS
-            if (args.length>tamanhoComando && !(args[0].equals("-n")))  {
+            if (args.length>tamanhoComando && !(args[0].equals("-n"))){
                 erro = modoNInterativo(opcoesExecucao, args, erro);
             }
         }
