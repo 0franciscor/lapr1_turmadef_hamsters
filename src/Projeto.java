@@ -1,7 +1,6 @@
 import org.la4j.Matrix;
 import org.la4j.decomposition.EigenDecompositor;
 import org.la4j.matrix.dense.Basic2DMatrix;
-
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -56,17 +55,17 @@ public class Projeto {
         int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = modointerativo; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
 
-        //String[] args2 = new String[]{"-o", "Hamsters.txt"};
+        //String[] args2 = new String[]{"-a", "3", "-g", "2", "Hamsters.txt", "conita.txt"};
         //args = args2;
 
-        //RESPOSAVEL POR VERIFICAR EVITAR ERRO COM MODO INTERATIVO COM MAIS DE DOIS PARAMETROS
-        if (args.length>tamanhoComando && !(args[0].equals("-n"))) {
-            erro = modoNInterativo(opcoesExecucao, args, erro);
-        }
-
-        if(args.length == tamanhoComando && !(args[0].equals("-n"))){
+        if(args.length != tamanhoComando && args[0].equals("-n")){
             erro = detetadoErro;
             erro();
+        }
+
+        //RESPOSAVEL POR VERIFICAR EVITAR ERRO COM MODO INTERATIVO COM MAIS DE DOIS PARAMETROS
+        if (args.length>= (3*tamanhoComando) && args.length <= (todaInformacaoCGrafico)  && !(args[0].equals("-n")) && erro != tamanhoComando) {
+            erro = modoNInterativo(opcoesExecucao, args, erro);
         }
 
         if(erro != detetadoErro) {
@@ -79,8 +78,7 @@ public class Projeto {
             //TERMINA AQUI E COMEÇA PARA O MODO INTERATIVO COM INTRODUÇAO DE FICHEIRO
 
             else if (erro != detetadoErro && args.length == tamanhoComando && args[0].equals("-n")) {
-                existe = modoInterativo(args);
-                if (existe)
+                if (modoInterativo(args))
                     nomeFicheiro = args[1];
                 else {
                     erro = detetadoErro;
@@ -208,7 +206,7 @@ public class Projeto {
         } else{
             erro = detetadoErro;
         }
-        if(opcoesExecucao[1] == 0){
+        if(opcoesExecucao[1] == 0 || opcoesExecucao[0] == 0)  {
             erro = detetadoErro;
         }
 
