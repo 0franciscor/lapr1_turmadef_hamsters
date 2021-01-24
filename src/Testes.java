@@ -73,7 +73,7 @@ public class Testes {
         System.out.println("Criarpasta: "+Criarpasta("output"));
     }
 
-    //COMPARAÇÃO
+    //---------------------COMPARAÇÃO-------------------------
 
     public static boolean comparaVetores(double[] vetor1, double[] vetor2) {
         for (int i = 0; i < vetor1.length; i++) {
@@ -93,7 +93,7 @@ public class Testes {
         return true;
     }
 
-    //TESTES INTRODUÇÃO DADOS
+    //-------------------------------TESTES INTRODUÇÃO DADOS------------------------------------
 
     public static boolean modoInterativo(String[] argumentos) {
         return Projeto.modoInterativo(argumentos);

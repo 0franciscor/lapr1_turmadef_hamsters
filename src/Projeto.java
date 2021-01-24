@@ -1,6 +1,7 @@
 import org.la4j.Matrix;
 import org.la4j.decomposition.EigenDecompositor;
 import org.la4j.matrix.dense.Basic2DMatrix;
+
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,8 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.FileTime;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -54,6 +53,7 @@ public class Projeto {
         String nomeFicheiro = null;
         int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = modointerativo; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
+
 
         if(args.length != 0) {
             if ((args.length == tamanhoComando && !(args[0].equals("-n"))) || (args.length != tamanhoComando && (args[0].equals("-n")))) {
@@ -235,8 +235,10 @@ public class Projeto {
         boolean existe = ficheiroVerificacao.exists();
 
         if(existe) {
-            if (nomeFicheiro.contains("ç") || nomeFicheiro.contains("ã") || nomeFicheiro.contains("õ"))
+            if (nomeFicheiro.contains("ç") || nomeFicheiro.contains("ã") || nomeFicheiro.contains("õ")) {
+                System.out.println("(O ficheiro deve conter um nome sem caracteres especiais.)");
                 return false;
+            }
         }
 
         return existe;
@@ -293,14 +295,14 @@ public class Projeto {
     }
 
     public static String nomeManual(){
-        System.out.print("Qual é o nome da população que pretende estudar? ");
+        System.out.print("(Para que o gráfico em formato .eps seja devidamente criado, o nome não deve conter caracteres especiais)\nQual é o nome da população que pretende estudar? ");
         String nomePop = ler.next();
-        if (nomePop.contains("ç") || nomePop.contains("ã") || nomePop.contains("õ"))
-            do{
+        if (nomePop.contains("ç") || nomePop.contains("ã") || nomePop.contains("õ")) {
+            do {
                 System.out.print("\nNome com caracteres inválidos. Insira outro, por favor: ");
                 nomePop = ler.next();
-            } while(nomePop.contains("ç") || nomePop.contains("ã") || nomePop.contains("õ"));
-
+            } while (nomePop.contains("ç") || nomePop.contains("ã") || nomePop.contains("õ"));
+        }
         return nomePop;
     }
 
@@ -374,7 +376,7 @@ public class Projeto {
 
             if(elemento.equalsIgnoreCase("Taxa de Sobrevivência") && (array[i]<0 || array[i]>1)) {
                 do {
-                    System.out.println("Parâmetro não compatível. Insira um núemro entre 0 e 1");
+                    System.out.println("Parâmetro não compatível. Insira um número entre 0 e 1.");
                     System.out.print("Insira o valor nº" + (i + 1) + " da " + elemento + ": ");
                     array[i] = ler.nextDouble();
                 } while(array[i]<0 || array[i]>1);
