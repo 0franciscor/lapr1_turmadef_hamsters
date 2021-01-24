@@ -54,7 +54,6 @@ public class Projeto {
         int[] opcoesExecucao = new int[5];
         int numCiclos = 0, erro = modointerativo; //ERRO 0 - Interativo; ERRO 1- NAO INTERATIVO; ERRO 2- VERDADEIRO ERRO
 
-
         if(args.length != 0) {
             if ((args.length == tamanhoComando && !(args[0].equals("-n"))) || (args.length != tamanhoComando && (args[0].equals("-n")))) {
                 erro = detetadoErro;
@@ -110,9 +109,15 @@ public class Projeto {
                 } else {
                     if(args.length==0) {
                         populacaoInicial = vetorManual();
-                        matrizLeslie = matrizManual(populacaoInicial);
-                        nomepop = nomeManual();
-                        System.out.println();
+                        if(populacaoInicial != null) {
+                            matrizLeslie = matrizManual(populacaoInicial);
+                            nomepop = nomeManual();
+                            System.out.println();
+                        }
+                        else {
+                            erro = detetadoErro;
+                            System.out.println("O vetor populacional está vazio.");
+                        }
                     }
                 }
                 if(nomeFicheiro == null && nomepop == null)
@@ -277,8 +282,18 @@ public class Projeto {
 
     public static double[] vetorManual() {
         double[] array  = new double[1000];
+        double[] temporario = insercaoDados1(array);
+        int aux = 0;
+        for(int i = 0; i<temporario.length; i++){
+            if(temporario[i] == 0){
+                aux++;
+            }
+        }
+        if(aux == temporario.length)
+            return null;
+        else
+            return temporario;
 
-        return insercaoDados1(array);
     }
 
     public static double[][] matrizManual(double[] populacaoInicial){
@@ -542,6 +557,7 @@ public class Projeto {
             escreverParaConsola(matrizLeslie,geracao, populacoesEstimadas, taxasDeVariacao, Nt, distribuicaoNormalizada, valorProprio, vetorProprio,opcoesVisualizacao, nomepop);
         } while(leitura != sair && aux==0);
     }
+
     public static void infomacao(){
         System.out.println("\nQuais os dados que gostaria de visualizar?\n\nInsira os números associados a cada parâmetro e prima Enter.\nEm parâmetros isolados, apenas insira o número que pretende e prima Enter.\n");
         System.out.println("Exemplo de introdução:\n2\n5\n0\n");
@@ -880,7 +896,7 @@ public class Projeto {
 
     public static void PerguntaGrafico(String codigognuplot,int geracao,int geracao1,double[]populacoesEstimadas,double[]taxasDeVariacao,double[][] Nt,double [][] distribuicaoNormalizada,double valorProprio, double[] vetorProprio,double[][]matrizLeslie,String nomepop,String output,String nome) throws IOException, InterruptedException {
         int resposta;
-        String nomegrafico=nome+geracao1+"geracoes_"+output;
+        String nomegrafico=nome+geracao1+"G_"+output;
         File graficopng = new File("Grafico.png");
         TimeUnit.MILLISECONDS.sleep(tempoespera1);
         System.out.println("Deseja Salvar o Gráfico?(1- Sim; 2- Não)");
@@ -1004,13 +1020,13 @@ public class Projeto {
         return decimalFormat.format(Double.valueOf(s));
     }
 
-    public static String determinarDataCriacao() throws IOException {
+    public static String determinarDataCriacao(){
         String nomeFich = "./";
         File file = new File(nomeFich);
         SimpleDateFormat formato = new SimpleDateFormat("dd_MM_yyyy");
-        String date = formato.format(file.lastModified());
-        return date;
+        return formato.format(file.lastModified());
     }
+
     public static void EliminarFicheiroTextoGrafico(File file) {
         file.delete();
     }
@@ -1041,8 +1057,8 @@ public class Projeto {
         EliminarFicheiroTextoGrafico(novofich);
     }
 
-    public static void PerguntaGraficoNaoInterativo(String codigognuplot,int num,String output,String nome) throws IOException, InterruptedException {
-        String nomegrafico=nome+output;
+    public static void PerguntaGraficoNaoInterativo(String codigognuplot,int num,String output,String nome, int geracao) throws IOException, InterruptedException {
+        String nomegrafico=nome+ geracao + "G_" + output;
         switch (num) {
             case 1:
                 gerarGrafico(nomegrafico,"png","png",output,codigognuplot);
@@ -1082,11 +1098,12 @@ public class Projeto {
             }
         }
     }
-    public static String Criaroutput(String nomepop) throws IOException {
+
+    public static String Criaroutput(String nomepop){
         String tempo = determinarDataCriacao();
-        String output=nomepop + "_" + tempo;
-        return output;
+        return nomepop + "_" + tempo;
     }
+
     public static void Moverficheiro(String nomegrafico,String output) throws IOException {
         String deficheiro = nomegrafico;
         String paraficheiro = output+"\\"+nomegrafico;
@@ -1116,14 +1133,14 @@ public class Projeto {
 
     public static void Grafico1e2naointerativo(String codigognuplot,int geracao,double[] populacoesEstimadas,int num,String output,String nome) throws InterruptedException, IOException {
         EscreverGrafico1e2(geracao, populacoesEstimadas);
-        PerguntaGraficoNaoInterativo(codigognuplot, num, output, nome);
+        PerguntaGraficoNaoInterativo(codigognuplot, num, output, nome, geracao);
         TimeUnit.MILLISECONDS.sleep(tempoespera2);
     }
 
     public static void Grafico3e4naointerativo(int geracao,int num,String output,double[][] Nt,String ylabel,String titulo,String nome) throws InterruptedException, IOException {
         EscreverGrafico3e4(Nt[0].length,Nt,geracao);
         String s=CodigoGrafico3e4(Nt[0].length,ylabel,titulo);
-        PerguntaGraficoNaoInterativo(s,num,output,nome);
+        PerguntaGraficoNaoInterativo(s,num,output,nome, geracao);
         TimeUnit.MILLISECONDS.sleep(tempoespera2);
     }
 

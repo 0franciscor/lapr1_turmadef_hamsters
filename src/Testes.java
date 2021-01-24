@@ -124,7 +124,7 @@ public class Testes {
         return comparaMatrizes(matrizEsperada, matrizLeslie);
     }
 
-    public static boolean leituraDados(String linha, String nomeFicheiro ) throws FileNotFoundException {
+    public static boolean leituraDados(String linha, String nomeFicheiro) throws FileNotFoundException {
         return linha.equals(Projeto.leituraDados(nomeFicheiro, 0));
     }
 
@@ -233,6 +233,7 @@ public class Testes {
             return false;
         }
     }
+
     public static boolean ConverterNotacaoCientifica(double teste, String esperado) {
         String resultado = Projeto.ConverterNotacaoCientifica(teste);
         if (resultado.equals(esperado)) {
@@ -241,6 +242,7 @@ public class Testes {
             return false;
         }
     }
+
     public static boolean DoubleparaIntVer(double teste) {
         boolean resultado = Projeto.DoubleparaIntVer(teste);
         boolean expected = true;
@@ -250,6 +252,7 @@ public class Testes {
             return false;
         }
     }
+
     public static boolean DoubleToInt(double teste, String expected) {
         String resultado = Projeto.DoubleToInt(teste);
         if (resultado.equals(expected)) {
@@ -258,6 +261,7 @@ public class Testes {
             return false;
         }
     }
+
     public static boolean EliminarFicheiroTextoGrafico(String nome) {
         File file = new File(nome);
         Projeto.EliminarFicheiroTextoGrafico(file);
@@ -267,6 +271,7 @@ public class Testes {
             return true;
         }
     }
+
     public static boolean RetirarExtensao(String teste, String expected) {
         String resultado = Projeto.RetirarExtensao(teste);
         if (resultado.equals(expected)) {
@@ -275,7 +280,9 @@ public class Testes {
             return false;
         }
     }
+
     //-------------------------------------Testes Gráficos--------------------------------------------
+
     public static boolean codigoGrafico3e4(String ylabel,String titulo,int n,String expected) throws IOException {
         String resultado = Projeto.CodigoGrafico3e4(n, ylabel, titulo);
         if (expected.equals(resultado)) {
@@ -284,6 +291,7 @@ public class Testes {
             return false;
         }
     }
+
     public static boolean Criarpasta(String nome) {
         File file = new File(nome);
         Projeto.Criarpasta(nome);
@@ -293,4 +301,5 @@ public class Testes {
             return false;
         }
     }
+
 }
